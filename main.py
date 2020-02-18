@@ -1,7 +1,12 @@
 import discord
 import os
 from discord.ext import commands
-import parameters
+
+
+try:
+    exec(open('parameters.py').read)
+except FileNotFoundError:
+    print('Unable to find parameters')
 
 
 client = commands.Bot(command_prefix=prefix)
