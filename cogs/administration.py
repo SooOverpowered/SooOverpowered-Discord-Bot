@@ -7,10 +7,6 @@ class Administration(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def test(self, ctx):
-        await ctx.send('test')
-
-    @commands.command()
     async def ping(self, ctx):
         time = round(client.latency * 1000)
         await ctx.send('The ping is {0} ms!'.format(time))
