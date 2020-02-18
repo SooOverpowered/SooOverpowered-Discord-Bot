@@ -28,11 +28,6 @@ async def on_member_remove(member):
 
 
 @client.command()
-async def clear(ctx, amount=5):
-    await ctx.channel.purge(limit=amount+1)
-
-
-@client.command()
 async def kick(ctx, member: discord.Member, *, reason=None):
     await member.kick(reason=reason)
     print('{0.name} was kicked from {0.guild}'.format(member))
