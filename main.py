@@ -15,9 +15,13 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
+@client.event
+async def on_connect():
+    await client.change_presence(status=discord.Status.online,afk=False,activity='Initializing...')
 
 @client.event
 async def on_ready():
+    await client.change_presence(status=discord.Status.online,afk=False,activity='Ready')
     print('Bot logged in as {0.user}'.format(client))
 
 
