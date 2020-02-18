@@ -4,7 +4,7 @@ from discord.ext import commands
 
 
 try:
-    exec(open('parameters.py').read)
+    exec(open('parameters.py').read())
 except FileNotFoundError:
     print('Unable to find parameters')
 
