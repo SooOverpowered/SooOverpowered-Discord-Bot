@@ -11,6 +11,7 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
+
 @client.event
 async def on_ready():
     print('Bot logged in as {0.user}'.format(client))
@@ -24,12 +25,6 @@ async def on_member_join(member):
 @client.event
 async def on_member_remove(member):
     print("{0.user} has left the server.".format(member))
-
-
-@client.command()
-async def ping(ctx):
-    time = round(client.latency * 1000)
-    await ctx.send('The ping is {0} ms!'.format(time))
 
 
 @client.command()
