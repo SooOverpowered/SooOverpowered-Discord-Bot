@@ -18,9 +18,6 @@ for filename in os.listdir('./cogs'):
 
 @client.event
 async def on_ready():
-    custom_type=discord.ActivityType.custom()
-    custom_activity=discord.CustomActivity('Ready',type=custom_type)
-    await client.change_presence(status=discord.Status.online,afk=False,activity=custom_activity)
     print('Bot logged in as {0.user}'.format(client))
 
 
