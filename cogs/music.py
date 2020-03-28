@@ -9,10 +9,10 @@ class Music(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command
+    @commands.command()
     async def play(self, ctx, url):
-        server = ctx.message.server
-        channel = ctx.message.author.voice.voice_channel
+        server = ctx.message.guild
+        channel = ctx.message.author.voice.channel
         client.join_voice_channel(channel)
         voice_client = client.voice_client_in(server)
         player = await voice_client.create_ytdl_player(url)
