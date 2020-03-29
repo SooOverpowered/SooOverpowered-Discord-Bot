@@ -56,7 +56,7 @@ class Administration(commands.Cog):
     # Events
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Bot logged in as {0.user}'.format(client))
+        print('Bot logged in as {0.user}'.format(self.client))
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
