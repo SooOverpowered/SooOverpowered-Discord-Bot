@@ -26,28 +26,6 @@ for filename in os.listdir('./cogs'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
 
-# Logging
-@client.event
-async def on_ready():
-    print('Bot logged in as {0.user}'.format(client))
-
-
-@client.event
-async def on_member_join(member):
-    print("{0} has joined the server .".format(member))
-    await member.guild.system_channel.send(
-        embed=create_embed(f"**{member}** has joined the server.")
-    )
-
-
-@client.event
-async def on_member_remove(member):
-    print(f"{member} has left the server.")
-    await member.guild.system_channel.send(
-        embed=create_embed(f"**{member}** has left the server, RIP")
-    )
-
-
 # System commands
 @client.command()
 async def reload(ctx, extension):

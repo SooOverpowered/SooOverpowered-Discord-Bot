@@ -8,6 +8,7 @@ class Administration(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # Commands
     @commands.command()
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
@@ -31,12 +32,13 @@ class Administration(commands.Cog):
     async def nuke(self, ctx):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
-                embed=create_embed("You can't nuke the system channel\nPlease use the clear command instead")
+                embed=create_embed(
+                    "You can't nuke the system channel\nPlease use the clear command instead")
             )
         else:
             await ctx.send(
                 embed=create_embed("Initializing nuke process!")
-                )
+            )
             time.sleep(1)
             for i in range(5, 0, -1):
                 await ctx.send(
@@ -50,6 +52,25 @@ class Administration(commands.Cog):
             await ctx.channel.clone()
             await ctx.channel.delete()
             print(f'{ctx.channel} of {ctx.guild} just got nuked')
+
+    # Events
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print('Bot logged in as {0.user}'.format(client))
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        print("{0} has joined the server .".format(member))
+        await member.guild.system_channel.send(
+            embed=create_embed(f"**{member}** has joined the server.")
+        )
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        print(f"{member} has left the server.")
+        await member.guild.system_channel.send(
+            embed=create_embed(f"**{member}** has left the server, RIP")
+        )
 
 
 def setup(client):
