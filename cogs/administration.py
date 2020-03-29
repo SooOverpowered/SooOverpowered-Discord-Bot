@@ -29,11 +29,8 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def nuke(self, ctx):
-        embed=discord.Embed(
-            colour=discord.Colour.orange()
-        )
         time.sleep(1)
-        await ctx.send("Initializing nuke process!")
+        await ctx.send(discord.Embed(description="Initializing nuke process!"))
         for i in range(5,0,-1):
             await ctx.send(f'Incoming nuke in {i}')
             time.sleep(1)
