@@ -1,3 +1,4 @@
+# Imports
 import discord
 import time
 from helper import *
