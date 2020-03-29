@@ -1,6 +1,5 @@
 import discord
 import time
-
 from discord.ext import commands
 
 
@@ -29,30 +28,39 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def nuke(self, ctx):
-        await ctx.send(
-            embed=discord.Embed(
-                description="Initializing nuke process!",
-                color=discord.Color.orange()
-            )
-        )
-        time.sleep(1)
-        for i in range(5, 0, -1):
+        if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
                 embed=discord.Embed(
-                    description=f'Incoming nuke in {i}',
+                    description="You can't nuke the system channel\nPlease use the clear command instead",
+                    color=discord.Color.orange()
+                )
+            )
+        else:
+            await ctx.send(
+                embed=discord.Embed(
+                    description="Initializing nuke process!",
                     color=discord.Color.orange()
                 )
             )
             time.sleep(1)
-        await ctx.send(
-            embed=discord.Embed(
-                description='A GIANT NUKE APPEARED',
-                color=discord.Color.orange()
+            for i in range(5, 0, -1):
+                await ctx.send(
+                    embed=discord.Embed(
+                        description=f'Incoming nuke in {i}',
+                        color=discord.Color.orange()
+                    )
+                )
+                time.sleep(1)
+            await ctx.send(
+                embed=discord.Embed(
+                    description='A GIANT NUKE APPEARED',
+                    color=discord.Color.orange()
+                )
             )
-        )
-        time.sleep(1)
-        await ctx.channel.clone()
-        await ctx.channel.delete()
+            time.sleep(1)
+            await ctx.channel.clone()
+            await ctx.channel.delete()
+            print(f'{ctx.channel} just got nuked')
 
 
 def setup(client):

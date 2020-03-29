@@ -34,10 +34,15 @@ async def on_ready():
     print('Bot logged in as {0.user}'.format(client))
 
 
-
 @client.event
 async def on_member_join(member):
     print("{0} has joined the server .".format(member))
+    await member.guild.system_channel.send(
+        embed=discord.Embed(
+            color=discord.Color.orange(),
+            description=f"{member} has joined the server."
+            )
+    )
 
 
 @client.event
