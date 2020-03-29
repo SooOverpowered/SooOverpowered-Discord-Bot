@@ -29,12 +29,27 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def nuke(self, ctx):
-        await ctx.send(embed=discord.Embed(description="Initializing nuke process!", color=discord.Color.orange()))
+        await ctx.send(
+            embed=discord.Embed(
+                description="Initializing nuke process!",
+                color=discord.Color.orange()
+            )
+        )
         time.sleep(1)
         for i in range(5, 0, -1):
-            await ctx.send(embed=discord.Embed(description=f'Incoming nuke in {i}',color=discord.Color.orange()))
+            await ctx.send(
+                embed=discord.Embed(
+                    description=f'Incoming nuke in {i}',
+                    color=discord.Color.orange()
+                )
+            )
             time.sleep(1)
-        await ctx.send(embed=discord.Embed(description='A GIANT NUKE APPEARED',color=discord.Color.orange()))
+        await ctx.send(
+            embed=discord.Embed(
+                description='A GIANT NUKE APPEARED',
+                color=discord.Color.orange()
+            )
+        )
         time.sleep(1)
         await ctx.channel.clone()
         await ctx.channel.delete()
