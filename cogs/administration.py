@@ -1,4 +1,6 @@
 import discord
+import time
+
 from discord.ext import commands
 
 
@@ -27,6 +29,16 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def nuke(self, ctx):
+        embed=discord.Embed(
+            colour=discord.Colour.orange()
+        )
+        time.sleep(1)
+        await ctx.send("Initializing nuke process!")
+        for i in range(5,0,-1):
+            await ctx.send(f'Incoming nuke in {i}')
+            time.sleep(1)
+        await ctx.send('A giant nuke appeared')
+        time.sleep(1)
         await ctx.channel.clone()
         await ctx.channel.delete()
 
