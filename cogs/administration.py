@@ -1,5 +1,6 @@
 import discord
 import time
+from bot_plugin import *
 from discord.ext import commands
 
 
@@ -9,8 +10,8 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        time = round(client.latency * 1000)
-        await ctx.send('The ping is {0} ms!'.format(time))
+        time = round(self.client.latency * 1000)
+        await ctx.send(embed=create_embed(f'The ping is {time} ms!'))
 
     @commands.command()
     async def clear(self, ctx, amount=5):
@@ -30,32 +31,20 @@ class Administration(commands.Cog):
     async def nuke(self, ctx):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
-                embed=discord.Embed(
-                    description="You can't nuke the system channel\nPlease use the clear command instead",
-                    color=discord.Color.orange()
-                )
+                embed=create_embed("You can't nuke the system channel\nPlease use the clear command instead")
             )
         else:
             await ctx.send(
-                embed=discord.Embed(
-                    description="Initializing nuke process!",
-                    color=discord.Color.orange()
+                embed=create_embed("Initializing nuke process!")
                 )
-            )
             time.sleep(1)
             for i in range(5, 0, -1):
                 await ctx.send(
-                    embed=discord.Embed(
-                        description=f'Incoming nuke in {i}',
-                        color=discord.Color.orange()
-                    )
+                    embed=create_embed(f'Incoming nuke in {i}')
                 )
                 time.sleep(1)
             await ctx.send(
-                embed=discord.Embed(
-                    description='A GIANT NUKE APPEARED',
-                    color=discord.Color.orange()
-                )
+                embed=create_embed('**A GIANT NUKE APPEARED**')
             )
             time.sleep(1)
             await ctx.channel.clone()

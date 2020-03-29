@@ -1,6 +1,7 @@
 # Imports
 import discord
 import os
+from bot_plugin import *
 from discord.ext import commands
 
 
@@ -38,16 +39,16 @@ async def on_ready():
 async def on_member_join(member):
     print("{0} has joined the server .".format(member))
     await member.guild.system_channel.send(
-        embed=discord.Embed(
-            color=discord.Color.orange(),
-            description=f"{member} has joined the server."
-            )
+        embed=create_embed(f"**{member}** has joined the server.")
     )
 
 
 @client.event
 async def on_member_remove(member):
-    print("{0.user} has left the server.".format(member))
+    print(f"{member} has left the server.")
+    await member.guild.system_channel.send(
+        embed=create_embed(f"**{member}** has left the server, RIP")
+    )
 
 
 # System commands
@@ -65,6 +66,7 @@ async def help(ctx):
     embed.set_author(name='Help')
     embed.add_field(name='.ping', value='Returns Pong!', inline=False)
     await ctx.send(embed=embed)
+
 
 # Run the bot
 client.run(token)
