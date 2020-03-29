@@ -60,7 +60,7 @@ class Administration(commands.Cog):
             time.sleep(1)
             await ctx.channel.clone()
             await ctx.channel.delete()
-            print(f'{ctx.channel} just got nuked')
+            print(f'{ctx.channel} of {ctx.guild} just got nuked')
 
 
 def setup(client):
