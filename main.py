@@ -56,6 +56,8 @@ async def on_member_remove(member):
 async def reload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
+    print("Cogs reloaded successfully")
+    await ctx.send(embed=create_embed("Cogs reloaded successfully"))
 
 
 @client.command()
