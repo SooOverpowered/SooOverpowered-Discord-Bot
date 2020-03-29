@@ -26,13 +26,13 @@ for filename in os.listdir('./cogs'):
 
 
 # Custom activities
-starting_up = discord.CustomActivity()
+
 
 # Logging
 @client.event
 async def on_ready():
     print('Bot logged in as {0.user}'.format(client))
-    await client.change_presence(activity=starting_up)
+
 
 
 @client.event
