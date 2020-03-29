@@ -1,6 +1,6 @@
 import discord
 import time
-from bot_plugin import *
+from helper import *
 from discord.ext import commands
 
 
