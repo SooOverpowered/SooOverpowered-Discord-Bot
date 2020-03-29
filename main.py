@@ -31,18 +31,22 @@ for filename in os.listdir('./cogs'):
 async def reload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
-    print("Cogs reloaded successfully")
-    await ctx.send(embed=create_embed("Cogs reloaded successfully"))
+    print(f"Cog {extension} reloaded successfully")
+    await ctx.send(embed=create_embed(f"Cog {extension} reloaded successfully"))
 
 
 @client.command()
-async def help(ctx):
-    embed = discord.Embed(
-        color=discord.Color.orange()
-    )
-    embed.set_author(name='Help')
-    embed.add_field(name='.ping', value='Returns Pong!', inline=False)
-    await ctx.send(embed=embed)
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+    print(f'Cog {extension} loaded successfully')
+    await ctx.send(embed=create_embed(f"Cog {extension} loaded successfully"))
+
+
+@client.command()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+    print(f'Cog {extension} unloaded successfully')
+    await ctx.send(embed=create_embed(f"Cog {extension} unloaded successfully"))
 
 
 # Run the bot
