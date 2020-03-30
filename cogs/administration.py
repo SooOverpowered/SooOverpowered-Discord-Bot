@@ -21,7 +21,7 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        if reason==None:
+        if reason == None:
             await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for no reason'))
         else:
             await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for **{reason}**'))
@@ -30,7 +30,7 @@ class Administration(commands.Cog):
 
     @commands.command()
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        if reason==None:
+        if reason == None:
             await ctx.send(embed=create_embed(f'**{member}** was banned from **{member.guild}** for no reason'))
         else:
             await ctx.send(embed=create_embed(f'**{member}** was banned from **{member.guild}** for **{reason}**'))
@@ -82,5 +82,6 @@ class Administration(commands.Cog):
         )
 
 
+# Add cog
 def setup(client):
     client.add_cog(Administration(client))
