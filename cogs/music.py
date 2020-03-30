@@ -17,6 +17,8 @@ class Music(commands.Cog):
         await ctx.voice_client.disconnect()
     
     @commands.command()
+    async def funcname(parameter_list):
+        pass
 
 
 
