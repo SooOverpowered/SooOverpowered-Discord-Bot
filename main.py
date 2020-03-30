@@ -26,33 +26,5 @@ for filename in os.listdir('./cogs'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
 
-# System commands
-@client.command()
-async def reload(ctx, extension):
-    client.reload_extension(f'cogs.{extension}')
-    print(f"Cog {extension} reloaded successfully")
-    await ctx.send(embed=create_embed(f"Cog **{extension}** reloaded successfully"))
-
-
-@reload.error
-async def reload_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(embed=create_embed(f"Missing required argument, please use `{prefix}help reload` for correct usage"))
-
-
-@client.command()
-async def load(ctx, extension):
-    client.load_extension(f'cogs.{extension}')
-    print(f'Cog {extension} loaded successfully')
-    await ctx.send(embed=create_embed(f"Cog **{extension}** loaded successfully"))
-
-
-@client.command()
-async def unload(ctx, extension):
-    client.unload_extension(f'cogs.{extension}')
-    print(f'Cog {extension} unloaded successfully')
-    await ctx.send(embed=create_embed(f"Cog **{extension}** unloaded successfully"))
-
-
 # Run the bot
 client.run(token)

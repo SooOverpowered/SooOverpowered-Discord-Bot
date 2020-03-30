@@ -1,6 +1,7 @@
 # Imports
 import discord
 import time
+from parameters import *
 from helper import *
 from discord.ext import commands
 
@@ -10,16 +11,29 @@ class Administration(commands.Cog):
         self.client = client
 
     # Commands
-    @commands.command()
+    @commands.command(
+        name='ping',
+        description='Check the latency',
+        usage=f'{prefix}ping'
+    )
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
         await ctx.send(embed=create_embed(f'The ping is {time} ms!'))
 
-    @commands.command()
+    @commands.command(
+        name='clear',
+        description='Delete messages (default = 5)',
+        aliases=['purge', ],
+        usage=f'{prefix}clear [number of messages]'
+    )
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount+1)
 
-    @commands.command()
+    @commands.command(
+        name='kick',
+        description='Kick someone from the server',
+        usage=f'{prefix}kick [@member]'
+    )
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         if reason == None:
             await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for no reason'))
@@ -28,7 +42,11 @@ class Administration(commands.Cog):
         await member.kick(reason=reason)
         print('{0.name} was kicked from {0.guild}'.format(member))
 
-    @commands.command()
+    @commands.command(
+        name='ban',
+        description='Ban someone from the server',
+        usage=f'{prefix}ban [@member]'
+    )
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         if reason == None:
             await ctx.send(embed=create_embed(f'**{member}** was banned from **{member.guild}** for no reason'))
@@ -37,7 +55,11 @@ class Administration(commands.Cog):
         await member.ban(reason=reason)
         print('{0.name} was banned from {0.guild}'.format(member))
 
-    @commands.command()
+    @commands.command(
+        name='nuke',
+        description='Send a nuclear missile head that destroys all messages in a text channel',
+        usage=f'{prefix}nuke'
+    )
     async def nuke(self, ctx):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
