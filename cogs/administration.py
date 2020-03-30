@@ -35,12 +35,22 @@ class Administration(commands.Cog):
         usage=f'{prefix}kick [@member]'
     )
     async def kick(self, ctx, member: discord.Member, *, reason=None):
-        if reason == None:
-            await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for no reason'))
-        else:
-            await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for **{reason}**'))
-        await member.kick(reason=reason)
-        print('{0.name} was kicked from {0.guild}'.format(member))
+        await ctx.send(embed=create_embed('Please reply with "Y" to confirm action\nThe command will be automatically cancelled after 20 second'))
+        counter = 20
+        while counter > 0:
+            time.sleep(1)
+            async for message in ctx.channel.history():
+                if message.author == ctx.author and message.content == 'Y':
+                    counter = 0
+                    if reason == None:
+                        await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for no reason'))
+                    else:
+                        await ctx.send(embed=create_embed(f'**{member}** was kicked from **{member.guild}** for **{reason}**'))
+                    await member.kick(reason=reason)
+                    print('{0.name} was kicked from {0.guild}'.format(member))
+                    break
+                else:
+                    counter -= 1
 
     @commands.command(
         name='ban',
@@ -63,26 +73,30 @@ class Administration(commands.Cog):
     async def nuke(self, ctx):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
-                embed=create_embed(
-                    "You can't nuke the system channel\nPlease use the clear command instead")
-            )
+                embed=create_embed("You can't nuke the system channel\nPlease use the clear command instead"))
         else:
-            await ctx.send(
-                embed=create_embed("Initializing nuke process!")
-            )
-            time.sleep(1)
-            for i in range(5, 0, -1):
-                await ctx.send(
-                    embed=create_embed(f'Incoming nuke in {i}')
-                )
+            await ctx.send(embed=create_embed('Please reply with "Y" to confirm action\nThe command will be automatically cancelled after 20 second'))
+            counter = 20
+            while counter > 0:
                 time.sleep(1)
-            await ctx.send(
-                embed=create_embed('**A GIANT NUKE APPEARED**')
-            )
-            time.sleep(1)
-            await ctx.channel.clone()
-            await ctx.channel.delete()
-            print(f'{ctx.channel} of {ctx.guild} just got nuked')
+                async for message in ctx.channel.history(after=ctx.message.created_at):
+                    if message.author == ctx.author and message.content == 'Y':
+                        counter = 0
+                        await ctx.send(embed=create_embed("Initializing nuke process!"))
+                        time.sleep(1)
+                        for i in range(5, 0, -1):
+                            await ctx.send(embed=create_embed(f'Incoming nuke in {i}'))
+                            time.sleep(1)
+                        await ctx.send(embed=create_embed('**A GIANT NUKE APPEARED**'))
+                        time.sleep(1)
+                        await ctx.channel.clone()
+                        await ctx.channel.delete()
+                        print(f'{ctx.channel} of {ctx.guild} just got nuked')
+                        break
+                    else:
+                        counter -= 1
+                        if counter == 0:
+                            await ctx.send(embed=create_embed('The nuke got cancelled because the timer ran out'))
 
     # Events
     @commands.Cog.listener()
