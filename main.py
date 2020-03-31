@@ -4,7 +4,6 @@ import os
 from helper import *
 from discord.ext import commands
 
-
 # load up parameters
 try:
     exec(open('parameters.py').read())

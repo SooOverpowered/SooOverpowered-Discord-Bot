@@ -1,6 +1,6 @@
 # Imports
 import discord
-import parameters
+from parameters import *
 from discord.ext import commands
 
 
@@ -16,13 +16,10 @@ class Music(commands.Cog):
     @commands.command()
     async def leave(self, ctx):
         await ctx.voice_client.disconnect()
-    
+
     @commands.command()
     async def funcname(parameter_list):
         pass
-
-
-
 
 
 # Add cog
