@@ -28,6 +28,7 @@ class Administration(commands.Cog, name='Administration'):
         aliases=['purge', ],
         usage=f'{prefix}clear [number of messages]'
     )
+    @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount+1)
 
@@ -91,6 +92,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Ban someone from the server',
         usage=f'{prefix}ban [@member]'
     )
+    @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
             await ctx.send(
@@ -140,6 +142,7 @@ class Administration(commands.Cog, name='Administration'):
         usage=f'{prefix}nuke'
     )
     @commands.cooldown(1, 60, commands.BucketType.channel)
+    @commands.has_permissions(manage_channels=True)
     async def nuke(self, ctx):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
@@ -197,12 +200,69 @@ class Administration(commands.Cog, name='Administration'):
                             )
 
     # Error handler
+    @clear.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'You do not have the {"".join(error.missing_perms)} permission for this command'
+                )
+            )
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
+                )
+            )
+
     @nuke.error
     async def nuke_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(
                 embed=create_embed(
                     f'You can only send **1** nuke every **60 seconds**\nTime until next available nuke: {int(error.retry_after)}s'
+                )
+            )
+        elif isinstance(error, commands.MissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'You do not have the {"".join(error.missing_perms)} permission for this command'
+                )
+            )
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
+                )
+            )
+
+    @kick.error
+    async def kick_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'You do not have the {"".join(error.missing_perms)} permission for this command'
+                )
+            )
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
+                )
+            )
+
+    @ban.error
+    async def ban_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'You do not have the {"".join(error.missing_perms)} permission for this command'
+                )
+            )
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
                 )
             )
 
