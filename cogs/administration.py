@@ -1,6 +1,7 @@
 # Imports
 import discord
 import time
+from datetime import datetime
 from parameters import *
 from helper import *
 from discord.ext import commands
@@ -9,6 +10,7 @@ from discord.ext import commands
 class Administration(commands.Cog, name='Administration'):
     def __init__(self, client):
         self.client = client
+        self.recently_used_command = []
 
     # Commands
     @commands.command(
@@ -34,11 +36,18 @@ class Administration(commands.Cog, name='Administration'):
         description='Kick someone from the server',
         usage=f'{prefix}kick [@member]'
     )
+    @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
             await ctx.send(
                 embed=create_embed(
                     'You cannot kick yourself'
+                )
+            )
+        elif ctx.guild.owner == member:
+            await ctx.send(
+                embed=create_embed(
+                    'You cannot kick the server owner'
                 )
             )
         else:
@@ -130,6 +139,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Send a nuclear missile head that destroys all messages in a text channel',
         usage=f'{prefix}nuke'
     )
+    @commands.cooldown(1, 60, commands.BucketType.channel)
     async def nuke(self, ctx):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
@@ -168,9 +178,13 @@ class Administration(commands.Cog, name='Administration'):
                                 open('nuclear.txt').read()+'```'
                             )
                         )
+                        channel_info = [ctx.channel.category,
+                                        ctx.channel.position,
+                                        ]
                         time.sleep(1)
                         await ctx.channel.clone()
                         await ctx.channel.delete()
+                        await channel_info[0].text_channels[-1].edit(position=channel_info[1])
                         print(f'{ctx.channel} of {ctx.guild} just got nuked')
                         break
                     else:
@@ -181,6 +195,16 @@ class Administration(commands.Cog, name='Administration'):
                                     'The nuke got cancelled because the timer ran out'
                                 )
                             )
+
+    # Error handler
+    @nuke.error
+    async def nuke_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(
+                embed=create_embed(
+                    f'You can only send **1** nuke every **60 seconds**\nTime until next available nuke: {int(error.retry_after)}s'
+                )
+            )
 
     # Events
     @commands.Cog.listener()
