@@ -1,5 +1,6 @@
 # Imports
 import discord
+import parameters
 from discord.ext import commands
 
 

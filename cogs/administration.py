@@ -76,20 +76,40 @@ class Administration(commands.Cog, name='Administration'):
         usage=f'{prefix}ban [@member]'
     )
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        if reason == None:
-            await ctx.send(
-                embed=create_embed(
-                    f'**{member}** was banned from **{member.guild}** for no reason'
-                )
+        await ctx.send(
+            embed=create_embed(
+                'Please reply with "Y" to confirm action\nThe command will be automatically cancelled after 20 second'
             )
-        else:
-            await ctx.send(
-                embed=create_embed(
-                    f'**{member}** was banned from **{member.guild}** for **{reason}**'
-                )
-            )
-        await member.ban(reason=reason)
-        print('{0.name} was banned from {0.guild}'.format(member))
+        )
+        counter = 20
+        while counter > 0:
+            time.sleep(1)
+            async for message in ctx.channel.history(after=ctx.message.created_at):
+                if message.author == ctx.author and message.content == 'Y':
+                    counter = 0
+                    if reason == None:
+                        await ctx.send(
+                            embed=create_embed(
+                                f'**{member}** was banned from **{member.guild}** for no reason'
+                            )
+                        )
+                    else:
+                        await ctx.send(
+                            embed=create_embed(
+                                f'**{member}** was banned from **{member.guild}** for **{reason}**'
+                            )
+                        )
+                    await member.ban(reason=reason)
+                    print('{0.name} was banned from {0.guild}'.format(member))
+                    break
+                else:
+                    counter -= 1
+                    if counter == 0:
+                        await ctx.send(
+                            embed=create_embed(
+                                'The command got cancelled because the timer ran out'
+                            )
+                        )
 
     @commands.command(
         name='nuke',
@@ -149,21 +169,41 @@ class Administration(commands.Cog, name='Administration'):
 
     # Events
     @commands.Cog.listener()
+    async def on_connect(self):
+        await self.client.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name='everything blows up'
+            ),
+            status=discord.Status.online
+        )
+
+    @commands.Cog.listener()
     async def on_ready(self):
         print('Bot logged in as {0.user}'.format(self.client))
+
+    @commands.Cog.listener()
+    async def on_disconnect(self):
+        await self.client.change_presence(
+            status=discord.Status.offline
+        )
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
         print("{0} has joined the server .".format(member))
         await member.guild.system_channel.send(
-            embed=create_embed(f"**{member}** has joined the server.")
+            embed=create_embed(
+                f"**{member}** has joined the server."
+            )
         )
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         print(f"{member} has left the server.")
         await member.guild.system_channel.send(
-            embed=create_embed(f"**{member}** has left the server, RIP")
+            embed=create_embed(
+                f"**{member}** has left the server, RIP"
+            )
         )
 
 
