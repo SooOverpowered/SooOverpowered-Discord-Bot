@@ -9,7 +9,9 @@ class HelpMenu(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.group()
+    @commands.group(
+        invoke_without_command=True
+    )
     async def help(self, ctx):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
@@ -23,7 +25,10 @@ class HelpMenu(commands.Cog):
                             value='The music player', inline=False)
             await ctx.send(embed=embed)
 
-    @help.command()
+    @help.command(
+        name='Administration',
+        aliases=['admin', ]
+    )
     async def Administration(self, ctx):
         cog = self.client.get_cog('Administration')
         commands = cog.get_commands()

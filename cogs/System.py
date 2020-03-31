@@ -31,13 +31,18 @@ class System(commands.Cog):
     @load.error
     async def load_error(self, ctx, error):
         if isinstance(error, commands.CommandInvokeError):
-            await ctx.send(embed=create_embed(f'Cog not found, please use `{prefix}help reload` for list of cogs'))
+            await ctx.send(embed=create_embed(f'Cog not found, please use `{prefix}help load` for list of cogs'))
 
     @commands.command()
     async def unload(self, ctx, extension):
         self.client.unload_extension(f'cogs.{extension}')
         print(f'Cog {extension} unloaded successfully')
         await ctx.send(embed=create_embed(f"Cog **{extension}** unloaded successfully"))
+
+    @unload.error
+    async def unload_error(self, ctx, error):
+        if isinstance(error, commands.CommandInvokeError):
+            await ctx.send(embed=create_embed(f'Cog not found, please use `{prefix}help unload` for list of cogs'))
 
 
 def setup(client):

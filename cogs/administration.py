@@ -6,7 +6,7 @@ from helper import *
 from discord.ext import commands
 
 
-class Administration(commands.Cog):
+class Administration(commands.Cog, name='Administration'):
     def __init__(self, client):
         self.client = client
 
