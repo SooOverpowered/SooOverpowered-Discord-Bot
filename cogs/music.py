@@ -19,8 +19,14 @@ class Music(commands.Cog):
     )
     async def join(self, ctx):
         channel = ctx.author.voice.channel
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-        if voice and voice.is_connected:
+        voice = ctx.voice_client
+        if voice != None and voice.channel == channel:
+            await ctx.send(
+                embed=create_embed(
+                    'Bot is already connected to your voice channel'
+                )
+            )
+        elif voice != None and voice.is_connected:
             await voice.move_to(channel)
             print(f'Bot moved to {channel}')
         else:
@@ -33,9 +39,9 @@ class Music(commands.Cog):
         description='Disconnect from the voice channel'
     )
     async def leave(self, ctx):
-        channel = ctx.author.voice.channel
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-        if voice and voice.is_connected():
+        voice = ctx.voice_client
+        if voice != None:
+            channel = voice.channel
             await voice.disconnect()
             print(f'The bot has left {channel}')
             await ctx.send(
@@ -57,7 +63,7 @@ class Music(commands.Cog):
     )
     async def play(self, ctx, *, url):
         channel = ctx.author.voice.channel
-        voice = get(self.client.voice_clients, guild=ctx.guild)
+        voice = ctx.voice_client
         video_source = get_video_info(url)
         await ctx.send(
             embed=create_embed(
@@ -75,25 +81,6 @@ class Music(commands.Cog):
             volume=0.5
         )
         voice.play(source)
-
-        '''with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            print('Downloading audio now')
-            ydl.download([url])
-        for file in os.listdir('./'):
-            if file.endswith('.mp3'):
-                name = file
-                print(f'Renames file {file}')
-                os.rename(file, 'song.mp3')
-
-        voice.play(
-            discord.FFmpegPCMAudio('song.mp3'),
-            after=lambda e: print(f'{name} has finished playing')
-        )
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
-
-        await ctx.send(f'Playing {name}')
-        print('Playing')'''
 
 
 # Add cog
