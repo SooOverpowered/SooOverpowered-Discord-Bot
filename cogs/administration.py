@@ -143,11 +143,17 @@ class Administration(commands.Cog, name='Administration'):
     )
     @commands.cooldown(1, 60, commands.BucketType.channel)
     @commands.has_permissions(manage_channels=True)
-    async def nuke(self, ctx):
+    async def nuke(self, ctx, arg=None):
         if ctx.guild.system_channel == ctx.channel:
             await ctx.send(
                 embed=create_embed(
                     "You can't nuke the system channel\nPlease use the clear command instead"
+                )
+            )
+        elif arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'The nuke command does not take in any other argument'
                 )
             )
         else:
