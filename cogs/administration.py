@@ -159,7 +159,7 @@ class Administration(commands.Cog, name='Administration'):
         else:
             await ctx.send(
                 embed=create_embed(
-                    'Please reply with "Y" to confirm action\nThe command will be automatically cancelled after 20 second'
+                    'Please reply with **Y** to confirm action\nThe command will be automatically cancelled after 20 second'
                 )
             )
             counter = 20
