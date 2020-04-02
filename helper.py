@@ -19,8 +19,8 @@ def create_embed(text):
     return embed
 
 
-def get_video_info(url_or_search):
-    ytdl_options = {
+def get_video_info(url):
+    opts = {
         "default_search": "ytsearch",
         'format': 'bestaudio/best',
         'quiet': True,
@@ -33,8 +33,8 @@ def get_video_info(url_or_search):
     }
 
     def get_info(url):
-        with youtube_dl.YoutubeDL(ytdl_options) as ydl:
-            info = ydl.extract_info(url_or_search, download=False)
+        with youtube_dl.YoutubeDL(opts) as ydl:
+            info = ydl.extract_info(url, download=False)
             video = None
             if "_type" in info and info["_type"] == "playlist":
                 return get_info(
@@ -43,11 +43,11 @@ def get_video_info(url_or_search):
             else:
                 video = info
             return video
-    video = get_info(url_or_search)
+    video = get_info(url)
     video_format = video['formats'][0]
     stream_url = video_format['url']
     video_url = video['webpage_url']
     title = video['title']
     uploader = video["uploader"] if "uploader" in video else ""
     thumbnail = video["thumbnail"] if "thumbnail" in video else None
-    return [stream_url,title]
+    return [stream_url, title, video_url]
