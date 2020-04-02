@@ -92,7 +92,7 @@ class Music(commands.Cog):
 
     @commands.command(
         name='pause',
-        aliases=['stop', 'pau', 'pa'],
+        aliases=['pau', 'pa'],
         description='Pauses the music'
     )
     async def pause(self, ctx):
@@ -141,6 +141,27 @@ class Music(commands.Cog):
             await ctx.send(
                 embed=create_embed(
                     'Cannot resume while bot was not connected to any voice channel'
+                )
+            )
+
+    @commands.command(
+        name='stop',
+        aliases=['s', ],
+        description='Stop playing music'
+    )
+    async def stop(self, ctx):
+        voice = ctx.voice_client
+        if voice != None and voice.is_playing():
+            voice.stop()
+            await ctx.send(
+                embed=create_embed(
+                    'Stopped playing music'
+                )
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'Cannot stop if no music is playing'
                 )
             )
 
