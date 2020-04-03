@@ -38,6 +38,7 @@ def get_video_info(url):
             info = ydl.extract_info(url, download=False)
             video = None
             if "_type" in info and info["_type"] == "playlist":
+                time.sleep(1)
                 return get_info(
                     info['entries'][0]['url']
                 )
