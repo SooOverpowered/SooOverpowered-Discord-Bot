@@ -367,9 +367,7 @@ class Music(commands.Cog):
             voice.stop()
 
 # Error handler
-    @play.error
-    async def play_error(self, ctx, error):
-        p
+
 # Add cog
 
 
