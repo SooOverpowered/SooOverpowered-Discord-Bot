@@ -5,7 +5,7 @@ from parameters import *
 from discord.ext import commands
 
 
-class System(commands.Cog, name=System):
+class System(commands.Cog, name='System'):
     def __init__(self, client):
         self.client = client
 
