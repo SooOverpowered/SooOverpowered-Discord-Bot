@@ -162,14 +162,14 @@ class Music(commands.Cog, name='Music'):
         text_channel = ctx.channel
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
-        if voice == None:
+        if channel == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
                 )
             )
         else:
-            if voice.is_playing():
+            if voice != None and voice.is_playing():
                 video_source = get_video_info(url)
                 self.queues[voice].append(url)
                 await ctx.channel.purge(limit=1)
@@ -179,7 +179,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 )
             else:
-                if voice.is_connected():
+                if voice != None and voice.is_connected():
                     await voice.move_to(channel)
                 else:
                     voice = await channel.connect()
