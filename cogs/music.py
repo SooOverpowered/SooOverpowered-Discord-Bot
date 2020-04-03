@@ -137,7 +137,7 @@ class Music(commands.Cog, name='Music'):
         voice = ctx.voice_client
         if voice != None:
             channel = voice.channel
-            self.queues[voice]=[]
+            self.queues[voice] = []
             del self.now_playing[voice]
             await voice.disconnect()
             await ctx.send(
@@ -163,7 +163,7 @@ class Music(commands.Cog, name='Music'):
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
         if voice == None:
-            ctx.send(
+            await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
                 )
