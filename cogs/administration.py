@@ -92,7 +92,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Ban someone from the server',
         usage=f'{prefix}ban [@member]'
     )
-    @commands.has_permissions(ban_members=True)
+    @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
             await ctx.send(

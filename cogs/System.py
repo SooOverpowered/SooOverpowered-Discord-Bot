@@ -11,18 +11,21 @@ class System(commands.Cog):
 
     # Commands
     @commands.command()
+    @commands.has_permissions(administrator=True)
     async def reload(self, ctx, extension):
         self.client.reload_extension(f'cogs.{extension}')
         print(f"Cog {extension} reloaded successfully")
         await ctx.send(embed=create_embed(f"Cog **{extension}** reloaded successfully"))
 
     @commands.command()
+    @commands.has_permissions(administrator=True)
     async def load(self, ctx, extension):
         self.client.load_extension(f'cogs.{extension}')
         print(f'Cog {extension} loaded successfully')
         await ctx.send(embed=create_embed(f"Cog **{extension}** loaded successfully"))
 
     @commands.command()
+    @commands.has_permissions(administrator=True)
     async def unload(self, ctx, extension):
         self.client.unload_extension(f'cogs.{extension}')
         print(f'Cog {extension} unloaded successfully')
