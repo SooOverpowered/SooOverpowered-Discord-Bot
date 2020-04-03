@@ -3,6 +3,7 @@ import discord
 import youtube_dl
 import os
 import asyncio
+import time
 from helper import *
 from parameters import *
 from discord.ext import commands
