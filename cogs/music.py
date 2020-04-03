@@ -13,7 +13,7 @@ def create_ytdl_source(source):
     player = discord.PCMVolumeTransformer(
         discord.FFmpegPCMAudio(
             source,
-            executable='./ffmpeg/bin',
+            executable='./ffmpeg/bin/ffmpeg.exe',
             before_options=" -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 1",
         ),
         volume=0.5
