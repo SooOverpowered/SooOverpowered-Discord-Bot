@@ -5,7 +5,7 @@ from parameters import *
 from discord.ext import commands
 
 
-class HelpMenu(commands.Cog):
+class HelpMenu(commands.Cog, name='Help'):
     def __init__(self, client):
         self.client = client
 
@@ -27,7 +27,8 @@ class HelpMenu(commands.Cog):
 
     @help.command(
         name='Administration',
-        aliases=['admin', ]
+        aliases=['admin', ],
+        description='Show list of administrative commands'
     )
     async def Administration(self, ctx):
         cog = self.client.get_cog('Administration')

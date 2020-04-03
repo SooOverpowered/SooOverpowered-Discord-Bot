@@ -55,7 +55,7 @@ def get_video_info(url):
     return [stream_url, title, video_url]
 
 
-class Music(commands.Cog):
+class Music(commands.Cog, name='Music'):
     def __init__(self, client):
         self.client = client
         self.queues = {}
@@ -98,7 +98,9 @@ class Music(commands.Cog):
 
     @commands.command(
         name='join',
-        description='Connect to your current voice channel'
+        aliases=['j', 'connect', ],
+        description='Connect to your current voice channel',
+        usage=f'`{prefix}join`'
     )
     async def join(self, ctx):
         if ctx.author.voice == None:
@@ -128,13 +130,14 @@ class Music(commands.Cog):
     @commands.command(
         name='leave',
         aliases=['dc', 'disconnect'],
-        description='Disconnect from the voice channel'
+        description='Disconnect from the voice channel',
+        usage=f'`{prefix}leave`'
     )
     async def leave(self, ctx):
         voice = ctx.voice_client
         if voice != None:
             channel = voice.channel
-            del self.queues[voice]
+            self.queues[voice]=[]
             del self.now_playing[voice]
             await voice.disconnect()
             await ctx.send(
@@ -152,36 +155,45 @@ class Music(commands.Cog):
     @commands.command(
         name='play',
         aliases=['p', ],
-        description='Play music from Youtube'
+        description='Play music from Youtube',
+        usage=f'`{prefix}play`'
     )
     async def play(self, ctx, *, url):
         text_channel = ctx.channel
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
-        if voice != None and voice.is_playing():
-            video_source = get_video_info(url)
-            self.queues[voice].append(url)
-            await ctx.channel.purge(limit=1)
-            await ctx.send(
+        if voice == None:
+            ctx.send(
                 embed=create_embed(
-                    f'Song [{video_source[1]}]({video_source[2]}) added to queue'
+                    'You must be connected to a voice channel to use this command'
                 )
             )
         else:
-            if voice != None and voice.is_connected():
-                await voice.move_to(channel)
+            if voice.is_playing():
+                video_source = get_video_info(url)
+                self.queues[voice].append(url)
+                await ctx.channel.purge(limit=1)
+                await ctx.send(
+                    embed=create_embed(
+                        f'Song [{video_source[1]}]({video_source[2]}) added to queue'
+                    )
+                )
             else:
-                voice = await channel.connect()
-            voice = ctx.voice_client
-            self.queues[voice] = []
-            self.now_playing[voice] = url
-            await ctx.channel.purge(limit=1)
-            self.play_song(text_channel, voice)
+                if voice.is_connected():
+                    await voice.move_to(channel)
+                else:
+                    voice = await channel.connect()
+                voice = ctx.voice_client
+                self.queues[voice] = []
+                self.now_playing[voice] = url
+                await ctx.channel.purge(limit=1)
+                self.play_song(text_channel, voice)
 
     @commands.command(
         name='pause',
         aliases=['pau', 'pa'],
-        description='Pauses the music'
+        description='Pauses the music',
+        usage=f'`{prefix}pause`'
     )
     async def pause(self, ctx):
         voice = ctx.voice_client
@@ -214,7 +226,8 @@ class Music(commands.Cog):
     @commands.command(
         name='resume',
         aliases=['res', 're'],
-        description='Resume the music'
+        description='Resume the music',
+        usage=f'`{prefix}resume`'
     )
     async def resume(self, ctx):
         voice = ctx.voice_client
@@ -247,7 +260,8 @@ class Music(commands.Cog):
     @commands.command(
         name='stop',
         aliases=['s', 'st', ],
-        description='Stop playing music'
+        description='Stop playing music',
+        usage=f'`{prefix}stop`'
     )
     async def stop(self, ctx):
         voice = ctx.voice_client
@@ -270,7 +284,8 @@ class Music(commands.Cog):
     @commands.command(
         name='queue',
         aliases=['q', ],
-        description='Display the current music queue'
+        description='Display your current music queue',
+        usage=f'`{prefix}queue`'
     )
     async def queue(self, ctx, arg=None):
         voice = ctx.voice_client
@@ -280,29 +295,41 @@ class Music(commands.Cog):
                     'This command does not take in any other argument'
                 )
             )
-        elif self.queues[voice] == []:
+        elif voice != None:
+            if self.queues[voice] == []:
+                await ctx.send(
+                    embed=create_embed(
+                        'The music queue is empty'
+                    )
+                )
+            else:
+                output = ''
+                counter = 1
+                for urls in self.queues[voice]:
+                    output += f'{counter}. {get_video_info(urls)[1]}\n'
+                    counter += 1
+                embed = discord.Embed(
+                    color=discord.Color.orange(),
+                    description=output
+                )
+                embed.set_author(
+                    name=f'Music queue for {ctx.author.voice.channel}'
+                )
+                embed.set_footer(text=f'Repeat: {self.loop}')
+                await ctx.send(embed=embed)
+        else:
             await ctx.send(
                 embed=create_embed(
-                    'The music queue is empty'
+                    'You are not connected to any voice channel'
                 )
             )
-        else:
-            output = ''
-            counter = 1
-            for urls in self.queues[voice]:
-                output += f'{counter}. {get_video_info(urls)[1]}\n'
-                counter += 1
-            embed = discord.Embed(
-                color=discord.Color.orange(),
-                description=output
-            )
-            embed.set_author(
-                name=f'Music queue for {ctx.author.voice.channel}'
-            )
-            embed.set_footer(text=f'Repeat: {self.loop}')
-            await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(
+        name='loop',
+        aliases=['repeat', ],
+        description='Toggle between looping all, one or off',
+        usage=f'`{prefix}loop [all/one/off]`'
+    )
     async def loop(self, ctx, arg=None):
         voice = ctx.voice_client
         if voice == None or voice.is_playing() == False:
@@ -311,7 +338,7 @@ class Music(commands.Cog):
                     'There is no ongoing music being played'
                 )
             )
-        if arg == None:
+        if arg == None or arg == 'all':
             self.loop = 'all'
             voice = ctx.voice_client
             self.queues[voice].append(self.now_playing[voice])
@@ -347,7 +374,8 @@ class Music(commands.Cog):
     @commands.command(
         name='skip',
         aliases=['sk', ],
-        description='Skip the song currently being played'
+        description='Skip the song currently being played',
+        usage=f'`{prefix}skip`'
     )
     async def skip(self, ctx, arg=None):
         if arg != None:
@@ -367,6 +395,16 @@ class Music(commands.Cog):
                 )
             )
             voice.stop()
+
+    @commands.command(
+        name='dequeue',
+        aliases=['rmq', 'rm'],
+        description='Remove a song from the music queue',
+        usage=f'`{prefix}dequeue [song position in music queue]`'
+    )
+    async def dequeue(self, ctx, position):
+        voice = ctx.voice_client
+
 
 # Error handler
 

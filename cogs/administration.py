@@ -16,7 +16,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='ping',
         description='Check the latency',
-        usage=f'{prefix}ping'
+        usage=f'`{prefix}ping`'
     )
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
@@ -35,7 +35,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='kick',
         description='Kick someone from the server',
-        usage=f'{prefix}kick [@member]'
+        usage=f'`{prefix}kick [@member]`'
     )
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
@@ -90,7 +90,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='ban',
         description='Ban someone from the server',
-        usage=f'{prefix}ban [@member]'
+        usage=f'`{prefix}ban [@member]`'
     )
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
@@ -139,7 +139,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='nuke',
         description='Send a nuclear missile head that destroys all messages in a text channel',
-        usage=f'{prefix}nuke'
+        usage=f'`{prefix}nuke`'
     )
     @commands.cooldown(1, 60, commands.BucketType.channel)
     @commands.has_permissions(manage_channels=True)
@@ -208,7 +208,8 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='userinfo',
         aliases=['info', ],
-        description='Displays the user info'
+        description='Displays the user info',
+        usage=f'`{prefix}userinfo`'
     )
     async def userinfo(self, ctx, member: discord.Member = None):
         if member == None:
