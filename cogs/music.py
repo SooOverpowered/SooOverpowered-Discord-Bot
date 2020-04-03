@@ -9,6 +9,11 @@ from parameters import *
 from discord.ext import commands
 
 
+discord.opus.load_opus()
+if not discord.opus.is_loaded():
+    raise RunTimeError('Opus failed to load')
+
+
 def create_ytdl_source(source):
     player = discord.PCMVolumeTransformer(
         discord.FFmpegPCMAudio(
