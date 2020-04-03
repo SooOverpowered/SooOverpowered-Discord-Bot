@@ -138,7 +138,7 @@ class Music(commands.Cog, name='Music'):
         if voice != None:
             channel = voice.channel
             self.queues[voice] = []
-            del self.now_playing[voice]
+            self.now_playing[voice] = None
             await voice.disconnect()
             await ctx.send(
                 embed=create_embed(
@@ -266,8 +266,8 @@ class Music(commands.Cog, name='Music'):
     async def stop(self, ctx):
         voice = ctx.voice_client
         if voice != None and voice.is_playing():
-            del self.queues[voice]
-            del self.now_playing[voice]
+            self.queues[voice] = []
+            self.now_playing[voice] = None
             voice.stop()
             await ctx.send(
                 embed=create_embed(
