@@ -1,6 +1,7 @@
 # Imports
 import discord
 import os
+import asyncio
 from helper import *
 from discord.ext import commands
 
@@ -26,4 +27,4 @@ for filename in os.listdir('./cogs'):
 
 
 # Run the bot
-client.run(token)
+client.run(token, reconnect=True)

@@ -153,7 +153,7 @@ class Administration(commands.Cog, name='Administration'):
         elif arg != None:
             await ctx.send(
                 embed=create_embed(
-                    'The nuke command does not take in any other argument'
+                    'This command does not take in any other argument'
                 )
             )
         else:
@@ -204,6 +204,27 @@ class Administration(commands.Cog, name='Administration'):
                                     'The nuke got cancelled because the timer ran out'
                                 )
                             )
+
+    @commands.command(
+        name='userinfo',
+        aliases=['info', ],
+        description='Displays the user info'
+    )
+    async def userinfo(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            timestamp=ctx.message.created_at
+        )
+        embed.set_author(
+            name=f'User info: {member.display_name}'
+        )
+        embed.add_field(
+            name='Account Info',
+            value=f'Currently {member.status}'
+        )
+        await ctx.send(embed=embed)
 
     # Error handler
     @clear.error

@@ -57,7 +57,7 @@ class Music(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.queues = {}
-        self.loop = None
+        self.loop = 'off'
         self.now_playing = {}
 
     def play_song(self, text_channel, voice):
@@ -79,9 +79,16 @@ class Music(commands.Cog):
                 elif self.loop == 'one':
                     self.queues[voice].insert(0, info)
                 self.now_playing[voice] = info
-                self.play_song(text_channel, voice, self.now_playing[voice])
+                self.play_song(text_channel, voice)
             else:
                 del self.now_playing[voice]
+                asyncio.run_coroutine_threadsafe(
+                    text_channel.send(
+                        embed=create_embed(
+                            'Music queue ended, disconnected from voice'
+                        )
+                    ), self.client.loop
+                )
                 asyncio.run_coroutine_threadsafe(
                     voice.disconnect(), self.client.loop)
 
@@ -166,8 +173,8 @@ class Music(commands.Cog):
             voice = ctx.voice_client
             self.queues[voice] = []
             self.now_playing[voice] = url
-            self.play_song(text_channel, voice)
             await ctx.channel.purge(limit=1)
+            self.play_song(text_channel, voice)
 
     @commands.command(
         name='pause',
@@ -183,7 +190,13 @@ class Music(commands.Cog):
                     'Music paused'
                 )
             )
-        elif voice != None:
+        elif voice != None and voice.is_paused():
+            await ctx.send(
+                embed=create_embed(
+                    'Cannot pause while bot was already paused'
+                )
+            )
+        elif voice != None and voice.is_connected():
             await ctx.send(
                 embed=create_embed(
                     'Cannot pause while bot was not playing music'
@@ -216,6 +229,12 @@ class Music(commands.Cog):
                     'Cannot resume if music is already playing'
                 )
             )
+        elif voice != None and voice.is_connected():
+            await ctx.send(
+                embed=create_embed(
+                    'Cannot resume if there is no music to play'
+                )
+            )
         else:
             await ctx.send(
                 embed=create_embed(
@@ -225,7 +244,7 @@ class Music(commands.Cog):
 
     @commands.command(
         name='stop',
-        aliases=['s', ],
+        aliases=['s', 'st', ],
         description='Stop playing music'
     )
     async def stop(self, ctx):
@@ -252,23 +271,44 @@ class Music(commands.Cog):
         description='Display the current music queue'
     )
     async def queue(self, ctx, arg=None):
+        voice = ctx.voice_client
         if arg != None:
             await ctx.send(
                 embed=create_embed(
-                    'The queue command does not take in any other argument'
+                    'This command does not take in any other argument'
                 )
             )
-        elif self.queue[ctx.voice_client] == []:
-            ctx.send(
+        elif self.queues[voice] == []:
+            await ctx.send(
                 embed=create_embed(
                     'The music queue is empty'
                 )
             )
         else:
-            pass
+            output = ''
+            counter = 1
+            for urls in self.queues[voice]:
+                output += f'{counter}. {get_video_info(urls)[1]}\n'
+                counter += 1
+            embed = discord.Embed(
+                color=discord.Color.orange(),
+                description=output
+            )
+            embed.set_author(
+                name=f'Music queue for {ctx.author.voice.channel}'
+            )
+            embed.set_footer(text=f'Repeat: {self.loop}')
+            await ctx.send(embed=embed)
 
     @commands.command()
     async def loop(self, ctx, arg=None):
+        voice = ctx.voice_client
+        if voice == None or voice.is_playing() == False:
+            await ctx.send(
+                embed=create_embed(
+                    'There is no ongoing music being played'
+                )
+            )
         if arg == None:
             self.loop = 'all'
             voice = ctx.voice_client
@@ -281,16 +321,57 @@ class Music(commands.Cog):
         elif arg == 'one':
             self.loop = 'one'
             voice = ctx.voice_client
-            self.queues[voice].append(self.now_playing[voice])
+            self.queues[voice].insert(0, self.now_playing[voice])
             await ctx.send(
                 embed=create_embed(
                     'Repeating the current song in the music queue'
                 )
             )
         elif arg == 'off':
-            self.loop = None
+            self.loop = 'off'
+            self.queues[voice].remove(self.now_playing[voice])
+            await ctx.send(
+                embed=create_embed(
+                    'Repeating song is now off'
+                )
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'Please use the correct argument'
+                )
+            )
 
+    @commands.command(
+        name='skip',
+        aliases=['sk', ],
+        description='Skip the song currently being played'
+    )
+    async def skip(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        else:
+            voice = ctx.voice_client
+            if self.queues[voice] != []:
+                if self.now_playing[voice] in self.queues[voice]:
+                    self.queues[voice].remove(self.now_playing[voice])
+            await ctx.send(
+                embed=create_embed(
+                    f'Skipped {get_video_info(self.now_playing[voice])[1]}, playing next'
+                )
+            )
+            voice.stop()
 
+# Error handler
+    @play.error
+    async def play_error(self, ctx, error):
+        p
 # Add cog
+
+
 def setup(client):
     client.add_cog(Music(client))
