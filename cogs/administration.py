@@ -26,7 +26,7 @@ class Administration(commands.Cog, name='Administration'):
         name='clear',
         description='Delete messages (default = 5)',
         aliases=['purge', ],
-        usage=f'{prefix}clear [number of messages]'
+        usage=f'`{prefix}clear [number of messages]`'
     )
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=5):

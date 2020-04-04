@@ -39,7 +39,7 @@ class HelpMenu(commands.Cog, name='Help'):
             description='List of administrative commands'
         )
         for command in commands:
-            if command.aliases != None:
+            if command.aliases != []:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Usage: {command.usage}\nAliases: {"".join(command.aliases)}\nDescription: {command.description}',
