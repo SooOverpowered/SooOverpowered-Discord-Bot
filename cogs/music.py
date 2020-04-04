@@ -74,7 +74,7 @@ class Music(commands.Cog, name='Music'):
             ), self.client.loop
         )
 
-        def after_playing(error, voice):
+        def after_playing(error):
             if self.queues[voice] != []:
                 info = self.queues[voice].pop(0)
                 if self.loop[voice] == 'all':
@@ -94,7 +94,7 @@ class Music(commands.Cog, name='Music'):
                 asyncio.run_coroutine_threadsafe(
                     voice.disconnect(), self.client.loop)
 
-        voice.play(source, after=lambda e: after_playing(voice))
+        voice.play(source, after=after_playing())
 
     @commands.command(
         name='join',
@@ -187,6 +187,7 @@ class Music(commands.Cog, name='Music'):
                     voice = ctx.voice_client
                 self.queues[voice] = []
                 self.now_playing[voice] = url
+                self.loop[voice] = 'off'
                 await ctx.channel.purge(limit=1)
                 self.play_song(text_channel, voice)
 
