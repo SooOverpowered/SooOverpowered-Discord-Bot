@@ -74,7 +74,7 @@ class Music(commands.Cog, name='Music'):
             ), self.client.loop
         )
 
-        def after_playing(err):
+        def after_playing(voice):
             if self.queues[voice] != []:
                 info = self.queues[voice].pop(0)
                 if self.loop[voice] == 'all':
@@ -94,7 +94,7 @@ class Music(commands.Cog, name='Music'):
                 asyncio.run_coroutine_threadsafe(
                     voice.disconnect(), self.client.loop)
 
-        voice.play(source, after=after_playing)
+        voice.play(source, after=lambda e: after_playing(voice))
 
     @commands.command(
         name='join',
