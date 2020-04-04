@@ -74,7 +74,7 @@ class Music(commands.Cog, name='Music'):
             ), self.client.loop
         )
 
-        def after_playing(voice):
+        def after_playing(error, voice):
             if self.queues[voice] != []:
                 info = self.queues[voice].pop(0)
                 if self.loop[voice] == 'all':
