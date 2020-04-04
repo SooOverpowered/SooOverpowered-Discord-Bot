@@ -42,7 +42,7 @@ class HelpMenu(commands.Cog, name='Help'):
             if command.aliases != []:
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nAliases: {"".join(command.aliases)}\nDescription: {command.description}',
+                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{"".join(command.aliases)}`',
                     inline=False
                 )
             else:
