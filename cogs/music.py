@@ -305,7 +305,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 )
             else:
-                output = ''
+                output = f'**Now playing**: {get_video_info(self.now_playing[voice])}\n'
                 counter = 1
                 for urls in self.queues[voice]:
                     output += f'{counter}. {get_video_info(urls)[1]}\n'
