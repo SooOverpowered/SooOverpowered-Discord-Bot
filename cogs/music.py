@@ -297,7 +297,7 @@ class Music(commands.Cog, name='Music'):
             else:
                 output = ''
                 counter = 1
-                for urls in self.queues[voice]:
+                for urls in self.queues:
                     output += f'{counter}. {get_video_info(urls)[1]}\n'
                     counter += 1
                 embed = discord.Embed(
