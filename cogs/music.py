@@ -63,7 +63,7 @@ class Music(commands.Cog, name='Music'):
         self.now_playing = None
 
     def play_song(self, text_channel, voice):
-        info = get_video_info(self.now_playing[0])
+        info = get_video_info(self.now_playing)
         source = create_ytdl_source(info[0])
         asyncio.run_coroutine_threadsafe(
             text_channel.send(
