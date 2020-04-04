@@ -36,18 +36,20 @@ class HelpMenu(commands.Cog, name='Help'):
         embed = discord.Embed(
             color=discord.Color.orange(),
             author=cog.qualified_name,
-            description='List of administrative commands'
+            description='**List of administrative commands**'
         )
         for command in commands:
             if command.aliases != []:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Usage: {command.usage}\nAliases: {"".join(command.aliases)}\nDescription: {command.description}',
+                    inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Usage: {command.usage}\nDescription: {command.description}',
+                    inline=False
                 )
         await ctx.send(embed=embed)
 
