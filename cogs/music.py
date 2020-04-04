@@ -317,7 +317,7 @@ class Music(commands.Cog, name='Music'):
                 embed.set_author(
                     name=f'Music queue for {ctx.author.voice.channel}'
                 )
-                embed.set_footer(text=f'Repeat: {self.loop}')
+                embed.set_footer(text=f'Repeat: {self.loop[voice]}')
                 await ctx.send(embed=embed)
         else:
             await ctx.send(
