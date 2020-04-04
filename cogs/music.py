@@ -14,6 +14,7 @@ def create_ytdl_source(source):
         discord.FFmpegPCMAudio(
             source,
             before_options=" -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 1",
+            options='-vn'
         ),
         volume=0.5
     )
@@ -25,12 +26,12 @@ def get_video_info(url):
         "default_search": "ytsearch",
         'format': 'bestaudio/best',
         'quiet': True,
+        'audioformat': 'mp3',
         'extract_flat': 'in_playlist',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192'
-        }]
+        'extractaudio': True,
+        'nocheckcertificate': True,
+        'ignoreerrors': False,
+        'no_warnings': True,
     }
 
     def get_info(url):
