@@ -53,6 +53,7 @@ def get_video_info(url):
     title = video['title']
     uploader = video["uploader"] if "uploader" in video else ""
     thumbnail = video["thumbnail"] if "thumbnail" in video else None
+    print(stream_url)
     return [stream_url, title, video_url]
 
 
