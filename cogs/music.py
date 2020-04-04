@@ -83,7 +83,6 @@ class Music(commands.Cog, name='Music'):
                 self.now_playing[voice] = info
                 self.play_song(text_channel, voice)
             else:
-                del self.now_playing[voice]
                 asyncio.run_coroutine_threadsafe(
                     text_channel.send(
                         embed=create_embed(
