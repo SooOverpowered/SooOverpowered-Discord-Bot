@@ -49,7 +49,6 @@ class HelpMenu(commands.Cog, name='Help'):
                     name=command.qualified_name,
                     value=f'Usage: {command.usage}\nDescription: {command.description}',
                 )
-
         await ctx.send(embed=embed)
 
 
