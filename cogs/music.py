@@ -34,7 +34,6 @@ def get_video_info(url):
         'ignoreerrors': False,
         'no_warnings': True,
         'geo_bypass': True,
-        'proxy': '159.203.56.16:8080',
         'sleep_interval': 5,
     }
 
