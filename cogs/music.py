@@ -94,7 +94,7 @@ class Music(commands.Cog, name='Music'):
                 asyncio.run_coroutine_threadsafe(
                     voice.disconnect(), self.client.loop)
 
-        voice.play(source, after=after_playing
+        voice.play(source, after=after_playing)
 
     @commands.command(
         name='join',
