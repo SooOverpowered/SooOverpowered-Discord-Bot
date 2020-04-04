@@ -161,32 +161,25 @@ class Music(commands.Cog, name='Music'):
         text_channel = ctx.channel
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
-        if channel == None:
+        if voice != None and voice.is_playing():
+            video_source = get_video_info(url)
+            self.queues[voice].append(url)
+            await ctx.channel.purge(limit=1)
             await ctx.send(
                 embed=create_embed(
-                    'You must be connected to a voice channel to use this command'
+                    f'Song [{video_source[1]}]({video_source[2]}) added to queue'
                 )
             )
         else:
-            if voice != None and voice.is_playing():
-                video_source = get_video_info(url)
-                self.queues[voice].append(url)
-                await ctx.channel.purge(limit=1)
-                await ctx.send(
-                    embed=create_embed(
-                        f'Song [{video_source[1]}]({video_source[2]}) added to queue'
-                    )
-                )
+            if voice != None and voice.is_connected():
+                await voice.move_to(channel)
             else:
-                if voice != None and voice.is_connected():
-                    await voice.move_to(channel)
-                else:
-                    voice = await channel.connect()
+                voice = await channel.connect()
                 voice = ctx.voice_client
-                self.queues[voice] = []
-                self.now_playing[voice] = url
-                await ctx.channel.purge(limit=1)
-                self.play_song(text_channel, voice)
+            self.queues[voice] = []
+            self.now_playing[voice] = url
+            await ctx.channel.purge(limit=1)
+            self.play_song(text_channel, voice)
 
     @commands.command(
         name='pause',
@@ -406,6 +399,15 @@ class Music(commands.Cog, name='Music'):
 
 
 # Error handler
+    @play.error
+    async def play_error(self, ctx, error):
+        if isinstance(error, commands.CommandInvokeError):
+            await ctx.send(
+                embed=create_embed(
+                    'You must be connected to a voice channel to use this command'
+                )
+            )
+
 
 # Add cog
 
