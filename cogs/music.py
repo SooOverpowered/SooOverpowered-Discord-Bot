@@ -27,11 +27,15 @@ def get_video_info(url):
         'format': 'bestaudio/best',
         'quiet': True,
         'audioformat': 'mp3',
+        'noplaylist': True,
         'extract_flat': 'in_playlist',
         'extractaudio': True,
         'nocheckcertificate': True,
         'ignoreerrors': False,
         'no_warnings': True,
+        'geo_bypass': True,
+        'proxy': '159.203.56.16:8080',
+        'sleep_interval': 5,
     }
 
     def get_info(url):
