@@ -50,7 +50,7 @@ class HelpMenu(commands.Cog, name='Help'):
                     value=f'Usage: {command.usage}\nDescription: {command.description}',
                 )
 
-        await ctx.send(embed=create_embed('test'))
+        await ctx.send(embed=embed)
 
 
 def setup(client):
