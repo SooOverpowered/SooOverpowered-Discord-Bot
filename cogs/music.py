@@ -3,7 +3,6 @@ import discord
 import youtube_dl
 import os
 import asyncio
-import time
 from helper import *
 from parameters import *
 from discord.ext import commands
@@ -33,8 +32,7 @@ def get_video_info(url):
         'nocheckcertificate': True,
         'ignoreerrors': False,
         'no_warnings': True,
-        'geo_bypass': True,
-        'sleep_interval': 5,
+        'sleep_interval': 1,
     }
 
     def get_info(url):
@@ -42,7 +40,6 @@ def get_video_info(url):
             info = ydl.extract_info(url, download=False)
             video = None
             if "_type" in info and info["_type"] == "playlist":
-                time.sleep(1)
                 return get_info(
                     info['entries'][0]['url']
                 )
