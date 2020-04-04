@@ -140,6 +140,7 @@ class Music(commands.Cog, name='Music'):
             channel = voice.channel
             self.queues[voice] = []
             self.now_playing[voice] = None
+            self.loop[voice] = 'off'
             await voice.disconnect()
             await ctx.send(
                 embed=create_embed(
@@ -270,6 +271,7 @@ class Music(commands.Cog, name='Music'):
         if voice != None and voice.is_playing():
             self.queues[voice] = []
             self.now_playing[voice] = None
+            self.loop[queue] = 'off'
             voice.stop()
             await ctx.send(
                 embed=create_embed(
@@ -305,7 +307,8 @@ class Music(commands.Cog, name='Music'):
                     )
                 )
             else:
-                output = f'**Now playing**: {get_video_info(self.now_playing[voice])}\n'
+                info = get_video_info(self.now_playing[voice])
+                output = f'**Now playing**: [{info[1]}]({info[2]})\n'
                 counter = 1
                 for urls in self.queues[voice]:
                     output += f'{counter}. {get_video_info(urls)[1]}\n'

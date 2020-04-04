@@ -33,6 +33,23 @@ class HelpMenu(commands.Cog, name='Help'):
     async def Administration(self, ctx):
         cog = self.client.get_cog('Administration')
         commands = cog.get_commands()
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            author=cog.qualified_name,
+            description='List of administrative commands'
+        )
+        for command in commands:
+            if command.aliases != None:
+                embed.add_field(
+                    name=command.qualified_name,
+                    value=f'Usage: {command.usage}\nAliases: {"".join(command.aliases)}\nDescription: {command.description}',
+                )
+            else:
+                embed.add_field(
+                    name=command.qualified_name,
+                    value=f'Usage: {command.usage}\nDescription: {command.description}',
+                )
+
         await ctx.send(embed=create_embed('test'))
 
 
