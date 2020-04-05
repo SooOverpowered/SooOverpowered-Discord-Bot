@@ -158,7 +158,7 @@ class Music(commands.Cog, name='Music'):
         name='play',
         aliases=['p', ],
         description='Play music from Youtube',
-        usage=f'`{prefix}play`'
+        usage=f'`{prefix}play [url or song name]`'
     )
     async def play(self, ctx, *, url):
         if ctx.author.voice == None:
