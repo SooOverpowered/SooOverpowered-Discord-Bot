@@ -19,7 +19,7 @@ class HelpMenu(commands.Cog, name='Help'):
                 description=f'Use `{prefix}help [module name]` for more information'
             )
             embed.set_author(
-                name='**Help**',
+                name='Help',
             )
             embed.add_field(
                 name='**Administration**',
