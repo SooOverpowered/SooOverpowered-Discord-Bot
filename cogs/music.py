@@ -521,9 +521,10 @@ class Music(commands.Cog, name='Music'):
                     else:
                         if self.loop[voice] == 'one':
                             self.queues[voice].remove(self.now_playing[voice])
+                        info = get_video_info(self.now_playing[voice])
                         await ctx.send(
                             embed=create_embed(
-                                f'Skipped {get_video_info(self.now_playing[voice])[1]}, playing next'
+                                f'Skipped [{info[1]}]({info[2]}), playing next'
                             )
                         )
                         voice.stop()
