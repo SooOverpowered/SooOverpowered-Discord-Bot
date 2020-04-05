@@ -122,7 +122,7 @@ class Music(commands.Cog, name='Music'):
                 else:
                     if len(voice.channel.members) == 1:
                         await voice.move_to(channel)
-                    if voice.is_playing() or voice.is_paused():
+                    elif voice.is_playing() or voice.is_paused():
                         await ctx.send(
                             embed=create_embed(
                                 'Please wait until other members are done listening to music'
