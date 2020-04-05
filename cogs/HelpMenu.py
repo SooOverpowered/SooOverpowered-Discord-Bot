@@ -53,6 +53,34 @@ class HelpMenu(commands.Cog, name='Help'):
                 )
         await ctx.send(embed=embed)
 
+    @help.command(
+        name='Music',
+        aliases=['music'],
+        description='Show list of music commands'
+    )
+    async def Music(self, ctx):
+        cog = self.client.get_cog('Music')
+        commands = cog.get_commands()
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            author=cog.qualified_name,
+            description='**List of music commands**'
+        )
+        for command in commands:
+            if command.aliases != []:
+                embed.add_field(
+                    name=command.qualified_name,
+                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{"".join(command.aliases)}`',
+                    inline=False
+                )
+            else:
+                embed.add_field(
+                    name=command.qualified_name,
+                    value=f'Usage: {command.usage}\nDescription: {command.description}',
+                    inline=False
+                )
+        await ctx.send(embed=embed)
+
 
 def setup(client):
     client.add_cog(HelpMenu(client))
