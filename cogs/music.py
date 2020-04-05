@@ -120,7 +120,8 @@ class Music(commands.Cog, name='Music'):
                         )
                     )
                 else:
-                    print(voice.channel.members)
+                    if len(voice.channel.members) == 1:
+                        await voice.move_to(channel)
                     if voice.is_playing() or voice.is_paused():
                         await ctx.send(
                             embed=create_embed(
