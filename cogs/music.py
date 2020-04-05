@@ -439,6 +439,8 @@ class Music(commands.Cog, name='Music'):
                             )
                         )
                     elif arg == None or arg == 'all':
+                        if self.loop[voice] == 'one':
+                            self.queues[voice].pop(0)
                         self.loop[voice] = 'all'
                         voice = ctx.voice_client
                         if self.now_playing[voice] not in self.queues[voice]:
@@ -517,6 +519,8 @@ class Music(commands.Cog, name='Music'):
                             )
                         )
                     else:
+                        if self.loop[voice] == 'one':
+                            self.queues[voice].remove(self.now_playing[voice])
                         await ctx.send(
                             embed=create_embed(
                                 f'Skipped {get_video_info(self.now_playing[voice])[1]}, playing next'
