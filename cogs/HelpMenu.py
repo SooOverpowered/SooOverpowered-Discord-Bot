@@ -16,13 +16,21 @@ class HelpMenu(commands.Cog, name='Help'):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
                 color=discord.Color.orange(),
-                author='Help',
                 description=f'Use `{prefix}help [module name]` for more information'
             )
-            embed.add_field(name='**Administration**',
-                            value='Managing the server', inline=False)
-            embed.add_field(name='**Music**',
-                            value='The music player', inline=False)
+            embed.set_author(
+                name='**Help**',
+            )
+            embed.add_field(
+                name='**Administration**',
+                value='Managing the server',
+                inline=False
+            )
+            embed.add_field(
+                name='**Music**',
+                value='The music player',
+                inline=False
+            )
             await ctx.send(embed=embed)
 
     @help.command(
@@ -35,8 +43,10 @@ class HelpMenu(commands.Cog, name='Help'):
         commands = cog.get_commands()
         embed = discord.Embed(
             color=discord.Color.orange(),
-            author=cog.qualified_name,
             description='**List of administrative commands**'
+        )
+        embed.set_author(
+            name=cog.qualified_name,
         )
         for command in commands:
             if command.aliases != []:
@@ -66,8 +76,10 @@ class HelpMenu(commands.Cog, name='Help'):
         commands = cog.get_commands()
         embed = discord.Embed(
             color=discord.Color.orange(),
-            author=cog.qualified_name,
             description='**List of music commands**'
+        )
+        embed.set_author(
+            name=cog.qualified_name
         )
         for command in commands:
             if command.aliases != []:
