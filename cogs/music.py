@@ -171,13 +171,19 @@ class Music(commands.Cog, name='Music'):
             text_channel = ctx.channel
             channel = ctx.author.voice.channel
             voice = ctx.voice_client
-            if voice != None and voice.is_playing():
+            if voice != None and voice.is_playing() and voice.channel == channel:
                 video_source = get_video_info(url)
                 self.queues[voice].append(url)
                 await ctx.channel.purge(limit=1)
                 await ctx.send(
                     embed=create_embed(
                         f'Song [{video_source[1]}]({video_source[2]}) added to queue'
+                    )
+                )
+            elif voice != None and voice.is_playing() and voice.channel != channel:
+                ctx.send(
+                    embed=create_embed(
+                        'Please wait until other members are done listening to music'
                     )
                 )
             else:
