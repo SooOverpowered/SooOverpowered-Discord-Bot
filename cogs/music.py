@@ -271,7 +271,7 @@ class Music(commands.Cog, name='Music'):
         if voice != None and voice.is_playing():
             self.queues[voice] = []
             self.now_playing[voice] = None
-            self.loop[queue] = 'off'
+            self.loop[voice] = 'off'
             voice.stop()
             await ctx.send(
                 embed=create_embed(
