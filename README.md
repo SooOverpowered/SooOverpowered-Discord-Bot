@@ -1,2 +1,2 @@
 # Kim Jong Un Bot
- Daed Bot
+ Kim Jong Un Bot
