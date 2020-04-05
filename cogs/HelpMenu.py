@@ -40,9 +40,12 @@ class HelpMenu(commands.Cog, name='Help'):
         )
         for command in commands:
             if command.aliases != []:
+                alias_list = command.aliases
+                for i in range(len(alias_list)):
+                    alias_list[i] = f'{prefix}'+alias_list[i]
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{prefix}{f", {prefix}".join(command.aliases)}`',
+                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{", ".join(alias_list)}`',
                     inline=False
                 )
             else:
@@ -68,9 +71,12 @@ class HelpMenu(commands.Cog, name='Help'):
         )
         for command in commands:
             if command.aliases != []:
+                alias_list = command.aliases
+                for i in range(len(alias_list)):
+                    alias_list[i] = f'{prefix}'+alias_list[i]
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{prefix}{f", {prefix}".join(command.aliases)}`',
+                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{", ".join(alias_list)}`',
                     inline=False
                 )
             else:
