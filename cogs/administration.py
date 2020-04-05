@@ -300,7 +300,7 @@ class Administration(commands.Cog, name='Administration'):
         await self.client.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name='everything blows up'
+                name="everything blows up | type '.help'"
             ),
             status=discord.Status.online
         )
