@@ -45,13 +45,13 @@ class HelpMenu(commands.Cog, name='Help'):
                     alias_list[i] = f'{prefix}'+alias_list[i]
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{", ".join(alias_list)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
                     inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nDescription: {command.description}',
+                    value=f'Description: {command.description}\nUsage: {command.usage}',
                     inline=False
                 )
         await ctx.send(embed=embed)
@@ -76,13 +76,13 @@ class HelpMenu(commands.Cog, name='Help'):
                     alias_list[i] = f'{prefix}'+alias_list[i]
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nDescription: {command.description}\nAliases: `{", ".join(alias_list)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
                     inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Usage: {command.usage}\nDescription: {command.description}',
+                    value=f'Description: {command.description}\nUsage: {command.usage}',
                     inline=False
                 )
         await ctx.send(embed=embed)
