@@ -653,6 +653,14 @@ class Music(commands.Cog, name='Music'):
 
 
 # Error handler
+    @play.error
+    async def play_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(
+                embed=create_embed(
+                    'The play command also need a link or search keyword to work'
+                )
+            )
 
 
 # Add cog
