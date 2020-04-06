@@ -242,30 +242,37 @@ class Music(commands.Cog, name='Music'):
             channel = ctx.author.voice.channel
             voice = ctx.voice_client
             if voice != None:
-                if voice.is_playing() or voice.is_paused():
-                    if voice.channel == channel:
-                        video_source = get_video_info(url)
-                        self.queues[voice].append(url)
+                if voice.channel != channel:
+                    if len(voice.channel.members) == 1:
+                        await voice.move_to(channel)
+                        self.queues[voice] = []
+                        self.now_playing[voice] = url
+                        self.loop[voice] = 'off'
                         await ctx.channel.purge(limit=1)
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Song [{video_source[1]}]({video_source[2]}) added to queue'
-                            )
-                        )
-                    else:
+                        self.play_song(text_channel, voice)
+                    elif voice.is_playing() or voice.is_paused():
                         await ctx.send(
                             embed=create_embed(
                                 'Please wait until other members are done listening to music'
                             )
                         )
-                else:
-                    if voice.channel != channel:
+                    else:
                         await voice.move_to(channel)
-                    self.queues[voice] = []
-                    self.now_playing[voice] = url
-                    self.loop[voice] = 'off'
+                        self.queues[voice] = []
+                        self.now_playing[voice] = url
+                        self.loop[voice] = 'off'
+                        await ctx.channel.purge(limit=1)
+                        self.play_song(text_channel, voice)
+                else:
+                    video_source = get_video_info(url)
+                    self.queues[voice].append(url)
                     await ctx.channel.purge(limit=1)
-                    self.play_song(text_channel, voice)
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Song [{video_source[1]}]({video_source[2]}) added to queue'
+                        )
+                    )
+
             else:
                 voice = await channel.connect()
                 voice = ctx.voice_client
