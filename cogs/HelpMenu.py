@@ -56,13 +56,11 @@ class HelpMenu(commands.Cog, name='Help'):
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
-                    inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}',
-                    inline=False
                 )
         await ctx.send(embed=embed)
 
@@ -89,13 +87,11 @@ class HelpMenu(commands.Cog, name='Help'):
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
-                    inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}',
-                    inline=False
                 )
         await ctx.send(embed=embed)
 
