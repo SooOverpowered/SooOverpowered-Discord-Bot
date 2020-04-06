@@ -232,6 +232,7 @@ class Music(commands.Cog, name='Music'):
     )
     async def play(self, ctx, *, url):
         if ctx.author.voice == None:
+            await ctx.channel.purge(limit=1)
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -251,6 +252,7 @@ class Music(commands.Cog, name='Music'):
                         await ctx.channel.purge(limit=1)
                         self.play_song(text_channel, voice)
                     elif voice.is_playing() or voice.is_paused():
+                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 'Please wait until other members are done listening to music'
