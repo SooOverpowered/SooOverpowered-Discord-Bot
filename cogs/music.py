@@ -122,6 +122,11 @@ class Music(commands.Cog, name='Music'):
                 else:
                     if len(voice.channel.members) == 1:
                         await voice.move_to(channel)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Bot connected to **{channel}**'
+                            )
+                        )
                     elif voice.is_playing() or voice.is_paused():
                         await ctx.send(
                             embed=create_embed(
@@ -130,8 +135,16 @@ class Music(commands.Cog, name='Music'):
                         )
                     else:
                         await voice.move_to(channel)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Bot connected to **{channel}**'
+                            )
+                        )
             else:
                 voice = await channel.connect()
+                self.queues[voice] = []
+                self.now_playing[voice] = None
+                self.loop[voice] = 'off'
                 await ctx.send(
                     embed=create_embed(
                         f'Bot connected to **{channel}**'
@@ -147,11 +160,7 @@ class Music(commands.Cog, name='Music'):
     async def leave(self, ctx):
         voice = ctx.voice_client
         if voice != None:
-            if voice.is_playing() or voice.is_paused():
-                await ctx.send(
-                    'Please wait until other members are done listening to music'
-                )
-            else:
+            if len(voice.channel.members) == 1:
                 self.queues[voice] = []
                 self.now_playing[voice] = None
                 self.loop[voice] = 'off'
@@ -161,6 +170,40 @@ class Music(commands.Cog, name='Music'):
                         f'Bot disconnected from **{voice.channel}**'
                     )
                 )
+            else:
+                if voice.is_playing() or voice.is_paused():
+                    if ctx.author.voice == None:
+                        await ctx.send(
+                            embed=create_embed(
+                                'Please wait until other members are done listening to music'
+                            )
+                        )
+                    elif ctx.author.voice.channel != voice.channel:
+                        await ctx.send(
+                            embed=create_embed(
+                                'Please wait until other members are done listening to music'
+                            )
+                        )
+                    else:
+                        self.queues[voice] = []
+                        self.now_playing[voice] = None
+                        self.loop[voice] = 'off'
+                        await voice.disconnect()
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Bot disconnected from **{voice.channel}**'
+                            )
+                        )
+                else:
+                    self.queues[voice] = []
+                    self.now_playing[voice] = None
+                    self.loop[voice] = 'off'
+                    await voice.disconnect()
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Bot disconnected from **{voice.channel}**'
+                        )
+                    )
         else:
             await ctx.send(
                 embed=create_embed(
@@ -336,14 +379,25 @@ class Music(commands.Cog, name='Music'):
             channel = ctx.author.voice.channel
             voice = ctx.voice_client
             if voice != None:
-                if voice.channel != channel:
-                    await ctx.send(
-                        embed=create_embed(
-                            'Please wait until other members are done listening to music'
-                        )
-                    )
-                else:
+                if len(voice.channel.members) == 1:
+                    self.queues[voice] = []
+                    self.now_playing[voice] = None
+                    self.loop[voice] = 'off'
                     if voice.is_playing() or voice.is_paused():
+                        await ctx.send(
+                            embed=create_embed(
+                                'Stopped playing music'
+                            )
+                        )
+                    voice.stop()
+                elif voice.is_playing() or voice.is_paused():
+                    if voice.channel != channel:
+                        await ctx.send(
+                            embed=create_embed(
+                                'Please wait until other members are done listening to music'
+                            )
+                        )
+                    else:
                         self.queues[voice] = []
                         self.now_playing[voice] = None
                         self.loop[voice] = 'off'
@@ -353,12 +407,12 @@ class Music(commands.Cog, name='Music'):
                                 'Stopped playing music'
                             )
                         )
-                    else:
-                        await ctx.send(
-                            embed=create_embed(
-                                'Cannot stop if no music is playing'
-                            )
+                else:
+                    await ctx.send(
+                        embed=create_embed(
+                            'Cannot stop if no music is playing'
                         )
+                    )
             else:
                 await ctx.send(
                     embed=create_embed(
@@ -434,7 +488,7 @@ class Music(commands.Cog, name='Music'):
                         )
                     )
                 else:
-                    if voice.is_playing() == False:
+                    if self.now_playing[voice] == None:
                         await ctx.send(
                             embed=create_embed(
                                 'There is no ongoing music being played'
