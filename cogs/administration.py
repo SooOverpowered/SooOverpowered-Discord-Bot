@@ -33,6 +33,75 @@ class Administration(commands.Cog, name='Administration'):
         await ctx.channel.purge(limit=amount+1)
 
     @commands.command(
+        name='nuke',
+        description='Send a nuclear missile head that destroys all messages in a text channel',
+        usage=f'`{prefix}nuke`'
+    )
+    @commands.cooldown(1, 60, commands.BucketType.channel)
+    @commands.has_permissions(manage_channels=True)
+    async def nuke(self, ctx, arg=None):
+        if ctx.guild.system_channel == ctx.channel:
+            await ctx.send(
+                embed=create_embed(
+                    "You can't nuke the system channel\nPlease use the clear command instead"
+                )
+            )
+        elif arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'Please reply with **Y** to confirm action\nThe command will be automatically cancelled after 20 second'
+                )
+            )
+            counter = 20
+            while counter > 0:
+                time.sleep(1)
+                async for message in ctx.channel.history(after=ctx.message.created_at):
+                    if message.author == ctx.author and message.content == 'Y':
+                        counter = 0
+                        await ctx.send(
+                            embed=create_embed(
+                                "Initializing nuke process!"
+                            )
+                        )
+                        time.sleep(1)
+                        for i in range(5, 0, -1):
+                            await ctx.send(
+                                embed=create_embed(
+                                    f'Incoming nuke in {i}'
+                                )
+                            )
+                            time.sleep(1)
+                        await ctx.send(
+                            embed=create_embed(
+                                '**A GIANT NUKE APPREARED**\n'+'```' +
+                                open('nuclear.txt').read()+'```'
+                            )
+                        )
+                        channel_info = [ctx.channel.category,
+                                        ctx.channel.position,
+                                        ]
+                        time.sleep(1)
+                        await ctx.channel.clone()
+                        await ctx.channel.delete()
+                        await channel_info[0].text_channels[-1].edit(position=channel_info[1])
+                        print(f'{ctx.channel} of {ctx.guild} just got nuked')
+                        break
+                    else:
+                        counter -= 1
+                        if counter == 0:
+                            await ctx.send(
+                                embed=create_embed(
+                                    'The nuke got cancelled because the timer ran out'
+                                )
+                            )
+
+    @commands.command(
         name='kick',
         description='Kick someone from the server',
         usage=f'`{prefix}kick [@member]`'
@@ -133,75 +202,6 @@ class Administration(commands.Cog, name='Administration'):
                             await ctx.send(
                                 embed=create_embed(
                                     'The command got cancelled because the timer ran out'
-                                )
-                            )
-
-    @commands.command(
-        name='nuke',
-        description='Send a nuclear missile head that destroys all messages in a text channel',
-        usage=f'`{prefix}nuke`'
-    )
-    @commands.cooldown(1, 60, commands.BucketType.channel)
-    @commands.has_permissions(manage_channels=True)
-    async def nuke(self, ctx, arg=None):
-        if ctx.guild.system_channel == ctx.channel:
-            await ctx.send(
-                embed=create_embed(
-                    "You can't nuke the system channel\nPlease use the clear command instead"
-                )
-            )
-        elif arg != None:
-            await ctx.send(
-                embed=create_embed(
-                    'This command does not take in any other argument'
-                )
-            )
-        else:
-            await ctx.send(
-                embed=create_embed(
-                    'Please reply with **Y** to confirm action\nThe command will be automatically cancelled after 20 second'
-                )
-            )
-            counter = 20
-            while counter > 0:
-                time.sleep(1)
-                async for message in ctx.channel.history(after=ctx.message.created_at):
-                    if message.author == ctx.author and message.content == 'Y':
-                        counter = 0
-                        await ctx.send(
-                            embed=create_embed(
-                                "Initializing nuke process!"
-                            )
-                        )
-                        time.sleep(1)
-                        for i in range(5, 0, -1):
-                            await ctx.send(
-                                embed=create_embed(
-                                    f'Incoming nuke in {i}'
-                                )
-                            )
-                            time.sleep(1)
-                        await ctx.send(
-                            embed=create_embed(
-                                '**A GIANT NUKE APPREARED**\n'+'```' +
-                                open('nuclear.txt').read()+'```'
-                            )
-                        )
-                        channel_info = [ctx.channel.category,
-                                        ctx.channel.position,
-                                        ]
-                        time.sleep(1)
-                        await ctx.channel.clone()
-                        await ctx.channel.delete()
-                        await channel_info[0].text_channels[-1].edit(position=channel_info[1])
-                        print(f'{ctx.channel} of {ctx.guild} just got nuked')
-                        break
-                    else:
-                        counter -= 1
-                        if counter == 0:
-                            await ctx.send(
-                                embed=create_embed(
-                                    'The nuke got cancelled because the timer ran out'
                                 )
                             )
 

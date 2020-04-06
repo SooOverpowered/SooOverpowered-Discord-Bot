@@ -452,6 +452,52 @@ class Music(commands.Cog, name='Music'):
                 )
 
     @commands.command(
+        name='skip',
+        aliases=['sk', ],
+        description='Skip the song currently being played',
+        usage=f'`{prefix}skip`'
+    )
+    async def skip(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        elif ctx.author.voice == None:
+            await ctx.send(
+                embed=create_embed(
+                    'You must be connected to a voice channel to use this command'
+                )
+            )
+        else:
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            if voice != None:
+                if voice.channel != channel:
+                    await ctx.send(
+                        embed=create_embed(
+                            'Please wait until other members are done listening to music'
+                        )
+                    )
+                else:
+                    if self.loop[voice] == 'one':
+                        self.queues[voice].remove(self.now_playing[voice])
+                    info = get_video_info(self.now_playing[voice])
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Skipped [{info[1]}]({info[2]}), playing next'
+                        )
+                    )
+                    voice.stop()
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    )
+                )
+
+    @commands.command(
         name='queue',
         aliases=['q', ],
         description='Display your current music queue',
@@ -503,6 +549,57 @@ class Music(commands.Cog, name='Music'):
                         )
                         embed.set_footer(text=f'Repeat: {self.loop[voice]}')
                         await ctx.send(embed=embed)
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    )
+                )
+
+    @commands.command(
+        name='dequeue',
+        aliases=['rmq', 'rm'],
+        description='Remove a song from the music queue',
+        usage=f'`{prefix}dequeue [song position in music queue]`'
+    )
+    async def dequeue(self, ctx, position: int, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command only takes in one argument'
+                )
+            )
+        elif ctx.author.voice == None:
+            await ctx.send(
+                embed=create_embed(
+                    'You must be connected to a voice channel to use this command'
+                )
+            )
+        else:
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            if voice != None:
+                if voice.channel != channel:
+                    await ctx.send(
+                        embed=create_embed(
+                            'Please wait until other members are done listening to music'
+                        )
+                    )
+                else:
+                    if position > len(self.queues[voice]):
+                        await ctx.send(
+                            embed=create_embed(
+                                f'The music queue only have **{len(self.queues[voice])}** songs, but you specified more than that!'
+                            )
+                        )
+                    else:
+                        info = get_video_info(
+                            self.queues[voice].pop(position-1))
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Song [{info[1]}]({info[2]}) removed from music queue'
+                            )
+                        )
             else:
                 await ctx.send(
                     embed=create_embed(
@@ -590,105 +687,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 )
 
-    @commands.command(
-        name='skip',
-        aliases=['sk', ],
-        description='Skip the song currently being played',
-        usage=f'`{prefix}skip`'
-    )
-    async def skip(self, ctx, arg=None):
-        if arg != None:
-            await ctx.send(
-                embed=create_embed(
-                    'This command does not take in any other argument'
-                )
-            )
-        elif ctx.author.voice == None:
-            await ctx.send(
-                embed=create_embed(
-                    'You must be connected to a voice channel to use this command'
-                )
-            )
-        else:
-            channel = ctx.author.voice.channel
-            voice = ctx.voice_client
-            if voice != None:
-                if voice.channel != channel:
-                    await ctx.send(
-                        embed=create_embed(
-                            'Please wait until other members are done listening to music'
-                        )
-                    )
-                else:
-                    if self.loop[voice] == 'one':
-                        self.queues[voice].remove(self.now_playing[voice])
-                    info = get_video_info(self.now_playing[voice])
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Skipped [{info[1]}]({info[2]}), playing next'
-                        )
-                    )
-                    voice.stop()
-            else:
-                await ctx.send(
-                    embed=create_embed(
-                        'Bot was not connected to any voice channel'
-                    )
-                )
-
-    @commands.command(
-        name='dequeue',
-        aliases=['rmq', 'rm'],
-        description='Remove a song from the music queue',
-        usage=f'`{prefix}dequeue [song position in music queue]`'
-    )
-    async def dequeue(self, ctx, position: int, arg=None):
-        if arg != None:
-            await ctx.send(
-                embed=create_embed(
-                    'This command only takes in one argument'
-                )
-            )
-        elif ctx.author.voice == None:
-            await ctx.send(
-                embed=create_embed(
-                    'You must be connected to a voice channel to use this command'
-                )
-            )
-        else:
-            channel = ctx.author.voice.channel
-            voice = ctx.voice_client
-            if voice != None:
-                if voice.channel != channel:
-                    await ctx.send(
-                        embed=create_embed(
-                            'Please wait until other members are done listening to music'
-                        )
-                    )
-                else:
-                    if position > len(self.queues[voice]):
-                        await ctx.send(
-                            embed=create_embed(
-                                f'The music queue only have **{len(self.queues[voice])}** songs, but you specified more than that!'
-                            )
-                        )
-                    else:
-                        info = get_video_info(
-                            self.queues[voice].pop(position-1))
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Song [{info[1]}]({info[2]}) removed from music queue'
-                            )
-                        )
-            else:
-                await ctx.send(
-                    embed=create_embed(
-                        'Bot was not connected to any voice channel'
-                    )
-                )
-
-
-# Error handler
+    # Error handler
     @play.error
     async def play_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
