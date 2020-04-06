@@ -692,6 +692,15 @@ class Music(commands.Cog, name='Music'):
                 )
             )
 
+    @dequeue.error
+    async def dequeue(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(
+                embed=create_embed(
+                    'Please use the correct argument'
+                )
+            )
+
 
 # Add cog
 def setup(client):
