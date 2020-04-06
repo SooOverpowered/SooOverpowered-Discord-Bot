@@ -642,8 +642,14 @@ class Music(commands.Cog, name='Music'):
         description='Remove a song from the music queue',
         usage=f'`{prefix}dequeue [song position in music queue]`'
     )
-    async def dequeue(self, ctx, position: int):
-        if ctx.author.voice == None:
+    async def dequeue(self, ctx, position: int, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command only takes in one argument'
+                )
+            )
+        elif ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
