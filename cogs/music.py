@@ -102,8 +102,14 @@ class Music(commands.Cog, name='Music'):
         description='Connect to your current voice channel',
         usage=f'`{prefix}join`'
     )
-    async def join(self, ctx):
-        if ctx.author.voice == None:
+    async def join(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        elif ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     "You are not in any voice channel"
@@ -157,33 +163,50 @@ class Music(commands.Cog, name='Music'):
         description='Disconnect from the voice channel',
         usage=f'`{prefix}leave`'
     )
-    async def leave(self, ctx):
-        voice = ctx.voice_client
-        if voice != None:
-            if len(voice.channel.members) == 1:
-                self.queues[voice] = []
-                self.now_playing[voice] = None
-                self.loop[voice] = 'off'
-                await voice.disconnect()
-                await ctx.send(
-                    embed=create_embed(
-                        f'Bot disconnected from **{voice.channel}**'
-                    )
+    async def leave(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
                 )
-            else:
-                if voice.is_playing() or voice.is_paused():
-                    if ctx.author.voice == None:
-                        await ctx.send(
-                            embed=create_embed(
-                                'Please wait until other members are done listening to music'
-                            )
+            )
+        else:
+            voice = ctx.voice_client
+            if voice != None:
+                if len(voice.channel.members) == 1:
+                    self.queues[voice] = []
+                    self.now_playing[voice] = None
+                    self.loop[voice] = 'off'
+                    await voice.disconnect()
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Bot disconnected from **{voice.channel}**'
                         )
-                    elif ctx.author.voice.channel != voice.channel:
-                        await ctx.send(
-                            embed=create_embed(
-                                'Please wait until other members are done listening to music'
+                    )
+                else:
+                    if voice.is_playing() or voice.is_paused():
+                        if ctx.author.voice == None:
+                            await ctx.send(
+                                embed=create_embed(
+                                    'Please wait until other members are done listening to music'
+                                )
                             )
-                        )
+                        elif ctx.author.voice.channel != voice.channel:
+                            await ctx.send(
+                                embed=create_embed(
+                                    'Please wait until other members are done listening to music'
+                                )
+                            )
+                        else:
+                            self.queues[voice] = []
+                            self.now_playing[voice] = None
+                            self.loop[voice] = 'off'
+                            await voice.disconnect()
+                            await ctx.send(
+                                embed=create_embed(
+                                    f'Bot disconnected from **{voice.channel}**'
+                                )
+                            )
                     else:
                         self.queues[voice] = []
                         self.now_playing[voice] = None
@@ -194,22 +217,12 @@ class Music(commands.Cog, name='Music'):
                                 f'Bot disconnected from **{voice.channel}**'
                             )
                         )
-                else:
-                    self.queues[voice] = []
-                    self.now_playing[voice] = None
-                    self.loop[voice] = 'off'
-                    await voice.disconnect()
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Bot disconnected from **{voice.channel}**'
-                        )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
                     )
-        else:
-            await ctx.send(
-                embed=create_embed(
-                    'Bot was not connected to any voice channel'
                 )
-            )
 
     @commands.command(
         name='play',
@@ -268,8 +281,14 @@ class Music(commands.Cog, name='Music'):
         description='Pauses the music',
         usage=f'`{prefix}pause`'
     )
-    async def pause(self, ctx):
-        if ctx.author.voice == None:
+    async def pause(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        elif ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -318,8 +337,14 @@ class Music(commands.Cog, name='Music'):
         description='Resume the music',
         usage=f'`{prefix}resume`'
     )
-    async def resume(self, ctx):
-        if ctx.author.voice == None:
+    async def resume(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        elif ctx.author.voice == None:
             ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -368,8 +393,14 @@ class Music(commands.Cog, name='Music'):
         description='Stop playing music',
         usage=f'`{prefix}stop`'
     )
-    async def stop(self, ctx):
-        if ctx.author.voice == None:
+    async def stop(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        elif ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -566,7 +597,13 @@ class Music(commands.Cog, name='Music'):
         usage=f'`{prefix}skip`'
     )
     async def skip(self, ctx, arg=None):
-        if ctx.author.voice == None:
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        elif ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -583,22 +620,15 @@ class Music(commands.Cog, name='Music'):
                         )
                     )
                 else:
-                    if arg != None:
-                        await ctx.send(
-                            embed=create_embed(
-                                'This command does not take in any other argument'
-                            )
+                    if self.loop[voice] == 'one':
+                        self.queues[voice].remove(self.now_playing[voice])
+                    info = get_video_info(self.now_playing[voice])
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Skipped [{info[1]}]({info[2]}), playing next'
                         )
-                    else:
-                        if self.loop[voice] == 'one':
-                            self.queues[voice].remove(self.now_playing[voice])
-                        info = get_video_info(self.now_playing[voice])
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Skipped [{info[1]}]({info[2]}), playing next'
-                            )
-                        )
-                        voice.stop()
+                    )
+                    voice.stop()
             else:
                 await ctx.send(
                     embed=create_embed(
