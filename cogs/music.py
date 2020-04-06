@@ -427,42 +427,57 @@ class Music(commands.Cog, name='Music'):
         usage=f'`{prefix}queue`'
     )
     async def queue(self, ctx, arg=None):
-        voice = ctx.voice_client
         if arg != None:
             await ctx.send(
                 embed=create_embed(
                     'This command does not take in any other argument'
                 )
             )
-        elif voice != None:
-            if self.queues[voice] == []:
-                await ctx.send(
-                    embed=create_embed(
-                        'The music queue is empty'
-                    )
-                )
-            else:
-                info = get_video_info(self.now_playing[voice])
-                output = f'**Now playing**: [{info[1]}]({info[2]})\n'
-                counter = 1
-                for urls in self.queues[voice]:
-                    output += f'{counter}. {get_video_info(urls)[1]}\n'
-                    counter += 1
-                embed = discord.Embed(
-                    color=discord.Color.orange(),
-                    description=output
-                )
-                embed.set_author(
-                    name=f'Music queue for {ctx.author.voice.channel}'
-                )
-                embed.set_footer(text=f'Repeat: {self.loop[voice]}')
-                await ctx.send(embed=embed)
-        else:
+        elif ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
-                    'You are not connected to any voice channel'
+                    'You must be connected to a voice channel to use this command'
                 )
             )
+        else:
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            if voice != None:
+                if voice.channel != channel:
+                    await ctx.send(
+                        embed=create_embed(
+                            'You are not using music'
+                        )
+                    )
+                else:
+                    if self.queues[voice] == []:
+                        await ctx.send(
+                            embed=create_embed(
+                                'The music queue is empty'
+                            )
+                        )
+                    else:
+                        info = get_video_info(self.now_playing[voice])
+                        output = f'**Now playing**: [{info[1]}]({info[2]})\n'
+                        counter = 1
+                        for urls in self.queues[voice]:
+                            output += f'{counter}. {get_video_info(urls)[1]}\n'
+                            counter += 1
+                        embed = discord.Embed(
+                            color=discord.Color.orange(),
+                            description=output
+                        )
+                        embed.set_author(
+                            name=f'Music queue for {ctx.author.voice.channel}'
+                        )
+                        embed.set_footer(text=f'Repeat: {self.loop[voice]}')
+                        await ctx.send(embed=embed)
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    )
+                )
 
     @commands.command(
         name='loop',
@@ -597,8 +612,44 @@ class Music(commands.Cog, name='Music'):
         description='Remove a song from the music queue',
         usage=f'`{prefix}dequeue [song position in music queue]`'
     )
-    async def dequeue(self, ctx, position):
-        voice = ctx.voice_client
+    async def dequeue(self, ctx, position: int):
+        if ctx.author.voice == None:
+            await ctx.send(
+                embed=create_embed(
+                    'You must be connected to a voice channel to use this command'
+                )
+            )
+        else:
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            if voice != None:
+                if voice.channel != channel:
+                    await ctx.send(
+                        embed=create_embed(
+                            'Please wait until other members are done listening to music'
+                        )
+                    )
+                else:
+                    if position > len(self.queues[voice]):
+                        await ctx.send(
+                            embed=create_embed(
+                                f'The music queue only have **{len(self.queues[voice])}** songs, but you specified more than that!'
+                            )
+                        )
+                    else:
+                        info = get_video_info(
+                            self.queues[voice].pop(position-1))
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Song [{info[1]}]({info[2]}) removed from music queue'
+                            )
+                        )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    )
+                )
 
 
 # Error handler
