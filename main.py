@@ -13,7 +13,7 @@ except FileNotFoundError:
 
 
 # Start the bot
-client = commands.Bot(command_prefix=prefix)
+client = commands.Bot(command_prefix=prefix, owner_id=owner)
 
 
 # Remove default help command

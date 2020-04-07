@@ -3,3 +3,4 @@ invitelink = 'https://discordapp.com/api/oauth2/authorize?client_id=678865836513
 prefix = '.'
 landing_channel=None
 graveyard=None
+owner=244781530608697346

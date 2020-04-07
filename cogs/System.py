@@ -15,7 +15,7 @@ class System(commands.Cog, name='System'):
         description='Reload the cog',
         usage=f'`{prefix}reload [cog name]`'
     )
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def reload(self, ctx, extension):
         self.client.reload_extension(f'cogs.{extension}')
         print(f"Cog {extension} reloaded successfully")
@@ -26,7 +26,7 @@ class System(commands.Cog, name='System'):
         description='Load the cog',
         usage=f'`{prefix}load [cog name]`'
     )
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def load(self, ctx, extension):
         self.client.load_extension(f'cogs.{extension}')
         print(f'Cog {extension} loaded successfully')
@@ -36,7 +36,7 @@ class System(commands.Cog, name='System'):
         name='unload',
         description='Unload the cog',
         usage=f'`{prefix}unload [cog name]`')
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def unload(self, ctx, extension):
         self.client.unload_extension(f'cogs.{extension}')
         print(f'Cog {extension} unloaded successfully')
