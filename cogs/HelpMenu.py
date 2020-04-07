@@ -35,7 +35,7 @@ class HelpMenu(commands.Cog, name='Help'):
 
     @help.command(
         name='Administration',
-        aliases=['admin', ],
+        aliases=['admin', 'administration', ],
         description='Show list of administrative commands'
     )
     async def Administration(self, ctx):
@@ -66,7 +66,7 @@ class HelpMenu(commands.Cog, name='Help'):
 
     @help.command(
         name='Music',
-        aliases=['music'],
+        aliases=['music', ],
         description='Show list of music commands'
     )
     async def Music(self, ctx):
