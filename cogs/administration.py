@@ -296,6 +296,11 @@ class Administration(commands.Cog, name='Administration'):
 
     # Events
     @commands.Cog.listener()
+    async def on_disconnect(self):
+        await self.client.connect(reconnect=True)
+        await self.client.login(token, bot=True)
+
+    @commands.Cog.listener()
     async def on_connect(self):
         await self.client.change_presence(
             activity=discord.Activity(
