@@ -20,7 +20,11 @@ class Administration(commands.Cog, name='Administration'):
     )
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
-        await ctx.send(embed=create_embed(f'The ping is {time} ms!'))
+        await ctx.send(
+            embed=create_embed(
+                f'The ping is {time} ms!'
+            )
+        )
 
     @commands.command(
         name='clear',
