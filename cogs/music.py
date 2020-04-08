@@ -629,13 +629,7 @@ class Music(commands.Cog, name='Music'):
                         )
                     )
                 else:
-                    if self.now_playing[voice] == None:
-                        await ctx.send(
-                            embed=create_embed(
-                                'There is no ongoing music being played'
-                            )
-                        )
-                    elif arg == None or arg == 'all':
+                    if arg == None or arg == 'all':
                         self.loop[voice] = 'all'
                         voice = ctx.voice_client
                         await ctx.send(
