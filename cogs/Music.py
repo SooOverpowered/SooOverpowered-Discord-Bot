@@ -171,7 +171,7 @@ class Music(commands.Cog, name='Music'):
             voice = ctx.voice_client
             if voice != None:
                 if len(voice.channel.members) == 1:
-                    self.queues[voice] = []
+                    self.queues[voice] = [None]
                     self.loop[voice] = 'off'
                     await voice.disconnect()
                     await ctx.send(
@@ -194,7 +194,7 @@ class Music(commands.Cog, name='Music'):
                                 )
                             )
                         else:
-                            self.queues[voice] = []
+                            self.queues[voice] = [None]
                             self.loop[voice] = 'off'
                             await voice.disconnect()
                             await ctx.send(
@@ -203,7 +203,7 @@ class Music(commands.Cog, name='Music'):
                                 )
                             )
                     else:
-                        self.queues[voice] = []
+                        self.queues[voice] = [None]
                         self.loop[voice] = 'off'
                         await voice.disconnect()
                         await ctx.send(
@@ -411,7 +411,7 @@ class Music(commands.Cog, name='Music'):
             voice = ctx.voice_client
             if voice != None:
                 if len(voice.channel.members) == 1:
-                    self.queues[voice] = []
+                    self.queues[voice] = [None]
                     self.loop[voice] = 'off'
                     if voice.is_playing() or voice.is_paused():
                         await ctx.send(
@@ -428,7 +428,7 @@ class Music(commands.Cog, name='Music'):
                             )
                         )
                     else:
-                        self.queues[voice] = []
+                        self.queues[voice] = [None]
                         self.loop[voice] = 'off'
                         voice.stop()
                         await ctx.send(
