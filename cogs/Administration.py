@@ -236,8 +236,17 @@ class Administration(commands.Cog, name='Administration'):
         description='Set the custom prefix for the server',
         usage='`.setprefix [new prefix]`'
     )
-    async def setprefix(self, ctx, new_prefix):
-        pass
+    async def setprefix(self, ctx, new_prefix: str):
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        prefixes[str(ctx.guild.id)] = new_prefix
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+        await ctx.send(
+            embed=create_embed(
+                f'Prefix changed to {new_prefix}'
+            )
+        )
 
     # Error handler
     @clear.error
