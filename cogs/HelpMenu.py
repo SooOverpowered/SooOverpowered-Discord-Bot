@@ -10,7 +10,8 @@ class HelpMenu(commands.Cog, name='Help'):
         self.client = client
 
     @commands.group(
-        invoke_without_command=True
+        invoke_without_command=True,
+        aliases=['h', ]
     )
     async def help(self, ctx):
         if ctx.invoked_subcommand is None:

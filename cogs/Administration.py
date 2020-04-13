@@ -231,6 +231,14 @@ class Administration(commands.Cog, name='Administration'):
         )
         await ctx.send(embed=embed)
 
+    @commands.command(
+        name='setprefix',
+        description='Set the custom prefix for the server',
+        usage='`.setprefix [new prefix]`'
+    )
+    async def setprefix(self, ctx, new_prefix):
+        pass
+
     # Error handler
     @clear.error
     async def clear_error(self, ctx, error):
