@@ -2,8 +2,17 @@
 import discord
 import os
 import asyncio
+import json
+from parameters import *
 from helper import *
 from discord.ext import commands
+
+
+# Load custom prefixes
+def get_prefix(client, message):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+    return prefixes[str(message.guild.id)]
 
 
 # load up parameters
@@ -14,7 +23,7 @@ except FileNotFoundError:
 
 
 # Start the bot
-client = commands.Bot(command_prefix=prefix, owner_id=owner)
+client = commands.Bot(command_prefix=get_prefix, owner_id=owner)
 
 
 # Remove default help command

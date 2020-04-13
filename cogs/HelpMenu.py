@@ -16,7 +16,7 @@ class HelpMenu(commands.Cog, name='Help'):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
                 color=discord.Color.orange(),
-                description=f'Use `{prefix}help [module name]` for more information'
+                description=f'Use `.help [module name]` for more information'
             )
             embed.set_author(
                 name='Help',
@@ -50,9 +50,12 @@ class HelpMenu(commands.Cog, name='Help'):
         )
         for command in commands:
             if command.aliases != []:
+                alias_list = command.aliases
+                for i in range(len(alias_list)):
+                    alias_list[i] = f'.'+alias_list[i]
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(command.aliases)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
                 )
             else:
                 embed.add_field(
@@ -78,9 +81,12 @@ class HelpMenu(commands.Cog, name='Help'):
         )
         for command in commands:
             if command.aliases != []:
+                alias_list = command.aliases
+                for i in range(len(alias_list)):
+                    alias_list[i] = f'.'+alias_list[i]
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(command.aliases)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
                 )
             else:
                 embed.add_field(

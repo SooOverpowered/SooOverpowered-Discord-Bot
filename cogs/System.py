@@ -13,7 +13,7 @@ class System(commands.Cog, name='System'):
     @commands.command(
         name='reload',
         description='Reload the cog',
-        usage=f'`{prefix}reload [cog name]`'
+        usage=f'`.reload [cog name]`'
     )
     @commands.is_owner()
     async def reload(self, ctx, extension):
@@ -28,7 +28,7 @@ class System(commands.Cog, name='System'):
     @commands.command(
         name='load',
         description='Load the cog',
-        usage=f'`{prefix}load [cog name]`'
+        usage=f'`.load [cog name]`'
     )
     @commands.is_owner()
     async def load(self, ctx, extension):
@@ -43,7 +43,7 @@ class System(commands.Cog, name='System'):
     @commands.command(
         name='unload',
         description='Unload the cog',
-        usage=f'`{prefix}unload [cog name]`')
+        usage=f'`.unload [cog name]`')
     @commands.is_owner()
     async def unload(self, ctx, extension):
         self.client.unload_extension(f'cogs.{extension}')
@@ -60,13 +60,13 @@ class System(commands.Cog, name='System'):
         if isinstance(error, commands.CommandInvokeError):
             await ctx.send(
                 embed=create_embed(
-                    f'Cog not found, please use `{prefix}help reload` for list of cogs'
+                    f'Cog not found, please use `.help reload` for list of cogs'
                 )
             )
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(
                 embed=create_embed(
-                    f"Missing required argument, please use `{prefix}help reload` for correct usage"
+                    f"Missing required argument, please use `.help reload` for correct usage"
                 )
             )
         elif isinstance(error, commands.NotOwner):
@@ -81,7 +81,7 @@ class System(commands.Cog, name='System'):
         if isinstance(error, commands.CommandInvokeError):
             await ctx.send(
                 embed=create_embed(
-                    f'Cog not found, please use `{prefix}help load` for list of cogs'
+                    f'Cog not found, please use `.help load` for list of cogs'
                 )
             )
         elif isinstance(error, commands.NotOwner):
@@ -96,7 +96,7 @@ class System(commands.Cog, name='System'):
         if isinstance(error, commands.CommandInvokeError):
             await ctx.send(
                 embed=create_embed(
-                    f'Cog not found, please use `{prefix}help unload` for list of cogs'
+                    f'Cog not found, please use `.help unload` for list of cogs'
                 )
             )
         elif isinstance(error, commands.NotOwner):

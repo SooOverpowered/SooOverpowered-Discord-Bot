@@ -1,8 +1,8 @@
 # Imports
 import discord
 import time
+import json
 from datetime import datetime
-from parameters import *
 from helper import *
 from discord.ext import commands
 
@@ -16,7 +16,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='ping',
         description='Check the latency',
-        usage=f'`{prefix}ping`'
+        usage=f'`.ping`'
     )
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
@@ -30,7 +30,7 @@ class Administration(commands.Cog, name='Administration'):
         name='clear',
         description='Delete messages (default = 5)',
         aliases=['purge', ],
-        usage=f'`{prefix}clear [number of messages]`'
+        usage=f'`.clear [number of messages]`'
     )
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=5):
@@ -39,7 +39,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='nuke',
         description='Send a nuclear missile head that destroys all messages in a text channel',
-        usage=f'`{prefix}nuke`'
+        usage=f'`.nuke`'
     )
     @commands.cooldown(1, 60, commands.BucketType.channel)
     @commands.has_permissions(manage_channels=True)
@@ -108,7 +108,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='kick',
         description='Kick someone from the server',
-        usage=f'`{prefix}kick [@member]`'
+        usage=f'`.kick [@member]`'
     )
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
@@ -163,7 +163,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='ban',
         description='Ban someone from the server',
-        usage=f'`{prefix}ban [@member]`'
+        usage=f'`.ban [@member]`'
     )
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
@@ -213,7 +213,7 @@ class Administration(commands.Cog, name='Administration'):
         name='userinfo',
         aliases=['info', ],
         description='Displays the user info',
-        usage=f'`{prefix}userinfo`'
+        usage=f'`.userinfo`'
     )
     async def userinfo(self, ctx, member: discord.Member = None):
         if member == None:
@@ -310,8 +310,27 @@ class Administration(commands.Cog, name='Administration'):
         )
 
     @commands.Cog.listener()
+    async def on_disconnect(self):
+        voiceclients = self.client.voice_clients
+        for voice in voiceclients:
+            if voice.is_playing():
+                voice.pause()
+
+    @commands.Cog.listener()
     async def on_ready(self):
         print('Bot logged in as {0.user}'.format(self.client))
+        guilds = self.client.guilds
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        for guild in guilds:
+            if str(guild.id) not in prefixes:
+                prefixes[str(guild.id)] = '.'
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+        voiceclients = self.client.voice_clients
+        for voice in voiceclients:
+            if voice.is_paused():
+                voice.resume()
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -330,6 +349,22 @@ class Administration(commands.Cog, name='Administration'):
                 f"**{member}** has left the server, RIP"
             )
         )
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        prefixes[str(guild.id)] = '.'
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        prefixes.pop(str(guild.id))
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
 
 
 # Add cog
