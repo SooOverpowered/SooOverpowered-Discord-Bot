@@ -775,17 +775,17 @@ class Music(commands.Cog, name='Music'):
     )
     async def voiceping(self, ctx):
         voice = ctx.voice_client
-        if voice == None:
-            await ctx.send(
-                embed=create_embed(
-                    'Bot was not connected to any voice channel'
-                )
-            )
-        else:
+        if voice != None:
             time = round(voice.latency*1000)
             await ctx.send(
                 embed=create_embed(
                     f'The voice ping is {time} ms!'
+                )
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'Bot was not connected to any voice channel'
                 )
             )
 
