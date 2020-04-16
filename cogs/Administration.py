@@ -232,18 +232,21 @@ class Administration(commands.Cog, name='Administration'):
         )
         embed.add_field(
             name='Account Info',
-            value=f"Currently {member.status}\nAccound created on {member.created_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.created_at).days} days ago!"
+            value=f"Currently {member.status}\nAccound created on {member.created_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.created_at).days} days ago!",
+            inline=False
         )
         embed.add_field(
             name='Server Info',
-            value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!"
+            value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!",
+            inline=False
         )
         role_str = ''
         for role in member.roles:
             role_str += str(role)+', '
         embed.add_field(
             name='Roles',
-            value=role_str
+            value=role_str,
+            inline=False
         )
         embed.set_footer(
             text=f'ID: {member.id}'
