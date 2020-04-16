@@ -248,7 +248,7 @@ class Administration(commands.Cog, name='Administration'):
         embed.set_footer(
             text=f'ID: {member.id}'
         )
-        await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions(everyone=True, roles=True))
+        await ctx.send(embed=embed)
 
     @commands.command(
         name='setprefix',
