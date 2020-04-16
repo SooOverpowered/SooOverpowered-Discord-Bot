@@ -238,9 +238,12 @@ class Administration(commands.Cog, name='Administration'):
             name='Server Info',
             value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!"
         )
+        role_str = ''
+        for role in member.roles:
+            role_str.append(str(role)+', ')
         embed.add_field(
             name='Roles',
-            value=", ".join(member.roles)
+            value=role_str
         )
         embed.set_footer(
             text=f'ID: {member.id}'
