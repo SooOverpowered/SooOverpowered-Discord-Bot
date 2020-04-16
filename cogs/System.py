@@ -13,7 +13,7 @@ class System(commands.Cog, name='System'):
     @commands.command(
         name='reload',
         description='Reload the cog',
-        usage=f'`.reload [cog name]`'
+        usage='`.reload [cog name]`'
     )
     @commands.is_owner()
     async def reload(self, ctx, extension):
@@ -28,7 +28,7 @@ class System(commands.Cog, name='System'):
     @commands.command(
         name='load',
         description='Load the cog',
-        usage=f'`.load [cog name]`'
+        usage='`.load [cog name]`'
     )
     @commands.is_owner()
     async def load(self, ctx, extension):
@@ -43,7 +43,7 @@ class System(commands.Cog, name='System'):
     @commands.command(
         name='unload',
         description='Unload the cog',
-        usage=f'`.unload [cog name]`')
+        usage='`.unload [cog name]`')
     @commands.is_owner()
     async def unload(self, ctx, extension):
         self.client.unload_extension(f'cogs.{extension}')

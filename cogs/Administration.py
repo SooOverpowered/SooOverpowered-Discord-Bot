@@ -16,7 +16,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='ping',
         description='Check the latency',
-        usage=f'`.ping`'
+        usage='`.ping`'
     )
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
@@ -30,7 +30,7 @@ class Administration(commands.Cog, name='Administration'):
         name='clear',
         description='Delete messages (default = 5)',
         aliases=['purge', ],
-        usage=f'`.clear [number of messages]`'
+        usage='`.clear [number of messages]`'
     )
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=5):
@@ -39,7 +39,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='nuke',
         description='Send a nuclear missile head that destroys all messages in a text channel',
-        usage=f'`.nuke`'
+        usage='`.nuke`'
     )
     @commands.cooldown(1, 60, commands.BucketType.channel)
     @commands.has_permissions(manage_channels=True)
@@ -108,7 +108,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='kick',
         description='Kick someone from the server',
-        usage=f'`.kick [@member]`'
+        usage='`.kick [@member]`'
     )
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
@@ -163,7 +163,7 @@ class Administration(commands.Cog, name='Administration'):
     @commands.command(
         name='ban',
         description='Ban someone from the server',
-        usage=f'`.ban [@member]`'
+        usage='`.ban [@member]`'
     )
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
@@ -213,7 +213,7 @@ class Administration(commands.Cog, name='Administration'):
         name='userinfo',
         aliases=['info', ],
         description='Displays the user info',
-        usage=f'`.userinfo`'
+        usage='`.userinfo`'
     )
     async def userinfo(self, ctx, member: discord.Member = None):
         if member == None:
@@ -332,6 +332,20 @@ class Administration(commands.Cog, name='Administration'):
         for voice in voiceclients:
             if voice.is_playing():
                 voice.pause()
+        with open('queue.json', 'r') as f:
+            queue = json.load(f)
+        for voice in voiceclients:
+            if voice.is_playing():
+                channel = self.client.get_channel(
+                    int(
+                        queue[str(voice)][0]['text_channel']
+                    )
+                )
+                await channel.send(
+                    embed=create_embed(
+                        'Bot was disconnected from discord, music was paused for you automatically'
+                    )
+                )
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -344,10 +358,13 @@ class Administration(commands.Cog, name='Administration'):
                 prefixes[str(guild.id)] = '.'
         with open('prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
-        voiceclients = self.client.voice_clients
-        for voice in voiceclients:
-            if voice.is_paused():
-                voice.resume()
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        for guild in guilds:
+            if str(guild.id) not in playlist:
+                playlist[str(guild.id)] = {}
+        with open('playlist.json', 'w') as f:
+            json.dump(playlist, f, indent=4)
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -374,6 +391,11 @@ class Administration(commands.Cog, name='Administration'):
         prefixes[str(guild.id)] = '.'
         with open('prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        playlist[str(guild.id)] = {}
+        with open('playlist.json', 'w') as f:
+            json.dump(playlist, f, indent=4)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
@@ -382,6 +404,11 @@ class Administration(commands.Cog, name='Administration'):
         prefixes.pop(str(guild.id))
         with open('prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        playlist.pop(str(guild.id))
+        with open('playlist.json', 'w') as f:
+            json.dump(playlist, f, indent=4)
 
 
 # Add cog

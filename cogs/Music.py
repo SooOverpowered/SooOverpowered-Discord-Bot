@@ -4,6 +4,7 @@ import youtube_dl
 import os
 import asyncio
 import json
+import math
 from helper import *
 from parameters import *
 from discord.ext import commands
@@ -114,7 +115,7 @@ class Music(commands.Cog, name='Music'):
         name='join',
         aliases=['j', 'connect', ],
         description='Connect to your current voice channel',
-        usage=f'`.join`'
+        usage='`.join`'
     )
     async def join(self, ctx, arg=None):
         if arg != None:
@@ -175,7 +176,7 @@ class Music(commands.Cog, name='Music'):
         name='leave',
         aliases=['dc', 'disconnect'],
         description='Disconnect from the voice channel',
-        usage=f'`.leave`'
+        usage='`.leave`'
     )
     async def leave(self, ctx, arg=None):
         if arg != None:
@@ -241,7 +242,7 @@ class Music(commands.Cog, name='Music'):
         name='play',
         aliases=['p', ],
         description='Play music from Youtube',
-        usage=f'`.play [url or song name]`'
+        usage='`.play [url or song name]`'
     )
     async def play(self, ctx, *, url):
         if ctx.author.voice == None:
@@ -360,7 +361,7 @@ class Music(commands.Cog, name='Music'):
         name='pause',
         aliases=['pau', 'pa'],
         description='Pauses the music',
-        usage=f'`.pause`'
+        usage='`.pause`'
     )
     async def pause(self, ctx, arg=None):
         if arg != None:
@@ -416,7 +417,7 @@ class Music(commands.Cog, name='Music'):
         name='resume',
         aliases=['res', 're'],
         description='Resume the music',
-        usage=f'`.resume`'
+        usage='`.resume`'
     )
     async def resume(self, ctx, arg=None):
         if arg != None:
@@ -472,7 +473,7 @@ class Music(commands.Cog, name='Music'):
         name='stop',
         aliases=['s', 'st', ],
         description='Stop playing music',
-        usage=f'`.stop`'
+        usage='`.stop`'
     )
     async def stop(self, ctx, arg=None):
         if arg != None:
@@ -536,7 +537,7 @@ class Music(commands.Cog, name='Music'):
         name='skip',
         aliases=['sk', ],
         description='Skip the song currently being played',
-        usage=f'`.skip`'
+        usage='`.skip`'
     )
     async def skip(self, ctx, arg=None):
         if arg != None:
@@ -586,7 +587,7 @@ class Music(commands.Cog, name='Music'):
         name='queue',
         aliases=['q', ],
         description='Display your current music queue',
-        usage=f'`.queue`'
+        usage='`.queue`'
     )
     async def queue(self, ctx, arg=None):
         if arg != None:
@@ -648,9 +649,9 @@ class Music(commands.Cog, name='Music'):
 
     @commands.command(
         name='dequeue',
-        aliases=['rmq', 'rm'],
+        aliases=['rmq', ],
         description='Remove a song from the music queue',
-        usage=f'`.dequeue [song position in music queue]`'
+        usage='`.dequeue [song position in music queue]`'
     )
     async def dequeue(self, ctx, position: int, arg=None):
         if arg != None:
@@ -678,13 +679,7 @@ class Music(commands.Cog, name='Music'):
                 else:
                     with open('queue.json', 'r') as f:
                         queue = json.load(f)
-                    if position > len(queue[str(voice)])-2 or position < 0:
-                        await ctx.send(
-                            embed=create_embed(
-                                f'The music queue have **{len(queue[str(voice)])-2}** songs, but you specified more than that!'
-                            )
-                        )
-                    else:
+                    if 1 <= position <= len(queue[str(voice)])-2:
                         info = queue[str(voice)][position+1]
                         queue[str(voice)].pop(position+1)
                         await ctx.send(
@@ -694,6 +689,12 @@ class Music(commands.Cog, name='Music'):
                         )
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
+                    else:
+                        await ctx.send(
+                            embed=create_embed(
+                                f'The music queue have **{len(queue[str(voice)])-2}** songs, but you specified more than that!'
+                            )
+                        )
             else:
                 await ctx.send(
                     embed=create_embed(
@@ -705,7 +706,7 @@ class Music(commands.Cog, name='Music'):
         name='loop',
         aliases=['repeat', ],
         description='Toggle between looping all, one or off',
-        usage=f'`.loop [all/one/off]`'
+        usage='`.loop [all/one/off]`'
     )
     async def loop(self, ctx, arg=None):
         if ctx.author.voice == None:
@@ -767,27 +768,315 @@ class Music(commands.Cog, name='Music'):
                     )
                 )
 
-    @commands.command(
-        name='voiceping',
-        aliases=['vping', ],
-        description='Check the voice latency',
-        usage=f'`.voiceping`'
+    @commands.group(
+        invoke_without_command=True,
+        name='playlist',
+        aliases=['pl', 'plist'],
+        description='Access playlist features',
+        usage='`.playlist [option]`'
     )
-    async def voiceping(self, ctx):
-        voice = ctx.voice_client
-        if voice != None:
-            time = round(voice.latency*1000)
+    async def playlist(self, ctx):
+        if ctx.invoked_subcommand is None:
             await ctx.send(
                 embed=create_embed(
-                    f'The voice ping is {time} ms!'
+                    'Please use `.help music playlist` for a list of available options'
+                )
+            )
+
+    @playlist.command(
+        name='play',
+        description='Add the playlist to queue and start playing',
+        usage='`.playlist play [playlist name]`'
+    )
+    async def playlist_play(self, ctx, name: str):
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        if ctx.author.voice == None:
+            await ctx.channel.purge(limit=1)
+            await ctx.send(
+                embed=create_embed(
+                    'You must be connected to a voice channel to use this command'
+                )
+            )
+        elif name not in playlist[str(ctx.guild.id)]:
+            await ctx.send(
+                embed=create_embed(
+                    f'Playlist **{name}** not found'
+                )
+            )
+        else:
+            text_channel = ctx.channel
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            with open('queue.json', 'r') as f:
+                queue = json.load(f)
+            if voice != None:
+                if voice.channel != channel:
+                    if len(voice.channel.members) == 1:
+                        queue.pop(str(voice))
+                        await voice.move_to(channel)
+                        queue[str(voice)] = [
+                            {
+                                'loop': 'off',
+                                "text_channel": str(text_channel.id),
+                            },
+                        ]
+                        for song in playlist[str(ctx.guild.id)][name]:
+                            queue[str(voice)].append(song)
+                        with open('queue.json', 'w') as f:
+                            json.dump(queue, f, indent=4)
+                        await ctx.channel.purge(limit=1)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Playlist **{name}** added to queue'
+                            )
+                        )
+                        self.play_song(voice)
+                    elif voice.is_playing() or voice.is_paused():
+                        await ctx.channel.purge(limit=1)
+                        await ctx.send(
+                            embed=create_embed(
+                                'Please wait until other members are done listening to music'
+                            )
+                        )
+                    else:
+                        queue.pop(str(voice))
+                        await voice.move_to(channel)
+                        queue[str(voice)] = [
+                            {
+                                'loop': 'off',
+                                "text_channel": str(text_channel.id),
+                            },
+                        ]
+                        for song in playlist[str(ctx.guild.id)][name]:
+                            queue[str(voice)].append(song)
+                        with open('queue.json', 'w') as f:
+                            json.dump(queue, f, indent=4)
+                        await ctx.channel.purge(limit=1)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Playlist **{name}** added to queue'
+                            )
+                        )
+                        self.play_song(voice)
+                else:
+                    if voice.is_playing() or voice.is_paused():
+                        for song in playlist[str(ctx.guild.id)][name]:
+                            queue[str(voice)].append(song)
+                        with open('queue.json', 'w') as f:
+                            json.dump(queue, f, indent=4)
+                        await ctx.channel.purge(limit=1)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Playlist **{name}** added to queue'
+                            )
+                        )
+                    else:
+                        for song in playlist[str(ctx.guild.id)][name]:
+                            queue[str(voice)].append(song)
+                        with open('queue.json', 'w') as f:
+                            json.dump(queue, f, indent=4)
+                        await ctx.channel.purge(limit=1)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Playlist **{name}** added to queue'
+                            )
+                        )
+                        self.play_song(voice)
+
+            else:
+                voice = await channel.connect(reconnect=True)
+                queue[str(voice)] = [
+                    {
+                        'loop': 'off',
+                        "text_channel": str(text_channel.id),
+                    },
+                ]
+                for song in playlist[str(ctx.guild.id)][name]:
+                    queue[str(voice)].append(song)
+                with open('queue.json', 'w') as f:
+                    json.dump(queue, f, indent=4)
+                await ctx.channel.purge(limit=1)
+                await ctx.send(
+                    embed=create_embed(
+                        f'Playlist **{name}** added to queue'
+                    )
+                )
+                self.play_song(voice)
+
+    @playlist.command(
+        name='create',
+        description='Create a playlist',
+        usage='`.playlist create [playlist name]`'
+    )
+    async def create(self, ctx, name: str, arg=None):
+        if arg == None:
+            with open('playlist.json', 'r') as f:
+                playlist = json.load(f)
+            if name in playlist[str(ctx.guild.id)]:
+                await ctx.send(
+                    embed=create_embed(
+                        'A playlist with the same name already exist'
+                    )
+                )
+            else:
+                playlist[str(ctx.guild.id)][name] = []
+                with open('playlist.json', 'w') as f:
+                    json.dump(playlist, f, indent=4)
+                await ctx.send(
+                    embed=create_embed(
+                        f'Playlist **{name}** created'
+                    )
+                )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'Your playlist name can only contain **1** word'
+                )
+            )
+
+    @playlist.command(
+        name='delete',
+        description='Delete an existing playlist',
+        usage='`.delete [playlist name]`',
+        aliases=['del', ]
+    )
+    async def delete(self, ctx, name: str):
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        if name not in playlist[str(ctx.guild.id)]:
+            await ctx.send(
+                embed=create_embed(
+                    f'Playlist **{name}** not found'
+                )
+            )
+        else:
+            playlist[str(ctx.guild.id)].pop(name)
+            with open('playlist.json', 'w') as f:
+                json.dump(playlist, f, indent=4)
+            await ctx.send(
+                embed=create_embed(
+                    f'Playlist **{name}** deleted'
+                )
+            )
+
+    @playlist.command(
+        name='add',
+        description='Add a song to an existing playlist',
+        usage='`.playlist add [playlist name] [song name or url]`'
+    )
+    async def add(self, ctx, name: str, *, url: str):
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        if name in playlist[str(ctx.guild.id)]:
+            info = get_video_info(url)
+            playlist[str(ctx.guild.id)][name].append(
+                {
+                    'url': info[2],
+                    'title': info[1]
+                }
+            )
+            with open('playlist.json', 'w') as f:
+                json.dump(playlist, f, indent=4)
+            await ctx.send(
+                embed=create_embed(
+                    f'Song [{info[1]}]({info[2]}) added to **{name}**'
                 )
             )
         else:
             await ctx.send(
                 embed=create_embed(
-                    'Bot was not connected to any voice channel'
+                    f'Playlist **{name}** not found'
                 )
             )
+
+    @playlist.command(
+        name='remove',
+        description='Remove a song from an existing playlist',
+        usage='`.playlist remove [playlist name] [song name]`',
+        aliases=['rm']
+    )
+    async def remove(self, ctx, name: str, position: int):
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        if name in playlist[str(ctx.guild.id)]:
+            if 1 <= position <= len(playlist[str(ctx.guild.id)]):
+                info = playlist[str(ctx.guild.id)][name].pop(position-1)
+                with open('playlist.json', 'w') as f:
+                    json.dump(playlist, f, indent=4)
+                await ctx.send(
+                    embed=create_embed(
+                        f'Song [{info["title"]}]({info["url"]}) deleted from **{name}**'
+                    )
+                )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        f'The playlist have **{len(playlist[str(ctx.guild.id)])}** songs, but you specified more than that!'
+                    )
+                )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    f'Playlist **{name}** not found'
+                )
+            )
+
+    @playlist.command(
+        name='list',
+        description='List the songs in an existing playlist',
+        usage='`.playlist list [playlist name] [page]`',
+        aliases=['ls']
+    )
+    async def _list(self, ctx, name: str, page: int = 1):
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        if name in playlist[str(ctx.guild.id)]:
+            pages = math.ceil(len(playlist[str(ctx.guild.id)])/20)
+            if 1 <= page < pages:
+                output = ''
+                counter = 1 + (page-1)*20
+                for song in playlist[str(ctx.guild.id)][name][(page-1)*20:page*20]:
+                    output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                    counter += 1
+                embed = discord.Embed(
+                    color=discord.Color.orange(),
+                    description=output
+                )
+                embed.set_author(
+                    name=f'Playlist {name}'
+                )
+                embed.set_footer(
+                    text=f'Page {page} of {pages} | use .playlist list [playlist name] [page]'
+                )
+                await ctx.send(
+                    embed=embed
+                )
+            elif page == pages:
+                output = ''
+                counter = 1 + (page-1)*20
+                for song in playlist[str(ctx.guild.id)][name][(page-1)*20::]:
+                    output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                    counter += 1
+                embed = discord.Embed(
+                    color=discord.Color.orange(),
+                    description=output
+                )
+                embed.set_author(
+                    name=f'Playlist {name}'
+                )
+                embed.set_footer(
+                    text=f'Page {page} of {pages} | use .playlist list [playlist name] [page]'
+                )
+                await ctx.send(
+                    embed=embed
+                )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'The page you specified does not exist'
+                    )
+                )
 
     # Error handler
     @play.error

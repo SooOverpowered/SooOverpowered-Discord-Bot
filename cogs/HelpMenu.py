@@ -17,7 +17,7 @@ class HelpMenu(commands.Cog, name='Help'):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
                 color=discord.Color.orange(),
-                description=f'Use `.help [module name]` for more information'
+                description='Use `.help [module name]` for more information'
             )
             embed.set_author(
                 name='Help',
@@ -44,7 +44,7 @@ class HelpMenu(commands.Cog, name='Help'):
         commands = cog.get_commands()
         embed = discord.Embed(
             color=discord.Color.orange(),
-            description='**List of administrative commands**'
+            description='**List of administrative commands**\n\nUse `.help Administration [command name]` for more information'
         )
         embed.set_author(
             name=cog.qualified_name,
@@ -57,11 +57,13 @@ class HelpMenu(commands.Cog, name='Help'):
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
+                    inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}',
+                    inline=False
                 )
         await ctx.send(embed=embed)
 
@@ -75,7 +77,7 @@ class HelpMenu(commands.Cog, name='Help'):
         commands = cog.get_commands()
         embed = discord.Embed(
             color=discord.Color.orange(),
-            description='**List of music commands**'
+            description='**List of music commands**\n\nUse `.help Music [command name]` for more information'
         )
         embed.set_author(
             name=cog.qualified_name
@@ -88,11 +90,13 @@ class HelpMenu(commands.Cog, name='Help'):
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
+                    inline=False
                 )
             else:
                 embed.add_field(
                     name=command.qualified_name,
                     value=f'Description: {command.description}\nUsage: {command.usage}',
+                    inline=False
                 )
         await ctx.send(embed=embed)
 
