@@ -3,6 +3,7 @@ import discord
 from helper import *
 from parameters import *
 from discord.ext import commands
+from discord.utils import get
 
 
 class HelpMenu(commands.Cog, name='Help'):
@@ -106,13 +107,35 @@ class HelpMenu(commands.Cog, name='Help'):
         await ctx.send(embed=embed)
 
     @Music.group(
-        name='playlist',
+        name='Playlist',
         invoke_without_command=True,
-        aliases=['pl', 'plist']
+        aliases=['pl', 'plist', 'playlist']
     )
     async def help_playlist(self, ctx):
         await ctx.channel.purge(limit=1)
-        pass
+        cog = self.client.get_cog('Music')
+        commands = discord.utils.get(cog.get_commands(), name='playlist')
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            description='**List of playlist options**\n\nUse `.help Music Playlist [option]` for more information'
+        )
+        for command in commands.commands:
+            if command.aliases != []:
+                alias_list = command.aliases
+                for i in range(len(alias_list)):
+                    alias_list[i] = f'.'+alias_list[i]
+                embed.add_field(
+                    name=command.qualified_name,
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
+                    inline=False
+                )
+            else:
+                embed.add_field(
+                    name=command.qualified_name,
+                    value=f'Description: {command.description}\nUsage: {command.usage}',
+                    inline=False
+                )
+        await ctx.send(embed=embed)
 
 
 def setup(client):
