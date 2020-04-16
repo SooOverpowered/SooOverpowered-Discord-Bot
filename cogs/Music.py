@@ -782,21 +782,28 @@ class Music(commands.Cog, name='Music'):
         await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
-        output = ''
-        counter = 1
-        for name in playlist[str(ctx.guild.id)].keys():
-            output += f'{counter}. {name}\n'
-            counter += 1
-        embed = discord.Embed(
-            color=discord.Color.orange(),
-            description=output
-        )
-        embed.set_author(
-            name=f'Playlists in {ctx.guild.name}:'
-        )
-        await ctx.send(
-            embed=embed
-        )
+        if playlist[str(ctx.guild.id)].keys()==[]:
+            await ctx.send(
+                embed=create_embed(
+                    'There is no playlist created in this guild'
+                )
+            )
+        else:
+            output = ''
+            counter = 1
+            for name in playlist[str(ctx.guild.id)].keys():
+                output += f'{counter}. {name}\n'
+                counter += 1
+            embed = discord.Embed(
+                color=discord.Color.orange(),
+                description=output
+            )
+            embed.set_author(
+                name=f'Playlists in {ctx.guild.name}:'
+            )
+            await ctx.send(
+                embed=embed
+            )
 
     @playlist.command(
         name='play',
