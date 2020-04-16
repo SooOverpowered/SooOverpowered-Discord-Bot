@@ -10,6 +10,8 @@ class HelpMenu(commands.Cog, name='Help'):
         self.client = client
 
     @commands.group(
+        name='Help',
+        description='The help command',
         invoke_without_command=True,
         aliases=['h', ]
     )
@@ -67,7 +69,7 @@ class HelpMenu(commands.Cog, name='Help'):
                 )
         await ctx.send(embed=embed)
 
-    @help.command(
+    @help.group(
         name='Music',
         aliases=['music', ],
         description='Show list of music commands'
@@ -99,6 +101,14 @@ class HelpMenu(commands.Cog, name='Help'):
                     inline=False
                 )
         await ctx.send(embed=embed)
+
+    @Music.group(
+        name='playlist',
+        invoke_without_command=True,
+        aliases=['pl', 'plist']
+    )
+    async def help_playlist(self, ctx):
+        pass
 
 
 def setup(client):
