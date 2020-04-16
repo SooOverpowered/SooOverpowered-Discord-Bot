@@ -240,7 +240,7 @@ class Administration(commands.Cog, name='Administration'):
         )
         role_str = ''
         for role in member.roles:
-            role_str.append(str(role)+', ')
+            role_str += str(role)+', '
         embed.add_field(
             name='Roles',
             value=role_str
