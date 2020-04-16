@@ -57,11 +57,12 @@ class HelpMenu(commands.Cog, name='Help'):
         for command in commands:
             if command.aliases != []:
                 alias_list = command.aliases
+                temp_alias_list = []
                 for i in range(len(alias_list)):
-                    alias_list[i] = f'.'+alias_list[i]
+                    temp_alias_list.append(f'.'+alias_list[i])
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(temp_alias_list)}`',
                     inline=False
                 )
             else:
@@ -91,11 +92,12 @@ class HelpMenu(commands.Cog, name='Help'):
         for command in commands:
             if command.aliases != []:
                 alias_list = command.aliases
+                temp_alias_list = []
                 for i in range(len(alias_list)):
-                    alias_list[i] = f'.'+alias_list[i]
+                    temp_alias_list.append(f'.'+alias_list[i])
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(temp_alias_list)}`',
                     inline=False
                 )
             else:
@@ -122,11 +124,12 @@ class HelpMenu(commands.Cog, name='Help'):
         for command in commands.commands:
             if command.aliases != []:
                 alias_list = command.aliases
+                temp_alias_list = []
                 for i in range(len(alias_list)):
-                    alias_list[i] = f'.'+alias_list[i]
+                    temp_alias_list.append(f'.'+alias_list[i])
                 embed.add_field(
                     name=command.qualified_name,
-                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(alias_list)}`',
+                    value=f'Description: {command.description}\nUsage: {command.usage}\nAliases: `{", ".join(temp_alias_list)}`',
                     inline=False
                 )
             else:
