@@ -17,6 +17,7 @@ class System(commands.Cog, name='System'):
     )
     @commands.is_owner()
     async def reload(self, ctx, extension):
+        await ctx.channel.purge(limit=1)
         self.client.reload_extension(f'cogs.{extension}')
         print(f"Cog {extension} reloaded successfully")
         await ctx.send(
@@ -32,6 +33,7 @@ class System(commands.Cog, name='System'):
     )
     @commands.is_owner()
     async def load(self, ctx, extension):
+        await ctx.channel.purge(limit=1)
         self.client.load_extension(f'cogs.{extension}')
         print(f'Cog {extension} loaded successfully')
         await ctx.send(
@@ -46,6 +48,7 @@ class System(commands.Cog, name='System'):
         usage='`.unload [cog name]`')
     @commands.is_owner()
     async def unload(self, ctx, extension):
+        await ctx.channel.purge(limit=1)
         self.client.unload_extension(f'cogs.{extension}')
         print(f'Cog {extension} unloaded successfully')
         await ctx.send(

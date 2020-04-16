@@ -19,6 +19,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.ping`'
     )
     async def ping(self, ctx):
+        await ctx.channel.purge(limit=1)
         time = round(self.client.latency * 1000)
         await ctx.send(
             embed=create_embed(
@@ -112,6 +113,7 @@ class Administration(commands.Cog, name='Administration'):
     )
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
+        await ctx.channel.purge(limit=1)
         if ctx.author == member:
             await ctx.send(
                 embed=create_embed(
@@ -167,6 +169,7 @@ class Administration(commands.Cog, name='Administration'):
     )
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
+        await ctx.channel.purge(limit=1)
         if ctx.author == member:
             await ctx.send(
                 embed=create_embed(
@@ -216,6 +219,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.userinfo`'
     )
     async def userinfo(self, ctx, member: discord.Member = None):
+        await ctx.channel.purge(limit=1)
         if member == None:
             member = ctx.author
         embed = discord.Embed(
@@ -237,6 +241,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.setprefix [new prefix]`'
     )
     async def setprefix(self, ctx, new_prefix: str):
+        await ctx.channel.purge(limit=1)
         with open('prefixes.json', 'r') as f:
             prefixes = json.load(f)
         prefixes[str(ctx.guild.id)] = new_prefix

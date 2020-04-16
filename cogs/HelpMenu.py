@@ -16,6 +16,7 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['h', ]
     )
     async def help(self, ctx):
+        await ctx.channel.purge(limit=1)
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
                 color=discord.Color.orange(),
@@ -42,6 +43,7 @@ class HelpMenu(commands.Cog, name='Help'):
         description='Show list of administrative commands'
     )
     async def Administration(self, ctx):
+        await ctx.channel.purge(limit=1)
         cog = self.client.get_cog('Administration')
         commands = cog.get_commands()
         embed = discord.Embed(
@@ -75,6 +77,7 @@ class HelpMenu(commands.Cog, name='Help'):
         description='Show list of music commands'
     )
     async def Music(self, ctx):
+        await ctx.channel.purge(limit=1)
         cog = self.client.get_cog('Music')
         commands = cog.get_commands()
         embed = discord.Embed(
@@ -108,6 +111,7 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['pl', 'plist']
     )
     async def help_playlist(self, ctx):
+        await ctx.channel.purge(limit=1)
         pass
 
 

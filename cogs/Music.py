@@ -118,6 +118,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.join`'
     )
     async def join(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -179,6 +180,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.leave`'
     )
     async def leave(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -245,8 +247,8 @@ class Music(commands.Cog, name='Music'):
         usage='`.play [url or song name]`'
     )
     async def play(self, ctx, *, url):
+        await ctx.channel.purge(limit=1)
         if ctx.author.voice == None:
-            await ctx.channel.purge(limit=1)
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -278,10 +280,8 @@ class Music(commands.Cog, name='Music'):
                         )
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         self.play_song(voice)
                     elif voice.is_playing() or voice.is_paused():
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 'Please wait until other members are done listening to music'
@@ -305,7 +305,6 @@ class Music(commands.Cog, name='Music'):
                         )
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         self.play_song(voice)
                 else:
                     if voice.is_playing() or voice.is_paused():
@@ -318,7 +317,6 @@ class Music(commands.Cog, name='Music'):
                         )
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 f'Song [{info[1]}]({info[2]}) added to queue'
@@ -334,7 +332,6 @@ class Music(commands.Cog, name='Music'):
                         )
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         self.play_song(voice)
 
             else:
@@ -354,7 +351,6 @@ class Music(commands.Cog, name='Music'):
                 )
                 with open('queue.json', 'w') as f:
                     json.dump(queue, f, indent=4)
-                await ctx.channel.purge(limit=1)
                 self.play_song(voice)
 
     @commands.command(
@@ -364,6 +360,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.pause`'
     )
     async def pause(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -420,6 +417,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.resume`'
     )
     async def resume(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -476,6 +474,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.stop`'
     )
     async def stop(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -540,6 +539,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.skip`'
     )
     async def skip(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -590,6 +590,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.queue`'
     )
     async def queue(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -649,11 +650,12 @@ class Music(commands.Cog, name='Music'):
 
     @commands.command(
         name='dequeue',
-        aliases=['rmq', ],
+        aliases=['rmq', 'rm'],
         description='Remove a song from the music queue',
         usage='`.dequeue [song position in music queue]`'
     )
     async def dequeue(self, ctx, position: int, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg != None:
             await ctx.send(
                 embed=create_embed(
@@ -709,6 +711,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.loop [all/one/off]`'
     )
     async def loop(self, ctx, arg=None):
+        await ctx.channel.purge(limit=1)
         if ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
@@ -776,6 +779,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.playlist [option]`'
     )
     async def playlist(self, ctx):
+        await ctx.channel.purge(limit=1)
         if ctx.invoked_subcommand is None:
             await ctx.send(
                 embed=create_embed(
@@ -786,13 +790,14 @@ class Music(commands.Cog, name='Music'):
     @playlist.command(
         name='play',
         description='Add the playlist to queue and start playing',
-        usage='`.playlist play [playlist name]`'
+        usage='`.playlist play [playlist name]`',
+        aliases=['p', ]
     )
     async def playlist_play(self, ctx, name: str):
+        await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
         if ctx.author.voice == None:
-            await ctx.channel.purge(limit=1)
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -825,7 +830,6 @@ class Music(commands.Cog, name='Music'):
                             queue[str(voice)].append(song)
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 f'Playlist **{name}** added to queue'
@@ -833,7 +837,6 @@ class Music(commands.Cog, name='Music'):
                         )
                         self.play_song(voice)
                     elif voice.is_playing() or voice.is_paused():
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 'Please wait until other members are done listening to music'
@@ -852,7 +855,6 @@ class Music(commands.Cog, name='Music'):
                             queue[str(voice)].append(song)
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 f'Playlist **{name}** added to queue'
@@ -865,7 +867,6 @@ class Music(commands.Cog, name='Music'):
                             queue[str(voice)].append(song)
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 f'Playlist **{name}** added to queue'
@@ -876,7 +877,6 @@ class Music(commands.Cog, name='Music'):
                             queue[str(voice)].append(song)
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
-                        await ctx.channel.purge(limit=1)
                         await ctx.send(
                             embed=create_embed(
                                 f'Playlist **{name}** added to queue'
@@ -896,7 +896,6 @@ class Music(commands.Cog, name='Music'):
                     queue[str(voice)].append(song)
                 with open('queue.json', 'w') as f:
                     json.dump(queue, f, indent=4)
-                await ctx.channel.purge(limit=1)
                 await ctx.send(
                     embed=create_embed(
                         f'Playlist **{name}** added to queue'
@@ -910,6 +909,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.playlist create [playlist name]`'
     )
     async def create(self, ctx, name: str, arg=None):
+        await ctx.channel.purge(limit=1)
         if arg == None:
             with open('playlist.json', 'r') as f:
                 playlist = json.load(f)
@@ -942,6 +942,7 @@ class Music(commands.Cog, name='Music'):
         aliases=['del', ]
     )
     async def delete(self, ctx, name: str):
+        await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
         if name not in playlist[str(ctx.guild.id)]:
@@ -966,6 +967,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.playlist add [playlist name] [song name or url]`'
     )
     async def add(self, ctx, name: str, *, url: str):
+        await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
         if name in playlist[str(ctx.guild.id)]:
@@ -997,6 +999,7 @@ class Music(commands.Cog, name='Music'):
         aliases=['rm']
     )
     async def remove(self, ctx, name: str, position: int):
+        await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
         if name in playlist[str(ctx.guild.id)]:
@@ -1029,6 +1032,7 @@ class Music(commands.Cog, name='Music'):
         aliases=['ls']
     )
     async def _list(self, ctx, name: str, page: int = 1):
+        await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
         if name in playlist[str(ctx.guild.id)]:
