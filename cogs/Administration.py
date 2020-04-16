@@ -226,14 +226,26 @@ class Administration(commands.Cog, name='Administration'):
             color=discord.Color.orange(),
             timestamp=ctx.message.created_at
         )
+        embed.set_thumbnail(url=member.avatar_url)
         embed.set_author(
             name=f'User info: {member.display_name}'
         )
         embed.add_field(
             name='Account Info',
-            value=f'Currently {member.status}'
+            value=f"Currently {member.status}\nAccound created on {member.created_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.created_at).days} days ago!"
         )
-        await ctx.send(embed=embed)
+        embed.add_field(
+            name='Server Info',
+            value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!"
+        )
+        embed.add_field(
+            name='Roles',
+            value=", ".join(member.roles)
+        )
+        embed.set_footer(
+            text=f'ID: {member.id}'
+        )
+        await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions(everyone=True, roles=True))
 
     @commands.command(
         name='setprefix',
@@ -334,13 +346,11 @@ class Administration(commands.Cog, name='Administration'):
     @commands.Cog.listener()
     async def on_disconnect(self):
         voiceclients = self.client.voice_clients
-        for voice in voiceclients:
-            if voice.is_playing():
-                voice.pause()
         with open('queue.json', 'r') as f:
             queue = json.load(f)
         for voice in voiceclients:
             if voice.is_playing():
+                voice.pause()
                 channel = self.client.get_channel(
                     int(
                         queue[str(voice)][0]['text_channel']
