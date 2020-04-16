@@ -780,12 +780,23 @@ class Music(commands.Cog, name='Music'):
     )
     async def playlist(self, ctx):
         await ctx.channel.purge(limit=1)
-        if ctx.invoked_subcommand is None:
-            await ctx.send(
-                embed=create_embed(
-                    'Please use `.help music playlist` for a list of available options'
-                )
-            )
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        output = ''
+        counter = 1
+        for name in playlist[str(ctx.guild.id)].keys():
+            output += f'{counter}. {name}\n'
+            counter += 1
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            description=output
+        )
+        embed.set_author(
+            name=f'Playlists in {ctx.guild.name}:'
+        )
+        await ctx.send(
+            embed=embed
+        )
 
     @playlist.command(
         name='play',
@@ -1067,7 +1078,7 @@ class Music(commands.Cog, name='Music'):
                     description=output
                 )
                 embed.set_author(
-                    name=f'Playlist {name}'
+                    name=f'Playlist {name}:'
                 )
                 embed.set_footer(
                     text=f'Page {page} of {pages} | use .playlist list [playlist name] [page]'
