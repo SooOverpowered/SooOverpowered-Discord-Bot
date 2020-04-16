@@ -782,7 +782,7 @@ class Music(commands.Cog, name='Music'):
         await ctx.channel.purge(limit=1)
         with open('playlist.json', 'r') as f:
             playlist = json.load(f)
-        if playlist[str(ctx.guild.id)].keys()==[]:
+        if len(playlist[str(ctx.guild.id)].keys()) == 0:
             await ctx.send(
                 embed=create_embed(
                     'There is no playlist created in this guild'
