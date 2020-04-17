@@ -14,7 +14,7 @@ class HelpMenu(commands.Cog, name='Help'):
         name='Help',
         description='The help command',
         invoke_without_command=True,
-        aliases=['h', ]
+        aliases=['h', 'help']
     )
     async def help(self, ctx):
         await ctx.channel.purge(limit=1)
