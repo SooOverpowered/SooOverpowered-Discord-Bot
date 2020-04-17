@@ -117,11 +117,13 @@ class HelpMenu(commands.Cog, name='Help'):
         )
         embed.add_field(
             name='Usage',
-            value='`.clear [number of messages]`: clear a number of messages'
+            value='`.clear [number of messages]`: clear a number of messages',
+            inline=False
         )
         embed.add_field(
             name='Examples',
-            value='`.clear`: deletes the latest 5 messages\n`.clear 10`: deletes the latest 10 messages'
+            value='`.clear`: deletes the latest 5 messages\n`.clear 10`: deletes the latest 10 messages',
+            inline=False
         )
         await ctx.send(
             embed=embed
@@ -142,11 +144,13 @@ class HelpMenu(commands.Cog, name='Help'):
         )
         embed.add_field(
             name='Usage',
-            value='`.nuke`: nukes the channel, deletes all messages'
+            value='`.nuke`: nukes the channel, deletes all messages',
+            inline=False
         )
         embed.add_field(
             name='Example',
-            value='`.nuke`'
+            value='`.nuke`',
+            inline=False
         )
         await ctx.send(
             embed=embed
