@@ -235,11 +235,18 @@ class Administration(commands.Cog, name='Administration'):
             value=f"Currently {member.status}\nAccound created on {member.created_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.created_at).days} days ago!",
             inline=False
         )
-        embed.add_field(
-            name='Server Info',
-            value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!",
-            inline=False
-        )
+        if member.premium_since == None:
+            embed.add_field(
+                name='Server Info',
+                value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!\nNot boosting the server",
+                inline=False
+            )
+        else:
+            embed.add_field(
+                name='Server Info',
+                value=f"Joined server on {member.joined_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-member.joined_at).days} days ago!\nBoosting the server",
+                inline=False
+            )
         role_str = ''
         for role in member.roles:
             role_str += str(role)+', '
