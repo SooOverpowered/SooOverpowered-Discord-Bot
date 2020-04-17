@@ -42,7 +42,8 @@ class HelpMenu(commands.Cog, name='Help'):
     @help.group(
         name='Administration',
         aliases=['admin', 'administration', ],
-        description='Show list of administrative commands'
+        description='Show list of administrative commands',
+        invoke_without_command=True,
     )
     async def Administration(self, ctx):
         await ctx.channel.purge(limit=1)
@@ -147,11 +148,15 @@ class HelpMenu(commands.Cog, name='Help'):
             name='Example',
             value='`.nuke`'
         )
+        await ctx.send(
+            embed=embed
+        )
 
     @help.group(
         name='Music',
         aliases=['music', ],
-        description='Show list of music commands'
+        description='Show list of music commands',
+        invoke_without_command=True,
     )
     async def Music(self, ctx):
         await ctx.channel.purge(limit=1)

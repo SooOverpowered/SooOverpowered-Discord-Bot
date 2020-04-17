@@ -535,8 +535,8 @@ class Music(commands.Cog, name='Music'):
     @commands.command(
         name='skip',
         aliases=['sk', ],
-        description='Skip the song currently being played',
-        usage='`.skip`'
+        description='Skip to a song in the music queue',
+        usage='`.skip [position]`'
     )
     async def skip(self, ctx, pos: int = 1):
         await ctx.channel.purge(limit=1)
