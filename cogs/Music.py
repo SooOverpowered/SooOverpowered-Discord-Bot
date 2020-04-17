@@ -538,15 +538,9 @@ class Music(commands.Cog, name='Music'):
         description='Skip the song currently being played',
         usage='`.skip`'
     )
-    async def skip(self, ctx, arg=None):
+    async def skip(self, ctx, pos: int = 1):
         await ctx.channel.purge(limit=1)
-        if arg != None:
-            await ctx.send(
-                embed=create_embed(
-                    'This command does not take in any other argument'
-                )
-            )
-        elif ctx.author.voice == None:
+        if ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -570,9 +564,11 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)].pop(1)
                     await ctx.send(
                         embed=create_embed(
-                            f'Skipped [{info["title"]}]({info["url"]}), playing next'
+                            f'Skipped [{info["title"]}]({info["url"]})'
                         )
                     )
+                    for i in range(pos-1):
+                        queue[str(voice)].append(queue[str(voice)].pop(1))
                     with open('queue.json', 'w') as f:
                         json.dump(queue, f, indent=4)
                     voice.stop()

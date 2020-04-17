@@ -21,7 +21,8 @@ class HelpMenu(commands.Cog, name='Help'):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
                 color=discord.Color.orange(),
-                description='Use `.help [module name]` for more information'
+                description='Use `.help [module name]` for more information',
+                timestamp=ctx.message.created_at
             )
             embed.set_author(
                 name='Help',
@@ -38,7 +39,7 @@ class HelpMenu(commands.Cog, name='Help'):
             )
             await ctx.send(embed=embed)
 
-    @help.command(
+    @help.group(
         name='Administration',
         aliases=['admin', 'administration', ],
         description='Show list of administrative commands'
@@ -49,7 +50,8 @@ class HelpMenu(commands.Cog, name='Help'):
         commands = cog.get_commands()
         embed = discord.Embed(
             color=discord.Color.orange(),
-            description='**List of administrative commands**\n\nUse `.help Administration [command name]` for more information'
+            description='**List of administrative commands**\n\nUse `.help Administration [command name]` for more information',
+            timestamp=ctx.message.created_at
         )
         embed.set_author(
             name=cog.qualified_name,
@@ -72,6 +74,79 @@ class HelpMenu(commands.Cog, name='Help'):
                     inline=False
                 )
         await ctx.send(embed=embed)
+
+    @Administration.command(
+        name='ping',
+        description='How to use ping command'
+    )
+    async def help_ping(self, ctx):
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            description='Shows you the WebSocket heartbeat or latency of the Bot',
+            timestamp=ctx.message.created_at,
+        )
+        embed.set_author(
+            name='Ping'
+        )
+        embed.add_field(
+            name='Usage',
+            value='`.ping`: Show the bot latency'
+        )
+        embed.add_field(
+            name='Examples',
+            value='`.ping`'
+        )
+        await ctx.send(
+            embed=embed
+        )
+
+    @Administration.command(
+        name='clear',
+        description='How to use the clear command',
+        aliases=['purge']
+    )
+    async def help_clear(self, ctx):
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            description='Clear command, clear a specific number of command (defaults to 5)\nYou must have the manage message permission to use this command',
+            timestamp=ctx.message.created_at
+        )
+        embed.set_author(
+            name='Clear'
+        )
+        embed.add_field(
+            name='Usage',
+            value='`.clear [number of messages]`: clear a number of messages'
+        )
+        embed.add_field(
+            name='Examples',
+            value='`.clear`: deletes the latest 5 messages\n`.clear 10`: deletes the latest 10 messages'
+        )
+        await ctx.send(
+            embed=embed
+        )
+
+    @Administration.command(
+        name='nuke',
+        description='How to use the nuke command'
+    )
+    async def help_nuke(self, ctx):
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            description='Nuke command, deletes all message in a channel',
+            timestamp=ctx.message.created_at
+        )
+        embed.set_author(
+            name='Nuke'
+        )
+        embed.add_field(
+            name='Usage',
+            value='`.nuke`: nukes the channel, deletes all messages'
+        )
+        embed.add_field(
+            name='Example',
+            value='`.nuke`'
+        )
 
     @help.group(
         name='Music',
