@@ -567,8 +567,12 @@ class Music(commands.Cog, name='Music'):
                             f'Skipped [{info["title"]}]({info["url"]})'
                         )
                     )
-                    for i in range(pos-1):
-                        queue[str(voice)].append(queue[str(voice)].pop(1))
+                    if queue[str(voice)][0]['loop'] == 'all':
+                        for i in range(pos-1):
+                            queue[str(voice)].append(queue[str(voice)].pop(1))
+                    else:
+                        for i in range(pos-1):
+                            queue[str(voice)].pop(1)
                     with open('queue.json', 'w') as f:
                         json.dump(queue, f, indent=4)
                     voice.stop()
