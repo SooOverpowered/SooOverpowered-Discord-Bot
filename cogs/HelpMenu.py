@@ -38,7 +38,7 @@ class HelpMenu(commands.Cog, name='Help'):
                 inline=False
             )
             embed.set_footer(
-                text='Server prefix:' +
+                text='Server prefix: ' +
                 ' and '.join(await self.client.get_prefix(ctx.message))
             )
             await ctx.send(embed=embed)
@@ -61,8 +61,8 @@ class HelpMenu(commands.Cog, name='Help'):
             name=cog.qualified_name,
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         for command in commands:
             if command.aliases != []:
@@ -108,8 +108,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -141,8 +141,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -173,8 +173,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -205,8 +205,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -237,8 +237,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -270,8 +270,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -302,8 +302,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -327,8 +327,8 @@ class HelpMenu(commands.Cog, name='Help'):
             name=cog.qualified_name
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         for command in commands:
             if command.aliases != []:
@@ -375,8 +375,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -408,8 +408,8 @@ class HelpMenu(commands.Cog, name='Help'):
             inline=False
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         await ctx.send(
             embed=embed
@@ -430,8 +430,8 @@ class HelpMenu(commands.Cog, name='Help'):
             timestamp=ctx.message.created_at
         )
         embed.set_footer(
-            text='Server prefix:' +
-            ' and '.join(self.client.get_prefix(ctx.message))
+            text='Server prefix: ' +
+            ' and '.join(await self.client.get_prefix(ctx.message))
         )
         embed.add_field(
             name='playlist',
