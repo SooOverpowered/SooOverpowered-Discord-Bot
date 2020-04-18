@@ -352,7 +352,7 @@ class HelpMenu(commands.Cog, name='Help'):
     @help.command(
         name='join',
         description='How to use the join command',
-        aliases=['join', 'connect']
+        aliases=['j', 'connect']
     )
     async def help_join(self, ctx):
         await ctx.channel.purge(limit=1)
