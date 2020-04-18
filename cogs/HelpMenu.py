@@ -39,7 +39,7 @@ class HelpMenu(commands.Cog, name='Help'):
             )
             embed.set_footer(
                 text='Server prefix:' +
-                ' and '.join(self.client.get_prefix(ctx.message))
+                ' and '.join(await self.client.get_prefix(ctx.message))
             )
             await ctx.send(embed=embed)
 
