@@ -20,6 +20,7 @@ opts = {
     'extractaudio': True,
     'nocheckcertificate': True,
     'ignoreerrors': False,
+    'logtostderr': False,
     'no_warnings': True,
     'sleep_interval': 1,
 }
@@ -1013,7 +1014,7 @@ class Music(commands.Cog, name='Music'):
     @playlist.command(
         name='remove',
         description='Remove a song from an existing playlist',
-        usage='`.playlist remove [playlist name] [song name]`',
+        usage='`.playlist remove [playlist name] [song number]`',
         aliases=['rm']
     )
     async def remove(self, ctx, name: str, position: int):

@@ -1,5 +1,6 @@
 # Imports
 import discord
+import json
 from helper import *
 from parameters import *
 from discord.ext import commands
@@ -108,6 +109,99 @@ class System(commands.Cog, name='System'):
                     'You must be the bot owner to use this command'
                 )
             )
+
+    # Events
+    @commands.Cog.listener()
+    async def on_connect(self):
+        await self.client.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name="everything blows up | type '.help'"
+            ),
+            status=discord.Status.online
+        )
+
+    @commands.Cog.listener()
+    async def on_disconnect(self):
+        voiceclients = self.client.voice_clients
+        with open('queue.json', 'r') as f:
+            queue = json.load(f)
+        for voice in voiceclients:
+            if voice.is_playing():
+                voice.pause()
+                channel = self.client.get_channel(
+                    int(
+                        queue[str(voice)][0]['text_channel']
+                    )
+                )
+                await channel.send(
+                    embed=create_embed(
+                        'Bot was disconnected from discord, music was paused for you automatically'
+                    )
+                )
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print('Bot logged in as {0.user}'.format(self.client))
+        guilds = self.client.guilds
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        for guild in guilds:
+            if str(guild.id) not in prefixes:
+                prefixes[str(guild.id)] = ['.', ]
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        for guild in guilds:
+            if str(guild.id) not in playlist:
+                playlist[str(guild.id)] = {}
+        with open('playlist.json', 'w') as f:
+            json.dump(playlist, f, indent=4)
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        print("{0} has joined the server .".format(member))
+        await member.guild.system_channel.send(
+            embed=create_embed(
+                f"**{member}** has joined the server."
+            )
+        )
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        print(f"{member} has left the server.")
+        await member.guild.system_channel.send(
+            embed=create_embed(
+                f"**{member}** has left the server, RIP"
+            )
+        )
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        prefixes[str(guild.id)] = ['.', ]
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        playlist[str(guild.id)] = {}
+        with open('playlist.json', 'w') as f:
+            json.dump(playlist, f, indent=4)
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        prefixes.pop(str(guild.id))
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+        with open('playlist.json', 'r') as f:
+            playlist = json.load(f)
+        playlist.pop(str(guild.id))
+        with open('playlist.json', 'w') as f:
+            json.dump(playlist, f, indent=4)
 
 
 def setup(client):
