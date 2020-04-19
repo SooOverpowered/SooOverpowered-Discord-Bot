@@ -261,6 +261,45 @@ class Administration(commands.Cog, name='Administration'):
         await ctx.send(embed=embed)
 
     @commands.command(
+        name='serverinfo',
+        description='Displays the server info',
+        aliases=['svinfo', ],
+        usage='`.serverinfo`',
+    )
+    async def serverinfo(self, ctx):
+        await ctx.channel.purge(limit=1)
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            timestamp=ctx.message.created_at
+        )
+        embed.set_footer(
+            text=f'ID: {ctx.guild.id}'
+        )
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name=ctx.guild.name)
+        embed.add_field(
+            name='Server info',
+            value=f"Created on {ctx.guild.created_at.strftime('%d %b %Y %H:%M')}\nThat's {(datetime.now()-ctx.guild.created_at).days} days ago!\nServer boost level {ctx.guild.premium_tier}\nServer region: {ctx.guild.region}\nServer owner: {ctx.guild.owner.display_name}",
+            inline=False
+        )
+        embed.add_field(
+            name='Member',
+            value=f"{ctx.guild.member_count} members in the server\n{ctx.guild.premium_subscription_count} people boosted this server",
+            inline=False
+        )
+        role_output = ''
+        for role in ctx.guild.roles:
+            role_output += str(role)+', '
+        embed.add_field(
+            name='Roles',
+            value=role_output,
+            inline=False
+        )
+        await ctx.send(
+            embed=embed
+        )
+
+    @commands.command(
         name='setprefix',
         description='Set the custom prefix for the server',
         usage='`.setprefix [new prefix]`'

@@ -26,14 +26,14 @@ opts = {
 }
 
 
-def create_ytdl_source(source):
+def create_ytdl_source(source, volume=0.5):
     player = discord.PCMVolumeTransformer(
         discord.FFmpegPCMAudio(
             source,
             before_options=" -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 1",
             options='-vn'
         ),
-        volume=0.5
+        volume=volume
     )
     return player
 
@@ -70,7 +70,8 @@ class Music(commands.Cog, name='Music'):
         with open('queue.json', 'r') as f:
             queue = json.load(f)
         info = get_video_info(queue[str(voice)][1]['url'])
-        source = create_ytdl_source(info[0])
+        volume = queue[str(voice)][0]['volume']
+        source = create_ytdl_source(info[0], volume)
         text_channel = self.client.get_channel(int(
             queue[str(voice)][0]['text_channel']
         ))
@@ -164,6 +165,7 @@ class Music(commands.Cog, name='Music'):
                     {
                         'loop': 'off',
                         "text_channel": str(ctx.channel.id),
+                        "volume": 0.5
                     },
                 ]
                 with open('queue.json', 'w') as f:
@@ -271,6 +273,7 @@ class Music(commands.Cog, name='Music'):
                             {
                                 'loop': 'off',
                                 "text_channel": str(text_channel.id),
+                                "volume": 0.5
                             },
                         ]
                         queue[str(voice)].append(
@@ -296,6 +299,7 @@ class Music(commands.Cog, name='Music'):
                             {
                                 'loop': 'off',
                                 "text_channel": str(text_channel.id),
+                                "volume": 0.5
                             },
                         ]
                         queue[str(voice)].append(
@@ -342,6 +346,7 @@ class Music(commands.Cog, name='Music'):
                     {
                         'loop': 'off',
                         "text_channel": str(text_channel.id),
+                        "volume": 0.5
                     },
                 ]
                 queue[str(voice)].append(
@@ -581,6 +586,47 @@ class Music(commands.Cog, name='Music'):
                 await ctx.send(
                     embed=create_embed(
                         'Bot was not connected to any voice channel'
+                    )
+                )
+
+    @commands.command(
+        name='volume',
+        description='Changes the volume (max=100)',
+        aliases=['vol', ]
+    )
+    async def volume(self, ctx, volume: int):
+        await ctx.channel.purge(limit=1)
+        if ctx.voice_client == None:
+            await ctx.send(
+                embed=create_embed(
+                    'Bot was not connected to any voice channel'
+                )
+            )
+        elif ctx.author.voice == None:
+            await ctx.send(
+                embed=create_embed(
+                    'You must be connected to a voice channel to use this command'
+                )
+            )
+        else:
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            if voice.channel != channel:
+                await ctx.send(
+                    embed=create_embed(
+                        'Please wait until other members are done listening to music'
+                    )
+                )
+            else:
+                with open('queue.json', 'r') as f:
+                    queue = json.load(f)
+                queue[str(voice)][0]['volume'] = volume/200
+                with open('queue.json', 'w') as f:
+                    json.dump(queue, f, indent=4)
+                voice.source.volume = volume/200
+                await ctx.send(
+                    embed=create_embed(
+                        f'Music volume changed to {volume}'
                     )
                 )
 
@@ -843,6 +889,7 @@ class Music(commands.Cog, name='Music'):
                             {
                                 'loop': 'off',
                                 "text_channel": str(text_channel.id),
+                                "volume": 0.5
                             },
                         ]
                         for song in playlist[str(ctx.guild.id)][name]:
@@ -868,6 +915,7 @@ class Music(commands.Cog, name='Music'):
                             {
                                 'loop': 'off',
                                 "text_channel": str(text_channel.id),
+                                "volume": 0.5
                             },
                         ]
                         for song in playlist[str(ctx.guild.id)][name]:
@@ -909,6 +957,7 @@ class Music(commands.Cog, name='Music'):
                     {
                         'loop': 'off',
                         "text_channel": str(text_channel.id),
+                        "volume": 0.5
                     },
                 ]
                 for song in playlist[str(ctx.guild.id)][name]:
