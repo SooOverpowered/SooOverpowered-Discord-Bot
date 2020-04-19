@@ -679,13 +679,14 @@ class Music(commands.Cog, name='Music'):
                                 counter += 1
                         embed = discord.Embed(
                             color=discord.Color.orange(),
-                            description=output
+                            description=output,
+                            timestamp=ctx.message.created_at
                         )
                         embed.set_author(
                             name=f'Music queue for {ctx.author.voice.channel}'
                         )
                         embed.set_footer(
-                            text=f'Repeat: {queue[str(voice)][0]["loop"]}'
+                            text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]}'
                         )
                         await ctx.send(embed=embed)
             else:
