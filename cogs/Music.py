@@ -201,6 +201,11 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)][0]['loop'] = 'off'
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Bot disconnected from **{voice.channel}**'
+                            )
+                        )
                         voice.stop()
                     else:
                         queue.pop(str(voice))
@@ -225,6 +230,11 @@ class Music(commands.Cog, name='Music'):
                             queue[str(voice)][0]['loop'] = 'off'
                             with open('queue.json', 'w') as f:
                                 json.dump(queue, f, indent=4)
+                            await ctx.send(
+                                embed=create_embed(
+                                    f'Bot disconnected from **{voice.channel}**'
+                                )
+                            )
                             voice.stop()
                     else:
                         queue.pop(str(voice))
