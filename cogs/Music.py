@@ -414,15 +414,10 @@ class Music(commands.Cog, name='Music'):
                 ]
                 if "_type" in info and info["_type"] == "playlist":
                     for song in info['entries']:
-                        with youtube_dl.YoutubeDL(self.opts) as ydl:
-                            song_info = ydl.extract_info(
-                                song['url'],
-                                download=False
-                            )
                         queue[str(voice)].append(
                             {
-                                'url': song_info['webpage_url'],
-                                'title': song_info['title']
+                                'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                'title': song['title']
                             }
                         )
                     await ctx.send(
@@ -1128,15 +1123,10 @@ class Music(commands.Cog, name='Music'):
                 )
             if "_type" in info and info["_type"] == "playlist":
                 for song in info['entries']:
-                    with youtube_dl.YoutubeDL(opts) as ydl:
-                        song_info = ydl.extract_info(
-                            song['url'],
-                            download=False
-                        )
                     playlist[str(ctx.guild.id)][name].append(
                         {
-                            'url': song_info['webpage_url'],
-                            'title': song_info['title']
+                            'url': 'https://www.youtube.com/watch?v='+song['url'],
+                            'title': song['title']
                         }
                     )
                 await ctx.send(
