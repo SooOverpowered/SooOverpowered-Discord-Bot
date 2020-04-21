@@ -12,7 +12,7 @@ from discord.ext import commands
 
 opts = {
     "default_search": "ytsearch",
-    'format': 'bestaudio/best',
+    'format': 'bestaudio',
     'quiet': True,
     'audioformat': 'mp3',
     'noplaylist': True,
@@ -53,8 +53,7 @@ def get_info(url):
 
 def get_video_info(url):
     video = get_info(url)
-    video_format = video['formats'][0]
-    stream_url = video_format['url']
+    stream_url = video['url']
     video_url = video['webpage_url']
     title = video['title']
     uploader = video["uploader"] if "uploader" in video else ""
