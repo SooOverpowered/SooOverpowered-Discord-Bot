@@ -748,11 +748,11 @@ class Music(commands.Cog, name='Music'):
                         )
                     else:
                         info = queue[str(voice)][1]
-                        output = f'**Now playing**: [{info["title"]}]({info["url"]})\n'
+                        output = f'**Now playing**: {info["title"]}\n'
                         if len(queue[str(voice)]) > 2:
                             counter = 1
                             for song in queue[str(voice)][2:]:
-                                output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                                output += f'{counter}. {song["title"]}\n'
                                 counter += 1
                         embed = discord.Embed(
                             color=discord.Color.orange(),
