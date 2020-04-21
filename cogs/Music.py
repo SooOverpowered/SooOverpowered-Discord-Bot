@@ -268,19 +268,26 @@ class Music(commands.Cog, name='Music'):
                             },
                         ]
                         if "_type" in info and info["_type"] == "playlist":
-                            for song in info['entries']:
-                                queue[str(voice)].append(
-                                    {
-                                        'url': song['url'],
-                                        'title': song['title']
-                                    }
-                                )
-                            if len(info['entries']) > 1:
+                            if 'title' not in info['entries'][0]:
                                 await ctx.send(
                                     embed=create_embed(
-                                        f'{len(info["entries"])} songs from [link]({url}) added to queue'
+                                        'This playlist link is not supported'
                                     )
                                 )
+                            else:
+                                for song in info['entries']:
+                                    queue[str(voice)].append(
+                                        {
+                                            'url': song['url'],
+                                            'title': song['title']
+                                        }
+                                    )
+                                if len(info['entries']) > 1:
+                                    await ctx.send(
+                                        embed=create_embed(
+                                            f'{len(info["entries"])} songs from [link]({url}) added to queue'
+                                        )
+                                    )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -313,19 +320,26 @@ class Music(commands.Cog, name='Music'):
                             },
                         ]
                         if "_type" in info and info["_type"] == "playlist":
-                            for song in info['entries']:
-                                queue[str(voice)].append(
-                                    {
-                                        'url': song['url'],
-                                        'title': song['title']
-                                    }
-                                )
-                            if len(info['entries']) > 1:
+                            if 'title' not in info['entries'][0]:
                                 await ctx.send(
                                     embed=create_embed(
-                                        f'{len(info["entries"])} songs added to queue'
+                                        'This playlist link is not supported'
                                     )
                                 )
+                            else:
+                                for song in info['entries']:
+                                    queue[str(voice)].append(
+                                        {
+                                            'url': song['url'],
+                                            'title': song['title']
+                                        }
+                                    )
+                                if len(info['entries']) > 1:
+                                    await ctx.send(
+                                        embed=create_embed(
+                                            f'{len(info["entries"])} songs added to queue'
+                                        )
+                                    )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -362,18 +376,25 @@ class Music(commands.Cog, name='Music'):
                                     )
                                 )
                             else:
-                                for song in info['entries']:
-                                    queue[str(voice)].append(
-                                        {
-                                            'url': song['url'],
-                                            'title': song['title']
-                                        }
+                                if 'title' not in info['entries'][0]:
+                                    await ctx.send(
+                                        embed=create_embed(
+                                            'This playlist link is not supported'
+                                        )
                                     )
-                                await ctx.send(
-                                    embed=create_embed(
-                                        f'{len(info["entries"])} songs added to queue'
+                                else:
+                                    for song in info['entries']:
+                                        queue[str(voice)].append(
+                                            {
+                                                'url': song['url'],
+                                                'title': song['title']
+                                            }
+                                        )
+                                    await ctx.send(
+                                        embed=create_embed(
+                                            f'{len(info["entries"])} songs added to queue'
+                                        )
                                     )
-                                )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -395,19 +416,26 @@ class Music(commands.Cog, name='Music'):
                                 download=False
                             )
                         if "_type" in info and info["_type"] == "playlist":
-                            for song in info['entries']:
-                                queue[str(voice)].append(
-                                    {
-                                        'url': song['url'],
-                                        'title': song['title']
-                                    }
-                                )
-                            if len(info['entries']) > 1:
+                            if 'title' not in info['entries'][0]:
                                 await ctx.send(
                                     embed=create_embed(
-                                        f'{len(info["entries"])} songs added to queue'
+                                        'This playlist link is not supported'
                                     )
                                 )
+                            else:
+                                for song in info['entries']:
+                                    queue[str(voice)].append(
+                                        {
+                                            'url': song['url'],
+                                            'title': song['title']
+                                        }
+                                    )
+                                if len(info['entries']) > 1:
+                                    await ctx.send(
+                                        embed=create_embed(
+                                            f'{len(info["entries"])} songs added to queue'
+                                        )
+                                    )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -434,19 +462,26 @@ class Music(commands.Cog, name='Music'):
                     },
                 ]
                 if "_type" in info and info["_type"] == "playlist":
-                    for song in info['entries']:
-                        queue[str(voice)].append(
-                            {
-                                'url': song['url'],
-                                'title': song['title']
-                            }
-                        )
-                    if len(info['entries']) > 1:
+                    if 'title' not in info['entries'][0]:
                         await ctx.send(
                             embed=create_embed(
-                                f'{len(info["entries"])} songs added to queue'
+                                'This playlist link is not supported'
                             )
                         )
+                    else:
+                        for song in info['entries']:
+                            queue[str(voice)].append(
+                                {
+                                    'url': song['url'],
+                                    'title': song['title']
+                                }
+                            )
+                        if len(info['entries']) > 1:
+                            await ctx.send(
+                                embed=create_embed(
+                                    f'{len(info["entries"])} songs added to queue'
+                                )
+                            )
                 else:
                     queue[str(voice)].append(
                         {
@@ -1182,30 +1217,37 @@ class Music(commands.Cog, name='Music'):
                     download=False
                 )
             if "_type" in info and info["_type"] == "playlist":
-                for song in info['entries']:
-                    playlist[str(ctx.guild.id)][name].append(
-                        {
-                            'url': song['url'],
-                            'title': song['title']
-                        }
-                    )
-                if len(info['entries']) > 1:
+                if 'title' not in info['entries'][0]:
                     await ctx.send(
                         embed=create_embed(
-                            f'{len(info["entries"])} songs added to **{name}**'
+                            'This playlist link is not supported'
                         )
                     )
                 else:
-                    with youtube_dl.YoutubeDL(opts) as ydl:
-                        song_info = ydl.extract_info(
-                            info['entries'][0]['url'],
-                            download=False
+                    for song in info['entries']:
+                        playlist[str(ctx.guild.id)][name].append(
+                            {
+                                'url': song['url'],
+                                'title': song['title']
+                            }
                         )
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Song [{song_info["title"]}]({song_info["webpage_url"]}) added to **{name}**'
+                    if len(info['entries']) > 1:
+                        await ctx.send(
+                            embed=create_embed(
+                                f'{len(info["entries"])} songs added to **{name}**'
+                            )
                         )
-                    )
+                    else:
+                        with youtube_dl.YoutubeDL(opts) as ydl:
+                            song_info = ydl.extract_info(
+                                info['entries'][0]['url'],
+                                download=False
+                            )
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Song [{song_info["title"]}]({song_info["webpage_url"]}) added to **{name}**'
+                            )
+                        )
             else:
                 playlist[str(ctx.guild.id)][name].append(
                     {
