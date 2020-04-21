@@ -414,9 +414,14 @@ class Music(commands.Cog, name='Music'):
                 ]
                 if "_type" in info and info["_type"] == "playlist":
                     for song in info['entries']:
+                        with youtube_dl.YoutubeDL(self.opts) as ydl:
+                            song_info = ydl.extract_info(
+                                song['url'],
+                                download=False
+                            )
                         queue[str(voice)].append(
                             {
-                                'url': song['url'],
+                                'url': song_info['webpage_url'],
                                 'title': song['title']
                             }
                         )
