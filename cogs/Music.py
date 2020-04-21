@@ -35,8 +35,8 @@ class Music(commands.Cog, name='Music'):
         'ignoreerrors': True,
         'logtostderr': False,
         'no_warnings': True,
-        'sleep_interval': 1,
-        'include_ads': False
+        'include_ads': False,
+        'skip_download': True
     }
 
     def play_song(self, voice):
