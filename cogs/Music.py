@@ -796,7 +796,7 @@ class Music(commands.Cog, name='Music'):
                                     name=f'Music queue for {ctx.author.voice.channel}'
                                 )
                                 embed.set_footer(
-                                    text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
+                                    text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200} | Page {page} of {pages}'
                                 )
                                 await ctx.send(
                                     embed=embed
@@ -817,7 +817,7 @@ class Music(commands.Cog, name='Music'):
                                 name=f'Music queue for {ctx.author.voice.channel}'
                             )
                             embed.set_footer(
-                                text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200} | Page {page} of {pages}'
+                                text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
                             )
                             await ctx.send(
                                 embed=embed
