@@ -275,11 +275,12 @@ class Music(commands.Cog, name='Music'):
                                         'title': song['title']
                                     }
                                 )
-                            await ctx.send(
-                                embed=create_embed(
-                                    f'{len(info["entries"])} songs from [link]({url}) added to queue'
+                            if len(info['entries']) > 1:
+                                await ctx.send(
+                                    embed=create_embed(
+                                        f'{len(info["entries"])} songs from [link]({url}) added to queue'
+                                    )
                                 )
-                            )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -319,11 +320,12 @@ class Music(commands.Cog, name='Music'):
                                         'title': song['title']
                                     }
                                 )
-                            await ctx.send(
-                                embed=create_embed(
-                                    f'{len(info["entries"])} songs added to queue'
+                            if len(info['entries']) > 1:
+                                await ctx.send(
+                                    embed=create_embed(
+                                        f'{len(info["entries"])} songs added to queue'
+                                    )
                                 )
-                            )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -400,11 +402,12 @@ class Music(commands.Cog, name='Music'):
                                         'title': song['title']
                                     }
                                 )
-                            await ctx.send(
-                                embed=create_embed(
-                                    f'{len(info["entries"])} songs added to queue'
+                            if len(info['entries']) > 1:
+                                await ctx.send(
+                                    embed=create_embed(
+                                        f'{len(info["entries"])} songs added to queue'
+                                    )
                                 )
-                            )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -438,11 +441,12 @@ class Music(commands.Cog, name='Music'):
                                 'title': song['title']
                             }
                         )
-                    await ctx.send(
-                        embed=create_embed(
-                            f'{len(info["entries"])} songs added to queue'
+                    if len(info['entries']) > 1:
+                        await ctx.send(
+                            embed=create_embed(
+                                f'{len(info["entries"])} songs added to queue'
+                            )
                         )
-                    )
                 else:
                     queue[str(voice)].append(
                         {
