@@ -416,11 +416,10 @@ class Music(commands.Cog, name='Music'):
                     for song in info['entries']:
                         queue[str(voice)].append(
                             {
-                                'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                'url': song['url'],
                                 'title': song['title']
                             }
                         )
-                        print('Done')
                     await ctx.send(
                         embed=create_embed(
                             f'{len(info["entries"])} songs added to queue'
