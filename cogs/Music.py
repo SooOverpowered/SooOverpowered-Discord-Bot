@@ -17,12 +17,12 @@ opts = {
     'audioformat': 'mp3',
     'noplaylist': True,
     'extract_flat': 'in_playlist',
-    'extractaudio': True,
     'nocheckcertificate': True,
-    'ignoreerrors': False,
+    'ignoreerrors': True,
     'logtostderr': False,
     'no_warnings': True,
     'sleep_interval': 1,
+    'include_ads': False
 }
 
 
