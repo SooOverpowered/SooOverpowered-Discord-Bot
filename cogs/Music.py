@@ -277,7 +277,7 @@ class Music(commands.Cog, name='Music'):
                                 )
                             await ctx.send(
                                 embed=create_embed(
-                                    f'{len(info["entries"])} songs added to queue'
+                                    f'{len(info["entries"])} songs from [link]({url}) added to queue'
                                 )
                             )
                         else:
