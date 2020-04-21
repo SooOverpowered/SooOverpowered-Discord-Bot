@@ -713,15 +713,9 @@ class Music(commands.Cog, name='Music'):
         description='Display your current music queue',
         usage='`.queue`'
     )
-    async def queue(self, ctx, arg=None):
+    async def queue(self, ctx, page: int = 1):
         await ctx.channel.purge(limit=1)
-        if arg != None:
-            await ctx.send(
-                embed=create_embed(
-                    'This command does not take in any other argument'
-                )
-            )
-        elif ctx.author.voice == None:
+        if ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
@@ -749,23 +743,53 @@ class Music(commands.Cog, name='Music'):
                     else:
                         info = queue[str(voice)][1]
                         output = f'**Now playing**: {info["title"]}\n'
-                        if len(queue[str(voice)]) > 2:
-                            counter = 1
-                            for song in queue[str(voice)][2:]:
-                                output += f'{counter}. {song["title"]}\n'
-                                counter += 1
-                        embed = discord.Embed(
-                            color=discord.Color.orange(),
-                            description=output,
-                            timestamp=ctx.message.created_at
-                        )
-                        embed.set_author(
-                            name=f'Music queue for {ctx.author.voice.channel}'
-                        )
-                        embed.set_footer(
-                            text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
-                        )
-                        await ctx.send(embed=embed)
+                        pages = math.ceil(len(queue[str(voice)][1:])/20)
+                        if 1 <= page < pages:
+                            if len(queue[str(voice)]) > 2:
+                                counter = 1 + (page-1)*20
+                                for song in queue[str(voice)][(page-1)*20+1:page*20+1]:
+                                    output += f'{counter}. {song["title"]}\n'
+                                    counter += 1
+                            embed = discord.Embed(
+                                color=discord.Color.orange(),
+                                description=output,
+                                timestamp=ctx.message.created_at
+                            )
+                            embed.set_author(
+                                name=f'Music queue for {ctx.author.voice.channel}'
+                            )
+                            embed.set_footer(
+                                text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
+                            )
+                            await ctx.send(
+                                embed=embed
+                            )
+                        elif page == pages:
+                            if len(queue[str(voice)]) > 2:
+                                counter = 1 + (page-1)*20
+                                for song in queue[str(voice)][(page-1)*20+1::]:
+                                    output += f'{counter}. {song["title"]}\n'
+                                    counter += 1
+                            embed = discord.Embed(
+                                color=discord.Color.orange(),
+                                description=output,
+                                timestamp=ctx.message.created_at
+                            )
+                            embed.set_author(
+                                name=f'Music queue for {ctx.author.voice.channel}'
+                            )
+                            embed.set_footer(
+                                text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
+                            )
+                            await ctx.send(
+                                embed=embed
+                            )
+                        else:
+                            await ctx.send(
+                                embed=create_embed(
+                                    'The page you specified does not exist'
+                                )
+                            )
             else:
                 await ctx.send(
                     embed=create_embed(
@@ -1208,7 +1232,8 @@ class Music(commands.Cog, name='Music'):
                     counter += 1
                 embed = discord.Embed(
                     color=discord.Color.orange(),
-                    description=output
+                    description=output,
+                    timestamp=ctx.message.created_at
                 )
                 embed.set_author(
                     name=f'Playlist {name}'
@@ -1227,7 +1252,8 @@ class Music(commands.Cog, name='Music'):
                     counter += 1
                 embed = discord.Embed(
                     color=discord.Color.orange(),
-                    description=output
+                    description=output,
+                    timestamp=ctx.message.created_at
                 )
                 embed.set_author(
                     name=f'Playlist {name}:'
