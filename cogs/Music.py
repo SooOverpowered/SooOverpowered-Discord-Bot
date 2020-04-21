@@ -342,18 +342,36 @@ class Music(commands.Cog, name='Music'):
                                 download=False
                             )
                         if "_type" in info and info["_type"] == "playlist":
-                            for song in info['entries']:
+                            if len(info['entries']) == 1:
+                                with youtube_dl.YoutubeDL(self.opts) as ydl:
+                                    song_info = ydl.extract_info(
+                                        info['entries'][0]['url'],
+                                        download=False
+                                    )
                                 queue[str(voice)].append(
                                     {
-                                        'url': song['url'],
-                                        'title': song['title']
+                                        'url': song_info['webpage_url'],
+                                        'title': song_info['title']
                                     }
                                 )
-                            await ctx.send(
-                                embed=create_embed(
-                                    f'{len(info["entries"])} songs added to queue'
+                                await ctx.send(
+                                    embed=create_embed(
+                                        f'Song [{song_info["title"]}]({song_info["webpage_url"]}) added to queue'
+                                    )
                                 )
-                            )
+                            else:
+                                for song in info['entries']:
+                                    queue[str(voice)].append(
+                                        {
+                                            'url': song['url'],
+                                            'title': song['title']
+                                        }
+                                    )
+                                await ctx.send(
+                                    embed=create_embed(
+                                        f'{len(info["entries"])} songs added to queue'
+                                    )
+                                )
                         else:
                             queue[str(voice)].append(
                                 {
@@ -711,7 +729,7 @@ class Music(commands.Cog, name='Music'):
         name='queue',
         aliases=['q', ],
         description='Display your current music queue',
-        usage='`.queue`'
+        usage='`.queue` [page]'
     )
     async def queue(self, ctx, page: int = 1):
         await ctx.channel.purge(limit=1)
@@ -743,53 +761,52 @@ class Music(commands.Cog, name='Music'):
                     else:
                         info = queue[str(voice)][1]
                         output = f'**Now playing**: {info["title"]}\n'
-                        pages = math.ceil(len(queue[str(voice)][1:])/20)
-                        if 1 <= page < pages:
-                            if len(queue[str(voice)]) > 2:
+                        pages = math.ceil(len(queue[str(voice)][2:])/20)
+                        if len(queue[str(voice)]) > 2:
+                            if 1 <= page < pages:
                                 counter = 1 + (page-1)*20
-                                for song in queue[str(voice)][(page-1)*20+1:page*20+1]:
+                                for song in queue[str(voice)][(page-1)*20+2:page*20+2]:
                                     output += f'{counter}. {song["title"]}\n'
                                     counter += 1
-                            embed = discord.Embed(
-                                color=discord.Color.orange(),
-                                description=output,
-                                timestamp=ctx.message.created_at
-                            )
-                            embed.set_author(
-                                name=f'Music queue for {ctx.author.voice.channel}'
-                            )
-                            embed.set_footer(
-                                text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
-                            )
-                            await ctx.send(
-                                embed=embed
-                            )
-                        elif page == pages:
-                            if len(queue[str(voice)]) > 2:
-                                counter = 1 + (page-1)*20
-                                for song in queue[str(voice)][(page-1)*20+1::]:
-                                    output += f'{counter}. {song["title"]}\n'
-                                    counter += 1
-                            embed = discord.Embed(
-                                color=discord.Color.orange(),
-                                description=output,
-                                timestamp=ctx.message.created_at
-                            )
-                            embed.set_author(
-                                name=f'Music queue for {ctx.author.voice.channel}'
-                            )
-                            embed.set_footer(
-                                text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
-                            )
-                            await ctx.send(
-                                embed=embed
-                            )
-                        else:
-                            await ctx.send(
-                                embed=create_embed(
-                                    'The page you specified does not exist'
+                                embed = discord.Embed(
+                                    color=discord.Color.orange(),
+                                    description=output,
+                                    timestamp=ctx.message.created_at
                                 )
-                            )
+                                embed.set_author(
+                                    name=f'Music queue for {ctx.author.voice.channel}'
+                                )
+                                embed.set_footer(
+                                    text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200} | Page {page} of {pages}'
+                                )
+                                await ctx.send(
+                                    embed=embed
+                                )
+                            elif page == pages:
+                                counter = 1 + (page-1)*20
+                                for song in queue[str(voice)][(page-1)*20+2::]:
+                                    output += f'{counter}. {song["title"]}\n'
+                                    counter += 1
+                                embed = discord.Embed(
+                                    color=discord.Color.orange(),
+                                    description=output,
+                                    timestamp=ctx.message.created_at
+                                )
+                                embed.set_author(
+                                    name=f'Music queue for {ctx.author.voice.channel}'
+                                )
+                                embed.set_footer(
+                                    text=f'Repeat: {queue[str(voice)][0]["loop"]} | Volume: {queue[str(voice)][0]["volume"]*200}'
+                                )
+                                await ctx.send(
+                                    embed=embed
+                                )
+                            else:
+                                await ctx.send(
+                                    embed=create_embed(
+                                        'The page you specified does not exist'
+                                    )
+                                )
             else:
                 await ctx.send(
                     embed=create_embed(
@@ -1146,18 +1163,36 @@ class Music(commands.Cog, name='Music'):
                     download=False
                 )
             if "_type" in info and info["_type"] == "playlist":
-                for song in info['entries']:
+                if len(info['entries']) == 1:
+                    with youtube_dl.YoutubeDL(opts) as ydl:
+                        song_info = ydl.extract_info(
+                            info['entries'][0]['url'],
+                            download=False
+                        )
                     playlist[str(ctx.guild.id)][name].append(
                         {
-                            'url': song['url'],
-                            'title': song['title']
+                            'url': song_info['webpage_url'],
+                            'title': song_info['title']
                         }
                     )
-                await ctx.send(
-                    embed=create_embed(
-                        f'{len(info["entries"])} songs added to **{name}**'
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Song [{song_info["title"]}]({song_info["webpage_url"]}) added to **{name}**'
+                        )
                     )
-                )
+                else:
+                    for song in info['entries']:
+                        playlist[str(ctx.guild.id)][name].append(
+                            {
+                                'url': song['url'],
+                                'title': song['title']
+                            }
+                        )
+                    await ctx.send(
+                        embed=create_embed(
+                            f'{len(info["entries"])} songs added to **{name}**'
+                        )
+                    )
             else:
                 playlist[str(ctx.guild.id)][name].append(
                     {
