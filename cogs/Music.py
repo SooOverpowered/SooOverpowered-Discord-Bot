@@ -422,7 +422,7 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)].append(
                             {
                                 'url': song_info['webpage_url'],
-                                'title': song['title']
+                                'title': song_info['title']
                             }
                         )
                     await ctx.send(
