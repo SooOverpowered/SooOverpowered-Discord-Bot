@@ -1182,34 +1182,28 @@ class Music(commands.Cog, name='Music'):
                     download=False
                 )
             if "_type" in info and info["_type"] == "playlist":
-                if len(info['entries']) == 1:
+                for song in info['entries']:
+                    playlist[str(ctx.guild.id)][name].append(
+                        {
+                            'url': song['url'],
+                            'title': song['title']
+                        }
+                    )
+                if len(info['entries']) > 1:
+                    await ctx.send(
+                        embed=create_embed(
+                            f'{len(info["entries"])} songs added to **{name}**'
+                        )
+                    )
+                else:
                     with youtube_dl.YoutubeDL(opts) as ydl:
                         song_info = ydl.extract_info(
                             info['entries'][0]['url'],
                             download=False
                         )
-                    playlist[str(ctx.guild.id)][name].append(
-                        {
-                            'url': song_info['webpage_url'],
-                            'title': song_info['title']
-                        }
-                    )
                     await ctx.send(
                         embed=create_embed(
                             f'Song [{song_info["title"]}]({song_info["webpage_url"]}) added to **{name}**'
-                        )
-                    )
-                else:
-                    for song in info['entries']:
-                        playlist[str(ctx.guild.id)][name].append(
-                            {
-                                'url': song['url'],
-                                'title': song['title']
-                            }
-                        )
-                    await ctx.send(
-                        embed=create_embed(
-                            f'{len(info["entries"])} songs added to **{name}**'
                         )
                     )
             else:
