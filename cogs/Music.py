@@ -271,7 +271,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -315,7 +315,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -345,7 +345,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -378,7 +378,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -1125,7 +1125,7 @@ class Music(commands.Cog, name='Music'):
                 for song in info['entries']:
                     playlist[str(ctx.guild.id)][name].append(
                         {
-                            'url': 'https://www.youtube.com/watch?v='+song['url'],
+                            'url': song['url'],
                             'title': song['title']
                         }
                     )
@@ -1204,7 +1204,7 @@ class Music(commands.Cog, name='Music'):
                 output = ''
                 counter = 1 + (page-1)*20
                 for song in playlist[str(ctx.guild.id)][name][(page-1)*20:page*20]:
-                    output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                    output += f'{counter}. {song["title"]}\n'
                     counter += 1
                 embed = discord.Embed(
                     color=discord.Color.orange(),
@@ -1223,7 +1223,7 @@ class Music(commands.Cog, name='Music'):
                 output = ''
                 counter = 1 + (page-1)*20
                 for song in playlist[str(ctx.guild.id)][name][(page-1)*20::]:
-                    output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                    output += f'{counter}. {song["title"]}\n'
                     counter += 1
                 embed = discord.Embed(
                     color=discord.Color.orange(),
