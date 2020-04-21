@@ -12,7 +12,7 @@ from discord.ext import commands
 
 opts = {
     "default_search": "ytsearch",
-    'format': 'bestaudio',
+    'format': 'bestaudio/best',
     'quiet': True,
     'audioformat': 'mp3',
     'noplaylist': True,
@@ -68,16 +68,20 @@ class Music(commands.Cog, name='Music'):
     def play_song(self, voice):
         with open('queue.json', 'r') as f:
             queue = json.load(f)
-        info = get_video_info(queue[str(voice)][1]['url'])
+        with youtube_dl.YoutubeDL(opts) as ydl:
+            info = ydl.extract_info(
+                queue[str(voice)][1]['url'],
+                download=False
+            )
         volume = queue[str(voice)][0]['volume']
-        source = create_ytdl_source(info[0], volume)
+        source = create_ytdl_source(info['url'], volume)
         text_channel = self.client.get_channel(int(
             queue[str(voice)][0]['text_channel']
         ))
         asyncio.run_coroutine_threadsafe(
             text_channel.send(
                 embed=create_embed(
-                    f'**Now playing**: [{info[1]}]({info[2]})'
+                    f'**Now playing**: [{info["title"]}]({info["webpage_url"]})'
                 )
             ), self.client.loop
         )
@@ -275,7 +279,11 @@ class Music(commands.Cog, name='Music'):
             if voice != None:
                 if voice.channel != channel:
                     if len(voice.channel.members) == 1:
-                        info = get_video_info(url)
+                        with youtube_dl.YoutubeDL(opts) as ydl:
+                            info = ydl.extract_info(
+                                queue[str(voice)][1]['url'],
+                                download=False
+                            )
                         queue.pop(str(voice))
                         await voice.move_to(channel)
                         queue[str(voice)] = [
@@ -285,12 +293,28 @@ class Music(commands.Cog, name='Music'):
                                 "volume": 0.5
                             },
                         ]
-                        queue[str(voice)].append(
-                            {
-                                'url': info[2],
-                                'title': info[1]
-                            }
-                        )
+                        if "_type" in info and info["_type"] == "playlist":
+                            for song in info['entries']:
+                                with youtube_dl.YoutubeDL(opts) as ydl:
+                                    song_info = ydl.extract_info(song['url'])
+                                queue[str(voice)].append(
+                                    {
+                                        'url': song_info['webpage_url'],
+                                        'title': song_info['title']
+                                    }
+                                )
+                            await ctx.send(
+                                embed=create_embed(
+                                    f'{len(info["entries"])} songs added to queue'
+                                )
+                            )
+                        else:
+                            queue[str(voice)].append(
+                                {
+                                    'url': info['webpage_url'],
+                                    'title': info['title']
+                                }
+                            )
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
                         self.play_song(voice)
