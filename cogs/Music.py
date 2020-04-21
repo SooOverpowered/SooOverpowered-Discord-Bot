@@ -25,24 +25,24 @@ def create_ytdl_source(source, volume=0.5):
 class Music(commands.Cog, name='Music'):
     def __init__(self, client):
         self.client = client
-    opts = {
-        "default_search": "ytsearch",
-        'format': 'bestaudio/best',
-        'quiet': True,
-        'noplaylist': False,
-        'extract_flat': 'in_playlist',
-        'nocheckcertificate': True,
-        'ignoreerrors': True,
-        'logtostderr': False,
-        'no_warnings': True,
-        'include_ads': False,
-        'skip_download': True
-    }
+        self.opts = {
+            "default_search": "ytsearch",
+            'format': 'bestaudio/best',
+            'quiet': True,
+            'noplaylist': False,
+            'extract_flat': 'in_playlist',
+            'nocheckcertificate': True,
+            'ignoreerrors': True,
+            'logtostderr': False,
+            'no_warnings': True,
+            'include_ads': False,
+            'skip_download': True
+        }
 
     def play_song(self, voice):
         with open('queue.json', 'r') as f:
             queue = json.load(f)
-        with youtube_dl.YoutubeDL(opts) as ydl:
+        with youtube_dl.YoutubeDL(self.opts) as ydl:
             info = ydl.extract_info(
                 queue[str(voice)][1]['url'],
                 download=False
@@ -253,7 +253,7 @@ class Music(commands.Cog, name='Music'):
             if voice != None:
                 if voice.channel != channel:
                     if len(voice.channel.members) == 1:
-                        with youtube_dl.YoutubeDL(opts) as ydl:
+                        with youtube_dl.YoutubeDL(self.opts) as ydl:
                             info = ydl.extract_info(
                                 url,
                                 download=False
@@ -271,7 +271,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url':'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -297,7 +297,7 @@ class Music(commands.Cog, name='Music'):
                             )
                         )
                     else:
-                        with youtube_dl.YoutubeDL(opts) as ydl:
+                        with youtube_dl.YoutubeDL(self.opts) as ydl:
                             info = ydl.extract_info(
                                 url,
                                 download=False
@@ -315,7 +315,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url':'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -336,7 +336,7 @@ class Music(commands.Cog, name='Music'):
                         self.play_song(voice)
                 else:
                     if voice.is_playing() or voice.is_paused():
-                        with youtube_dl.YoutubeDL(opts) as ydl:
+                        with youtube_dl.YoutubeDL(self.opts) as ydl:
                             info = ydl.extract_info(
                                 url,
                                 download=False
@@ -345,7 +345,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url':'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -369,7 +369,7 @@ class Music(commands.Cog, name='Music'):
                         with open('queue.json', 'w') as f:
                             json.dump(queue, f, indent=4)
                     else:
-                        with youtube_dl.YoutubeDL(opts) as ydl:
+                        with youtube_dl.YoutubeDL(self.opts) as ydl:
                             info = ydl.extract_info(
                                 url,
                                 download=False
@@ -378,7 +378,7 @@ class Music(commands.Cog, name='Music'):
                             for song in info['entries']:
                                 queue[str(voice)].append(
                                     {
-                                        'url':'https://www.youtube.com/watch?v='+song['url'],
+                                        'url': 'https://www.youtube.com/watch?v='+song['url'],
                                         'title': song['title']
                                     }
                                 )
@@ -400,7 +400,7 @@ class Music(commands.Cog, name='Music'):
 
             else:
                 voice = await channel.connect(reconnect=True)
-                with youtube_dl.YoutubeDL(opts) as ydl:
+                with youtube_dl.YoutubeDL(self.opts) as ydl:
                     info = ydl.extract_info(
                         url,
                         download=False
@@ -416,7 +416,7 @@ class Music(commands.Cog, name='Music'):
                     for song in info['entries']:
                         queue[str(voice)].append(
                             {
-                                'url':'https://www.youtube.com/watch?v='+song['url'],
+                                'url': 'https://www.youtube.com/watch?v='+song['url'],
                                 'title': song['title']
                             }
                         )
