@@ -416,7 +416,7 @@ class Music(commands.Cog, name='Music'):
                     for song in info['entries']:
                         queue[str(voice)].append(
                             {
-                                'url': 'https://www.youtube.com/watch?v='+song['url'],
+                                'url': song['url'],
                                 'title': song['title']
                             }
                         )
