@@ -6,6 +6,12 @@ import json
 from helper import *
 from discord.ext import commands
 
+# Load environmental variables
+try:
+    exec(open('variable.py').read())
+except:
+    pass
+
 
 # Load custom prefixes
 def get_prefix(client, message):
