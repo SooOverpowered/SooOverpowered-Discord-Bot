@@ -14,13 +14,6 @@ def get_prefix(client, message):
     return prefixes[str(message.guild.id)]
 
 
-# load up parameters
-try:
-    exec(open('parameters.py').read())
-except FileNotFoundError:
-    print('Unable to find parameters')
-
-
 # Start the bot
 client = commands.Bot(command_prefix=get_prefix, owner_id=os.environ['owner'])
 
