@@ -23,7 +23,7 @@ except FileNotFoundError:
 
 
 # Start the bot
-client = commands.Bot(command_prefix=get_prefix, owner_id=owner)
+client = commands.Bot(command_prefix=get_prefix, owner_id=os.environ['owner'])
 
 
 # Remove default help command
@@ -37,4 +37,4 @@ for filename in os.listdir('./cogs'):
 
 
 # Run the bot
-client.run(token, reconnect=True)
+client.run(os.environ['DISCORD_TOKEN'], reconnect=True)
