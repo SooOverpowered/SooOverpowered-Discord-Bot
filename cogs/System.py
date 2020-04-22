@@ -58,6 +58,16 @@ class System(commands.Cog, name='System'):
             )
         )
 
+    @commands.command(
+        name='listserver',
+        description='List the servers that the bot is in',
+        usage='`.listserver`'
+    )
+    @commands.is_owner()
+    async def listserver(self, ctx):
+        for guild in self.client.guilds:
+            pass
+
     # Error handler
     @reload.error
     async def reload_error(self, ctx, error):
@@ -202,6 +212,19 @@ class System(commands.Cog, name='System'):
         playlist.pop(str(guild.id))
         with open('playlist.json', 'w') as f:
             json.dump(playlist, f, indent=4)
+
+    @commands.Cog.listner()
+    async def on_command(self, ctx):
+        await ctx.message.delete()
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            await ctx.send(
+                embed=create_embed(
+                    'Command not found'
+                )
+            )
 
 
 def setup(client):

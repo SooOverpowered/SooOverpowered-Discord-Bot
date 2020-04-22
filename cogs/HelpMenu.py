@@ -17,7 +17,6 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['h', 'help']
     )
     async def help(self, ctx):
-        await ctx.channel.purge(limit=1)
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
                 color=discord.Color.orange(),
@@ -49,7 +48,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='Show list of administrative commands',
     )
     async def Administration(self, ctx):
-        await ctx.channel.purge(limit=1)
         cog = self.client.get_cog('Administration')
         commands = cog.get_commands()
         embed = discord.Embed(
@@ -88,7 +86,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='How to use ping command'
     )
     async def help_ping(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Shows you the WebSocket heartbeat or latency of the Bot',
@@ -121,7 +118,6 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['purge']
     )
     async def help_clear(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Clear command, clear a specific number of command (defaults to 5)\nYou must have the manage message permission to use this command',
@@ -153,7 +149,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='How to use the nuke command'
     )
     async def help_nuke(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Nuke command, deletes all message in a channel',
@@ -185,7 +180,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='How to use the kick command',
     )
     async def help_kick(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Kick command, kicks a member out of the server',
@@ -217,7 +211,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='How to use the ban command',
     )
     async def help_ban(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Ban command, bans a member out of the server',
@@ -250,7 +243,6 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['info', ]
     )
     async def help_userinfo(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Userinfo command, shows the info of a member',
@@ -282,7 +274,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='How to use the setprefix command',
     )
     async def help_setprefix(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Setprefix command, sets the custom prefix for the server',
@@ -315,7 +306,6 @@ class HelpMenu(commands.Cog, name='Help'):
         description='Show list of music commands',
     )
     async def Music(self, ctx):
-        await ctx.channel.purge(limit=1)
         cog = self.client.get_cog('Music')
         commands = cog.get_commands()
         embed = discord.Embed(
@@ -355,7 +345,6 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['j', 'connect']
     )
     async def help_join(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Setprefix command, sets the custom prefix for the server',
@@ -388,7 +377,6 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['dc', 'disconnect']
     )
     async def help_leave(self, ctx):
-        await ctx.channel.purge(limit=1)
         embed = discord.Embed(
             color=discord.Color.orange(),
             description='Leave command, sets the custom prefix for the server',
@@ -421,7 +409,6 @@ class HelpMenu(commands.Cog, name='Help'):
         aliases=['pl', 'plist']
     )
     async def help_playlist(self, ctx):
-        await ctx.channel.purge(limit=1)
         cog = self.client.get_cog('Music')
         commands = discord.utils.get(cog.get_commands(), name='playlist')
         embed = discord.Embed(
