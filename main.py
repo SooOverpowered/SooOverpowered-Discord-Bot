@@ -17,7 +17,8 @@ except:
 def get_prefix(client, message):
     with open('prefixes.json', 'r') as f:
         prefixes = json.load(f)
-    return prefixes[str(message.guild.id)]
+    extras = prefixes[str(message.guild.id)]
+    return commands.when_mentioned_or(*extras)(client, message)
 
 
 # Start the bot
