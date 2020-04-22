@@ -91,9 +91,17 @@ class Administration(commands.Cog, name='Administration'):
                                         ctx.channel.position,
                                         ]
                         time.sleep(1)
+                        channel_id = ctx.channel.id
                         await ctx.channel.clone()
                         await ctx.channel.delete()
-                        await channel_info[0].text_channels[-1].edit(position=channel_info[1])
+                        new_channel = channel_info[0].text_channels[-1]
+                        await new_channel.edit(position=channel_info[1])
+                        with open('queue.json', 'r') as f:
+                            queue = json.load(f)
+                        if queue[str(ctx.voice_client)][0]['text_channel'] == channel_id:
+                            queue[str(ctx.voice_client)][0]['text_channel'] = new_channel.id
+                        with open('queue.json', 'w') as f:
+                            json.dump(queue, f, indent=4)
                         print(f'{ctx.channel} of {ctx.guild} just got nuked')
                         break
                     else:

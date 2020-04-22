@@ -48,9 +48,9 @@ class Music(commands.Cog, name='Music'):
             )
         volume = queue[str(voice)][0]['volume']
         source = create_ytdl_source(info['url'], volume)
-        text_channel = self.client.get_channel(int(
+        text_channel = self.client.get_channel(
             queue[str(voice)][0]['text_channel']
-        ))
+        )
         try:
             asyncio.run_coroutine_threadsafe(
                 text_channel.send(
@@ -80,13 +80,16 @@ class Music(commands.Cog, name='Music'):
                 queue.pop(str(voice))
                 with open('queue.json', 'w') as f:
                     json.dump(queue, f, indent=4)
-                asyncio.run_coroutine_threadsafe(
-                    text_channel.send(
-                        embed=create_embed(
-                            'Music queue ended, disconnected from voice'
-                        )
-                    ), self.client.loop
-                )
+                try:
+                    asyncio.run_coroutine_threadsafe(
+                        text_channel.send(
+                            embed=create_embed(
+                                'Music queue ended, disconnected from voice'
+                            )
+                        ), self.client.loop
+                    )
+                except:
+                    pass
                 asyncio.run_coroutine_threadsafe(
                     voice.disconnect(), self.client.loop)
 
@@ -142,7 +145,7 @@ class Music(commands.Cog, name='Music'):
                 queue[str(voice)] = [
                     {
                         'loop': 'off',
-                        "text_channel": str(ctx.channel.id),
+                        "text_channel": ctx.channel.id,
                         "volume": 0.5
                     },
                 ]
@@ -262,7 +265,7 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)] = [
                             {
                                 'loop': 'off',
-                                "text_channel": str(text_channel.id),
+                                "text_channel": text_channel.id,
                                 "volume": 0.5
                             },
                         ]
@@ -314,7 +317,7 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)] = [
                             {
                                 'loop': 'off',
-                                "text_channel": str(text_channel.id),
+                                "text_channel": text_channel.id,
                                 "volume": 0.5
                             },
                         ]
@@ -456,7 +459,7 @@ class Music(commands.Cog, name='Music'):
                 queue[str(voice)] = [
                     {
                         'loop': 'off',
-                        "text_channel": str(text_channel.id),
+                        "text_channel": text_channel.id,
                         "volume": 0.5
                     },
                 ]
@@ -1050,7 +1053,7 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)] = [
                             {
                                 'loop': 'off',
-                                "text_channel": str(text_channel.id),
+                                "text_channel": text_channel.id,
                                 "volume": 0.5
                             },
                         ]
@@ -1076,7 +1079,7 @@ class Music(commands.Cog, name='Music'):
                         queue[str(voice)] = [
                             {
                                 'loop': 'off',
-                                "text_channel": str(text_channel.id),
+                                "text_channel": text_channel.id,
                                 "volume": 0.5
                             },
                         ]
@@ -1117,7 +1120,7 @@ class Music(commands.Cog, name='Music'):
                 queue[str(voice)] = [
                     {
                         'loop': 'off',
-                        "text_channel": str(text_channel.id),
+                        "text_channel": text_channel.id,
                         "volume": 0.5
                     },
                 ]
