@@ -214,7 +214,7 @@ class System(commands.Cog, name='System'):
             json.dump(playlist, f, indent=4)
 
     @commands.Cog.listener()
-    async def on_command(self, ctx):
+    async def on_command_completion(self, ctx):
         await ctx.message.delete()
 
     @commands.Cog.listener()
