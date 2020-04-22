@@ -215,7 +215,10 @@ class System(commands.Cog, name='System'):
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):
-        await ctx.message.delete()
+        try:
+            await ctx.message.delete()
+        else:
+            pass
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
