@@ -1,6 +1,7 @@
 # Imports
 import discord
 import json
+import os
 from helper import *
 from discord.ext import commands
 
@@ -125,7 +126,7 @@ class System(commands.Cog, name='System'):
         await self.client.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name="everything blows up | type '.help'"
+                name=f"{os.environ['activity']} | type .help"
             ),
             status=discord.Status.online
         )
