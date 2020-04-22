@@ -213,7 +213,7 @@ class System(commands.Cog, name='System'):
         with open('playlist.json', 'w') as f:
             json.dump(playlist, f, indent=4)
 
-    @commands.Cog.listner()
+    @commands.Cog.listener()
     async def on_command(self, ctx):
         await ctx.message.delete()
 
