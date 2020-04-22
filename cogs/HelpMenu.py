@@ -1,5 +1,6 @@
 # Imports
 import discord
+import json
 from helper import *
 from discord.ext import commands
 from discord.utils import get
@@ -35,10 +36,13 @@ class HelpMenu(commands.Cog, name='Help'):
                 value='The music player',
                 inline=False
             )
-            '''embed.set_footer(
+            with open('prefixes.json', 'r') as f:
+                prefixes = json.load(f)
+            extras = prefixes[str(ctx.guild.id)]
+            embed.set_footer(
                 text='Server prefix: ' +
-                ' and '.join(await self.client.get_prefix(ctx.message)[2:])
-            )'''
+                ' and '.join(extras)
+            )
             await ctx.send(embed=embed)
 
     @help.command(
@@ -57,9 +61,12 @@ class HelpMenu(commands.Cog, name='Help'):
         embed.set_author(
             name=cog.qualified_name,
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         for command in commands:
             if command.aliases != []:
@@ -103,9 +110,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.ping`',
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -135,9 +145,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.clear`: deletes the latest 5 messages\n`.clear 10`: deletes the latest 10 messages',
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -166,9 +179,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.nuke`',
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -197,9 +213,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.kick @abc`: abc kicked from server',
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -228,9 +247,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.ban @abc`: abc banned from server',
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -260,9 +282,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.userinfo`: shows your membership info\n`.userinfo @abc`: shows abc's membership info",
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -291,9 +316,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.setprefix ?`: changes the command prefix to '?'",
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -315,9 +343,12 @@ class HelpMenu(commands.Cog, name='Help'):
         embed.set_author(
             name=cog.qualified_name
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         for command in commands:
             if command.aliases != []:
@@ -362,9 +393,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.join`: Bot connected to voice channel",
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -394,9 +428,12 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.leave`: Bot disconnected from voice channel",
             inline=False
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         await ctx.send(
             embed=embed
@@ -415,9 +452,12 @@ class HelpMenu(commands.Cog, name='Help'):
             description='**List of playlist options**\n\nUse `.help playlist [option]` for more information',
             timestamp=ctx.message.created_at
         )
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        extras = prefixes[str(ctx.guild.id)]
         embed.set_footer(
             text='Server prefix: ' +
-            ' and '.join(await self.client.get_prefix(ctx.message)[2:])
+            ' and '.join(extras)
         )
         embed.add_field(
             name='playlist',
