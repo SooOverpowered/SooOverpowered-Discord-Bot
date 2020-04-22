@@ -15,7 +15,10 @@ def get_prefix(client, message):
 
 
 # Start the bot
-client = commands.Bot(command_prefix=get_prefix, owner_id=os.environ['owner'])
+client = commands.Bot(
+    command_prefix=get_prefix,
+    owner_id=int(os.environ['owner'])
+)
 
 
 # Remove default help command

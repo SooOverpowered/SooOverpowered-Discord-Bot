@@ -126,7 +126,7 @@ class System(commands.Cog, name='System'):
         await self.client.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name=f"{os.environ['activity']} | type .help"
+                name=f"{os.environ['activity']} | type {os.environ['default_prefix']}help"
             ),
             status=discord.Status.online
         )
@@ -225,6 +225,7 @@ class System(commands.Cog, name='System'):
                     'Command not found'
                 )
             )
+            await ctx.message.delete()
 
 
 def setup(client):
