@@ -51,13 +51,14 @@ class Music(commands.Cog, name='Music'):
         text_channel = self.client.get_channel(int(
             queue[str(voice)][0]['text_channel']
         ))
-        asyncio.run_coroutine_threadsafe(
-            text_channel.send(
-                embed=create_embed(
-                    f'**Now playing**: [{info["title"]}]({info["webpage_url"]})'
-                )
-            ), self.client.loop
-        )
+        try:
+            asyncio.run_coroutine_threadsafe(
+                text_channel.send(
+                    embed=create_embed(
+                        f'**Now playing**: [{info["title"]}]({info["webpage_url"]})'
+                    )
+                ), self.client.loop
+            )
 
         def after_playing(error):
             with open('queue.json', 'r') as f:
