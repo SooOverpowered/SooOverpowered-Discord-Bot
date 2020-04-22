@@ -217,7 +217,7 @@ class System(commands.Cog, name='System'):
     async def on_command_completion(self, ctx):
         try:
             await ctx.message.delete()
-        else:
+        except:
             pass
 
     @commands.Cog.listener()
