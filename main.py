@@ -3,7 +3,6 @@ import discord
 import os
 import asyncio
 import json
-from parameters import *
 from helper import *
 from discord.ext import commands
 
