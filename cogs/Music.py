@@ -59,6 +59,8 @@ class Music(commands.Cog, name='Music'):
                     )
                 ), self.client.loop
             )
+        except:
+            pass
 
         def after_playing(error):
             with open('queue.json', 'r') as f:
