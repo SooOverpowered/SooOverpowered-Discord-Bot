@@ -35,10 +35,10 @@ class HelpMenu(commands.Cog, name='Help'):
                 value='The music player',
                 inline=False
             )
-            embed.set_footer(
+            '''embed.set_footer(
                 text='Server prefix: ' +
                 ' and '.join(await self.client.get_prefix(ctx.message)[2:])
-            )
+            )'''
             await ctx.send(embed=embed)
 
     @help.command(
