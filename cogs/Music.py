@@ -6,7 +6,6 @@ import asyncio
 import json
 import math
 from helper import *
-from parameters import *
 from discord.ext import commands
 
 

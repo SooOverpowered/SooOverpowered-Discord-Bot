@@ -2,7 +2,6 @@
 import discord
 import json
 from helper import *
-from parameters import *
 from discord.ext import commands
 
 

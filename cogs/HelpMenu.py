@@ -1,7 +1,6 @@
 # Imports
 import discord
 from helper import *
-from parameters import *
 from discord.ext import commands
 from discord.utils import get
 
