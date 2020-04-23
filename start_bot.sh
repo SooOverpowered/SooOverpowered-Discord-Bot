@@ -1,2 +1,2 @@
-docker build
-docker run daedbot
+docker build -t daedbot
+docker run daedbot:latest
