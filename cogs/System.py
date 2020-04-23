@@ -2,6 +2,7 @@
 import discord
 import json
 import os
+import math
 from helper import *
 from discord.ext import commands
 
@@ -64,9 +65,19 @@ class System(commands.Cog, name='System'):
         usage='`.listserver`'
     )
     @commands.is_owner()
-    async def listserver(self, ctx):
-        for guild in self.client.guilds:
+    async def listserver(self, ctx, page: int = 1):
+        output = ''
+        guilds = self.client.guilds
+        pages = math.ceil(len(guilds)/20)
+        for guild in guilds:
             pass
+
+    @commands.command(
+        name='leaveserver'
+    )
+    @commands.is_owner()
+    async def leaveserver(self, ctx):
+        pass
 
     # Error handler
     @reload.error
@@ -172,11 +183,14 @@ class System(commands.Cog, name='System'):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         print("{0} has joined the server .".format(member))
-        await member.guild.system_channel.send(
-            embed=create_embed(
-                f"**{member}** has joined the server."
+        try:
+            await member.guild.system_channel.send(
+                embed=create_embed(
+                    f"**{member}** has joined the server."
+                )
             )
-        )
+        except:
+            pass
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
