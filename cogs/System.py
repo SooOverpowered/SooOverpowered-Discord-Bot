@@ -137,7 +137,7 @@ class System(commands.Cog, name='System'):
         await self.client.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name=f"{os.environ['activity']} | type {os.environ['default_prefix']}help"
+                name=f"{os.environ.get('activity')} | type {os.environ.get('default_prefix')}help"
             ),
             status=discord.Status.online
         )
@@ -169,7 +169,7 @@ class System(commands.Cog, name='System'):
             prefixes = json.load(f)
         for guild in guilds:
             if str(guild.id) not in prefixes:
-                prefixes[str(guild.id)] = ['.', ]
+                prefixes[str(guild.id)] = [os.environ.get('default_prefix'), ]
         with open('prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
         with open('playlist.json', 'r') as f:

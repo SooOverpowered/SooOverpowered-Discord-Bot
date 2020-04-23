@@ -10,7 +10,7 @@ from discord.ext import commands
 try:
     exec(open('variable.py').read())
 except:
-    pass
+    print('shit does not work, abort mission')
 
 
 # Load custom prefixes
@@ -24,7 +24,7 @@ def get_prefix(client, message):
 # Start the bot
 client = commands.Bot(
     command_prefix=get_prefix,
-    owner_id=int(os.environ['owner'])
+    owner_id=int(os.environ.get('owner'))
 )
 
 
@@ -39,4 +39,4 @@ for filename in os.listdir('./cogs'):
 
 
 # Run the bot
-client.run(os.environ['DISCORD_TOKEN'], reconnect=True)
+client.run(os.environ.get('DISCORD_TOKEN'), reconnect=True)
