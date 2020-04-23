@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED 1
 # Install pip requirements
 ADD requirements.txt .
 RUN python -m pip install -r requirements.txt
-RUN sudo apt-get install -y opus-tools ffmpeg
+RUN apt-get install -y opus-tools ffmpeg
 
 WORKDIR /app
 ADD . /app
