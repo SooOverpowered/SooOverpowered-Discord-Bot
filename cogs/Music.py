@@ -1012,7 +1012,7 @@ class Music(commands.Cog, name='Music'):
                     info = queue[pointer]
                     pages = math.ceil(item['size']/10)
                     output = ''
-                    if 1 <= page < pages:
+                    if 1 <= page <= pages:
                         counter = 1 + (page-1)*10
                         for song in queue[(page-1)*10:page*10]:
                             output += f'{counter}. {song["title"]}\n'
