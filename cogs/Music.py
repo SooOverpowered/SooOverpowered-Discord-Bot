@@ -9,6 +9,14 @@ from helper import *
 from discord.ext import commands
 
 
+# Connect to mongodb database
+client = pymongo.MongoClient(os.environ.get('dbconn'))
+db = client['DaedBot']
+guildcol = db['prefix']
+queuecol = db['queue']
+playlistcol = db['playlist']
+
+
 # Helper to create audio player
 def create_ytdl_source(source, volume=0.5):
     player = discord.PCMVolumeTransformer(
@@ -35,14 +43,6 @@ def ensure_voice():
         else:
             return True
     return commands.check(predicate)
-
-
-# Connect to mongodb database
-client = pymongo.MongoClient(os.environ.get('dbconn'))
-db = client['DaedBot']
-guildcol = db['prefix']
-queuecol = db['queue']
-playlistcol = db['playlist']
 
 
 class Music(commands.Cog, name='Music'):
@@ -1008,7 +1008,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 else:
                     queue = item['queue']
-                    pointer = queue['pointer']
+                    pointer = item['pointer']
                     info = queue[pointer]
                     pages = math.ceil(item['size']/10)
                     output = ''
