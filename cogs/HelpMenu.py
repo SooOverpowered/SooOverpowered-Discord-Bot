@@ -1,9 +1,18 @@
 # Imports
 import discord
 import pymongo
+import os
 from helper import *
 from discord.ext import commands
 from discord.utils import get
+
+
+# Connect to mongodb database
+client = pymongo.MongoClient(os.environ.get('dbconn'))
+db = client['DaedBot']
+guildcol = db['prefix']
+queuecol = db['queue']
+playlistcol = db['playlist']
 
 
 class HelpMenu(commands.Cog, name='Help'):
@@ -36,9 +45,7 @@ class HelpMenu(commands.Cog, name='Help'):
                 value='The music player',
                 inline=False
             )
-            with open('prefixes.json', 'r') as f:
-                prefixes = json.load(f)
-            extras = prefixes[str(ctx.guild.id)]
+            extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
             embed.set_footer(
                 text='Server prefix: ' +
                 ' and '.join(extras)
@@ -61,9 +68,7 @@ class HelpMenu(commands.Cog, name='Help'):
         embed.set_author(
             name=cog.qualified_name,
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -110,9 +115,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.ping`',
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -145,9 +148,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.clear`: deletes the latest 5 messages\n`.clear 10`: deletes the latest 10 messages',
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -179,9 +180,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.nuke`',
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -213,9 +212,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.kick @abc`: abc kicked from server',
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -247,9 +244,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value='`.ban @abc`: abc banned from server',
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -282,9 +277,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.userinfo`: shows your membership info\n`.userinfo @abc`: shows abc's membership info",
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -316,9 +309,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.setprefix ?`: changes the command prefix to '?'",
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -343,9 +334,7 @@ class HelpMenu(commands.Cog, name='Help'):
         embed.set_author(
             name=cog.qualified_name
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -393,9 +382,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.join`: Bot connected to voice channel",
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -428,9 +415,7 @@ class HelpMenu(commands.Cog, name='Help'):
             value="`.leave`: Bot disconnected from voice channel",
             inline=False
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
@@ -452,9 +437,7 @@ class HelpMenu(commands.Cog, name='Help'):
             description='**List of playlist options**\n\nUse `.help playlist [option]` for more information',
             timestamp=ctx.message.created_at
         )
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        extras = prefixes[str(ctx.guild.id)]
+        extras = guildcol.find_one({'guild_id': ctx.guild.id})['prefixes']
         embed.set_footer(
             text='Server prefix: ' +
             ' and '.join(extras)
