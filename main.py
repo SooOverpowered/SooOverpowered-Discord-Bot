@@ -1,5 +1,6 @@
 # Imports
 import discord
+import pymongo
 import os
 import asyncio
 import json
@@ -12,13 +13,19 @@ try:
 except:
     print('shit does not work, abort mission')
 
+# Connect to mongodb database
+client = pymongo.MongoClient(os.environ.get('dbconn'))
+db = client['DaedBot']
+guildcol = db['prefix']
+queuecol = db['queue']
+playlistcol = db['playlist']
+
 
 # Load custom prefixes
 def get_prefix(client, message):
-    with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
-    extras = prefixes[str(message.guild.id)]
-    return commands.when_mentioned_or(*extras)(client, message)
+    extras = guildcol.find_one({'guild_id': message.guild.id})
+    prefixes = extras['prefixes']
+    return commands.when_mentioned_or(*prefixes)(client, message)
 
 
 # Start the bot

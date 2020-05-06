@@ -2,15 +2,23 @@
 import discord
 import time
 import json
+import pymongo
 from datetime import datetime
 from helper import *
 from discord.ext import commands
 
 
+# Connect to mongodb database
+client = pymongo.MongoClient(os.environ.get('dbconn'))
+db = client['DaedBot']
+guildcol = db['prefix']
+queuecol = db['queue']
+playlistcol = db['playlist']
+
+
 class Administration(commands.Cog, name='Administration'):
     def __init__(self, client):
         self.client = client
-        self.recently_used_command = []
 
     # Commands
     @commands.command(
@@ -23,7 +31,8 @@ class Administration(commands.Cog, name='Administration'):
         await ctx.send(
             embed=create_embed(
                 f'The ping is {time} ms!'
-            )
+            ),
+            delete_after=10
         )
 
     @commands.command(
@@ -44,23 +53,19 @@ class Administration(commands.Cog, name='Administration'):
     @commands.cooldown(1, 60, commands.BucketType.channel)
     @commands.has_permissions(manage_channels=True)
     async def nuke(self, ctx, arg=None):
-        if ctx.guild.system_channel == ctx.channel:
-            await ctx.send(
-                embed=create_embed(
-                    "You can't nuke the system channel\nPlease use the clear command instead"
-                )
-            )
-        elif arg != None:
+        if arg != None:
             await ctx.send(
                 embed=create_embed(
                     'This command does not take in any other argument'
-                )
+                ),
+                delete_after=10
             )
         else:
             await ctx.send(
                 embed=create_embed(
                     'Please reply with **Y** to confirm action\nThe command will be automatically cancelled after 20 second'
-                )
+                ),
+                delete_after=30
             )
             counter = 20
             while counter > 0:
@@ -96,12 +101,18 @@ class Administration(commands.Cog, name='Administration'):
                         await ctx.channel.delete()
                         new_channel = channel_info[0].text_channels[-1]
                         await new_channel.edit(position=channel_info[1])
-                        with open('queue.json', 'r') as f:
-                            queue = json.load(f)
-                        if queue[str(ctx.voice_client)][0]['text_channel'] == channel_id:
-                            queue[str(ctx.voice_client)][0]['text_channel'] = new_channel.id
-                        with open('queue.json', 'w') as f:
-                            json.dump(queue, f, indent=4)
+                        queue = queuecol.find_one(
+                            {'guild_id': ctx.guild.id}
+                        )
+                        if queue['text_channel'] == channel_id:
+                            queuecol.update_one(
+                                {'guild_id': ctx.guild.id},
+                                {
+                                    '$set': {
+                                        'text_channel': new_channel.id
+                                    }
+                                }
+                            )
                         print(f'{ctx.channel} of {ctx.guild} just got nuked')
                         break
                     else:
@@ -110,7 +121,8 @@ class Administration(commands.Cog, name='Administration'):
                             await ctx.send(
                                 embed=create_embed(
                                     'The nuke got cancelled because the timer ran out'
-                                )
+                                ),
+                                delete_after=10
                             )
 
     @commands.command(
@@ -124,19 +136,22 @@ class Administration(commands.Cog, name='Administration'):
             await ctx.send(
                 embed=create_embed(
                     'You cannot kick yourself'
-                )
+                ),
+                delete_after=10
             )
         elif ctx.guild.owner == member:
             await ctx.send(
                 embed=create_embed(
                     'You cannot kick the server owner'
-                )
+                ),
+                delete_after=10
             )
         else:
             await ctx.send(
                 embed=create_embed(
                     'Please reply with "Y" to confirm action\nThe command will be automatically cancelled after 20 second'
-                )
+                ),
+                delete_after=30
             )
             counter = 20
             while counter > 0:
@@ -148,16 +163,17 @@ class Administration(commands.Cog, name='Administration'):
                             await ctx.send(
                                 embed=create_embed(
                                     f'**{member}** was kicked from **{member.guild}** for no reason'
-                                )
+                                ),
+                                delete_after=10
                             )
                         else:
                             await ctx.send(
                                 embed=create_embed(
                                     f'**{member}** was kicked from **{member.guild}** for **{reason}**'
-                                )
+                                ),
+                                delete_after=10
                             )
                         await member.kick(reason=reason)
-                        print('{0.name} was kicked from {0.guild}'.format(member))
                         break
                     else:
                         counter -= 1
@@ -165,7 +181,8 @@ class Administration(commands.Cog, name='Administration'):
                             await ctx.send(
                                 embed=create_embed(
                                     'The command got cancelled because the timer ran out'
-                                )
+                                ),
+                                delete_after=10
                             )
 
     @commands.command(
@@ -179,13 +196,15 @@ class Administration(commands.Cog, name='Administration'):
             await ctx.send(
                 embed=create_embed(
                     'You cannot ban yourself'
-                )
+                ),
+                delete_after=10
             )
         else:
             await ctx.send(
                 embed=create_embed(
                     'Please reply with "Y" to confirm action\nThe command will be automatically cancelled after 20 second'
-                )
+                ),
+                delete_after=30
             )
             counter = 20
             while counter > 0:
@@ -197,16 +216,17 @@ class Administration(commands.Cog, name='Administration'):
                             await ctx.send(
                                 embed=create_embed(
                                     f'**{member}** was banned from **{member.guild}** for no reason'
-                                )
+                                ),
+                                delete_after=10
                             )
                         else:
                             await ctx.send(
                                 embed=create_embed(
                                     f'**{member}** was banned from **{member.guild}** for **{reason}**'
-                                )
+                                ),
+                                delete_after=10
                             )
                         await member.ban(reason=reason)
-                        print('{0.name} was banned from {0.guild}'.format(member))
                         break
                     else:
                         counter -= 1
@@ -214,7 +234,8 @@ class Administration(commands.Cog, name='Administration'):
                             await ctx.send(
                                 embed=create_embed(
                                     'The command got cancelled because the timer ran out'
-                                )
+                                ),
+                                delete_after=10
                             )
 
     @commands.command(
@@ -308,19 +329,35 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.setprefix [new prefix]`'
     )
     async def setprefix(self, ctx, new_prefix: str):
-        with open('prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-        if len(prefixes[str(ctx.guild.id)]) == 2:
-            prefixes[str(ctx.guild.id)][1] = new_prefix
+        info = guildcol.find_one(
+            {'guild_id': ctx.guild.id}
+        )
+        prefixes = info['prefixes']
+        if len(prefixes) == 2:
+            prefixes[1] = new_prefix
         else:
-            prefixes[str(ctx.guild.id)].append(new_prefix)
-        with open('prefixes.json', 'w') as f:
-            json.dump(prefixes, f, indent=4)
+            prefixes.append(new_prefix)
+        guildcol.update_one(
+            {'guild_id': ctx.guild.id},
+            {
+                '$set': {
+                    'prefixes': prefixes
+                }
+            }
+        )
         await ctx.send(
             embed=create_embed(
                 f'Prefix changed to {new_prefix}'
             )
         )
+
+    @commands.command(
+        name='setannounce',
+        description='',
+        usage=''
+    )
+    async def setannounce(self, ctx):
+        pass
 
     # Error handler
     @clear.error
