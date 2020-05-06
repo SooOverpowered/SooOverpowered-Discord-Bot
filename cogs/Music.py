@@ -1009,7 +1009,7 @@ class Music(commands.Cog, name='Music'):
                 else:
                     print('step1')
                     queue = item['queue']
-                    print('queue')
+                    print(queue)
                     pointer = queue['pointer']
                     info = queue[pointer]
                     pages = math.ceil(item['size']/10)
