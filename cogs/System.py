@@ -168,6 +168,15 @@ class System(commands.Cog, name='System'):
         guilds = self.client.guilds
         dbguilds = []
         for item in guildcol.find():
+            if item['prefixes'][0] != os.environ.get('default_prefix'):
+                guildcol.update_one(
+                    {'guild_id': item['guild_id']},
+                    {
+                        '$set': {
+                            'prefixes.0': os.environ.get('default_prefix')
+                        }
+                    }
+                )
             dbguilds.append(item['guild_id'])
         for guild in guilds:
             if guild.id not in dbguilds:
@@ -243,6 +252,8 @@ class System(commands.Cog, name='System'):
             await ctx.message.delete()
         except:
             pass
+
+
 '''
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -255,6 +266,7 @@ class System(commands.Cog, name='System'):
             )
             await ctx.message.delete()
 '''
+
 
 def setup(client):
     client.add_cog(System(client))
