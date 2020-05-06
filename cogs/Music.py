@@ -1007,22 +1007,19 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     )
                 else:
-                    paginator = commands.Paginator()
                     queue = item['queue']
                     pointer = queue['pointer']
                     info = queue[pointer]
                     pages = math.ceil(item['size']/10)
+                    output = ''
                     if 1 <= page < pages:
                         counter = 1 + (page-1)*10
                         for song in queue[(page-1)*10:page*10]:
-                            paginator.add_line(
-                                f'{counter}. {song["title"]}\n'
-                            )
-                            paginator.add_line('')
+                            output += f'{counter}. {song["title"]}\n'
                             counter += 1
                         embed = discord.Embed(
                             color=discord.Color.orange(),
-                            description=paginator.pages[0],
+                            description=output,
                             title='**Music Queue**',
                             timestamp=ctx.message.created_at
                         )
@@ -1248,17 +1245,17 @@ class Music(commands.Cog, name='Music'):
                 delete_after=10
             )
         else:
-            paginator = commands.Paginator()
+            output = ''
             playlist_list = playlistcol.find({'guild_id': ctx.guild.id})
             pages = math.ceil(size/10)
             if 1 <= page < pages:
                 counter = 1+(page-1)*10
                 for pl in playlist_list[(page-1)*10:page*10]:
-                    paginator.add_line(f'{counter}. {pl["name"]}\n')
+                    output += f'{counter}. {pl["name"]}\n'
                     counter += 1
             embed = discord.Embed(
                 color=discord.Color.orange(),
-                description=paginator.pages[0],
+                description=output,
                 title=f'**Playlists in {ctx.guild.name}**',
                 timestamp=ctx.message.created_at
             )
@@ -1664,20 +1661,17 @@ class Music(commands.Cog, name='Music'):
                     delete_after=10
                 )
             else:
-                paginator = commands.Paginator()
+                output = ''
                 song_list = playlist['song_list']
                 pages = math.ceil(playlist['size']/10)
                 if 1 <= page <= pages:
                     counter = 1 + (page-1)*10
                     for song in song_list[(page-1)*10:page*10]:
-                        paginator.add_line(
-                            f'{counter}. {song["title"]}\n'
-                        )
-                        paginator.add_line('')
+                        output += f'{counter}. {song["title"]}\n'
                         counter += 1
                     embed = discord.Embed(
                         color=discord.Color.orange(),
-                        description=paginator.pages[0],
+                        description=output,
                         title=f'**{name}**',
                         timestamp=ctx.message.created_at
                     )
