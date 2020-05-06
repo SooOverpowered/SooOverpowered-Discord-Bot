@@ -1009,7 +1009,7 @@ class Music(commands.Cog, name='Music'):
         name='queue',
         aliases=['q', ],
         description='Display your current music queue',
-        usage='`.queue` [page]'
+        usage='`.queue [page]`'
     )
     @ensure_voice()
     async def queue(self, ctx, page: int = 1):
