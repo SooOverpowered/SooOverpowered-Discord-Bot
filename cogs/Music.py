@@ -1007,14 +1007,10 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     )
                 else:
-                    print('step1')
                     queue = item['queue']
-                    print(queue)
                     pointer = queue['pointer']
                     info = queue[pointer]
                     pages = math.ceil(item['size']/10)
-                    print(pages)
-                    print(page)
                     output = ''
                     if 1 <= page <= pages:
                         print('step2')
@@ -1022,7 +1018,6 @@ class Music(commands.Cog, name='Music'):
                         for song in queue[(page-1)*10:page*10]:
                             output += f'{counter}. {song["title"]}\n'
                             counter += 1
-                        print('step3')
                         embed = discord.Embed(
                             color=discord.Color.orange(),
                             description=output,
@@ -1052,7 +1047,6 @@ class Music(commands.Cog, name='Music'):
                         await ctx.send(
                             embed=embed
                         )
-                        print('step4')
                     else:
                         await ctx.send(
                             embed=create_embed(
