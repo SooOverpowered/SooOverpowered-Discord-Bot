@@ -891,7 +891,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.skip [position]`'
     )
     @ensure_voice()
-    async def skip(self, ctx, pos: int = 1):
+    async def skip(self, ctx, pos: int = 0):
         if ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
@@ -915,6 +915,32 @@ class Music(commands.Cog, name='Music'):
                     pointer = item['pointer']
                     queue = item['queue']
                     song = queue[pointer]
+                    if pos == 0:
+                        pass
+                    elif pos < 1 or pos > item['size']:
+                        await ctx.send(
+                            embed=create_embed(
+                                f'The queue only have {item["size"]} songs, but you specified more than that'
+                            )
+                        )
+                    elif item['loop'] == 'one':
+                        queuecol.update_one(
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
+                                    'pointer': pos-1
+                                }
+                            }
+                        )
+                    else:
+                        queuecol.update_one(
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
+                                    'pointer': pos-2
+                                }
+                            }
+                        )
                     await ctx.send(
                         embed=create_embed(
                             f'Skipped [{song["title"]}]({song["url"]})'
