@@ -1,7 +1,5 @@
 # Imports
 import discord
-import youtube_dl
-import os
 
 
 # Create embed

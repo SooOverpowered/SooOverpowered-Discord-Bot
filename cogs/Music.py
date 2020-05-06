@@ -3,7 +3,6 @@ import discord
 import youtube_dl
 import os
 import asyncio
-import json
 import math
 import pymongo
 from helper import *

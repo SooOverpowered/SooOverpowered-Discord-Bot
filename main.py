@@ -3,7 +3,6 @@ import discord
 import pymongo
 import os
 import asyncio
-import json
 from helper import *
 from discord.ext import commands
 

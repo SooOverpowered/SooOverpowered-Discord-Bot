@@ -1,7 +1,6 @@
 # Imports
 import discord
 import time
-import json
 import pymongo
 from datetime import datetime
 from helper import *
