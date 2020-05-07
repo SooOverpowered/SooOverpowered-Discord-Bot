@@ -378,7 +378,7 @@ class Administration(commands.Cog, name='Administration'):
             )
             await ctx.send(
                 embed=create_embed(
-                    f'Join message set to **{message}** at {channel.mention}'
+                    f'Join message set to "{message}" at {channel.mention}'
                 ),
                 delete_after=60
             )
@@ -409,7 +409,7 @@ class Administration(commands.Cog, name='Administration'):
             )
             await ctx.send(
                 embed=create_embed(
-                    f'Leave message set to **{message}** at {channel.mention}'
+                    f'Leave message set to "{message}" at {channel.mention}'
                 ),
                 delete_after=60
             )
