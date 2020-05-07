@@ -371,7 +371,7 @@ class Administration(commands.Cog, name='Administration'):
                 {
                     '$set': {
                         'announcement_join_channel': channel.id,
-                        'annoucement_join_message': message
+                        'announcement_join_message': message
                     }
                 }
             )
