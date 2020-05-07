@@ -1174,6 +1174,57 @@ class Music(commands.Cog, name='Music'):
                 )
 
     @commands.command(
+        name='clearqueue',
+        aliases=['flush', 'empty', 'clearq'],
+        description='Clear the current queue',
+        usage='`.clearqueue`'
+    )
+    @ensure_voice
+    async def clearqueue(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any argument'
+                ),
+                delete_after=10
+            )
+        else:
+            channel = ctx.author.voice.channel
+            voice = ctx.voice_client
+            if voice != None:
+                if voice.channel != channel:
+                    await ctx.send(
+                        embed=create_embed(
+                            'Please wait until other members are done listening to music'
+                        ),
+                        delete_after=10
+                    )
+                else:
+                    queuecol.update_one(
+                        {'guild_id': ctx.guild.id},
+                        {
+                            '$set': {
+                                'pointer': 0,
+                                'size': 0,
+                                'queue': []
+                            }
+                        }
+                    )
+                    await ctx.send(
+                        embed=create_embed(
+                            'Queue cleared'
+                        ),
+                        delete_after=10
+                    )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    ),
+                    delete_after=10
+                )
+
+    @commands.command(
         name='loop',
         aliases=['repeat', ],
         description='Toggle between looping all, one or off',
