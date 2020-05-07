@@ -233,9 +233,9 @@ class System(commands.Cog, name='System'):
                     os.environ.get('default_prefix'),
                 ],
                 'announcement_join_channel': None,
-                'announcement_join_message': '**{}** has joined the server.',
+                'announcement_join_message': None,
                 'announcement_leave_channel': None,
-                'announcement_leave_message': '**{}** has left the server, RIP'
+                'announcement_leave_message': None,
             }
         )
 
