@@ -353,11 +353,11 @@ class Administration(commands.Cog, name='Administration'):
         )
 
     @commands.command(
-        name='setannounce',
-        description='',
-        usage=''
+        name='set_join',
+        description='Sets the channel for member join and the announcement message',
+        usage='`.set_join [#channel] [message]`'
     )
-    async def set_join_message(self, ctx, channel: commands.TextChannelConverter, *, message: str):
+    async def set_join(self, ctx, channel: commands.TextChannelConverter, *, message: str):
         if re.search('\{\}', message) == None:
             await ctx.send(
                 embed=create_embed(
@@ -377,7 +377,36 @@ class Administration(commands.Cog, name='Administration'):
             )
             await ctx.send(
                 embed=create_embed(
-                    f'Join message set carefully'
+                    f'Join message set to **{message}** at {channel.mention}'
+                )
+            )
+
+    @commands.command(
+        name='set_leave',
+        description='Sets the channel for member leave and the announcement message',
+        usage='`.set_leave [#channel] [message]`'
+    )
+    async def set_leave(self, ctx, channel: commands.TextChannelConverter, *, message: str):
+        if re.search('\{\}', message) == None:
+            await ctx.send(
+                embed=create_embed(
+                    'Your message must contain "{}" to specify where to put the member name'
+                ),
+                delete_after=10
+            )
+        else:
+            guildcol.update_one(
+                {'guild_id': ctx.guild.id},
+                {
+                    '$set': {
+                        'announcement_leave_channel': channel.id,
+                        'announcement_leave_message': message
+                    }
+                }
+            )
+            await ctx.send(
+                embed=create_embed(
+                    f'Leave message set to **{message}** at {channel.mention}'
                 )
             )
 
