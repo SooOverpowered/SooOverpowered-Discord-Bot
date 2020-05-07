@@ -160,7 +160,6 @@ class System(commands.Cog, name='System'):
             guild = self.client.get_guild(queue['guild_id'])
             if guild.voice_client.is_playing():
                 guild.voice_client.pause()
-                text_channel = guild.get_channel(queue['text_channel'])
 
     @commands.Cog.listener()
     async def on_ready(self):

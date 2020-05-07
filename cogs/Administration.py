@@ -3,6 +3,7 @@ import discord
 import time
 import pymongo
 import os
+import re
 from datetime import datetime
 from helper import *
 from discord.ext import commands
@@ -356,8 +357,29 @@ class Administration(commands.Cog, name='Administration'):
         description='',
         usage=''
     )
-    async def setannounce(self, ctx):
-        pass
+    async def set_join_message(self, ctx, channel: commands.TextChannelConverter, *, message: str):
+        if re.search('\{\}', message) == None:
+            await ctx.send(
+                embed=create_embed(
+                    'Your message must contain "{}" to specify where to put the member name'
+                ),
+                delete_after=10
+            )
+        else:
+            guildcol.update_one(
+                {'guild_id': ctx.guild.id},
+                {
+                    '$set': {
+                        'announcement_join_channel': channel.id,
+                        'annoucement_join_message': message
+                    }
+                }
+            )
+            await ctx.send(
+                embed=create_embed(
+                    f'Join message set carefully'
+                )
+            )
 
     # Error handler
     @clear.error
