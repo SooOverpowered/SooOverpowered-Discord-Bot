@@ -917,7 +917,7 @@ class Music(commands.Cog, name='Music'):
                     if pos == 0:
                         pass
                     elif item['size'] == 0:
-                        voice.stop()
+                        pass
                     elif pos < 1 or pos > item['size']:
                         await ctx.send(
                             embed=create_embed(
@@ -934,7 +934,6 @@ class Music(commands.Cog, name='Music'):
                                 }
                             }
                         )
-                        voice.stop()
                         await ctx.send(
                             embed=create_embed(
                                 f'Skipped [{song["title"]}]({song["url"]})'
@@ -951,13 +950,13 @@ class Music(commands.Cog, name='Music'):
                                 }
                             }
                         )
-                        voice.stop()
                         await ctx.send(
                             embed=create_embed(
                                 f'Skipped [{song["title"]}]({song["url"]})'
                             ),
                             delete_after=10
                         )
+                    voice.stop()
 
             else:
                 await ctx.send(
