@@ -357,6 +357,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Sets the channel for member join and the announcement message',
         usage='`.set_join [#channel] [message]`'
     )
+    @commands.has_guild_permissions(manage_guild=True)
     async def set_join(self, ctx, channel: commands.TextChannelConverter, *, message: str):
         if re.search('\{\}', message) == None:
             await ctx.send(
@@ -386,6 +387,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Sets the channel for member leave and the announcement message',
         usage='`.set_leave [#channel] [message]`'
     )
+    @commands.has_guild_permissions(manage_guild=True)
     async def set_leave(self, ctx, channel: commands.TextChannelConverter, *, message: str):
         if re.search('\{\}', message) == None:
             await ctx.send(
