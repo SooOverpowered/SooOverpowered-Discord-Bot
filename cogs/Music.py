@@ -914,9 +914,10 @@ class Music(commands.Cog, name='Music'):
                     item = queuecol.find_one({'guild_id': ctx.guild.id})
                     pointer = item['pointer']
                     queue = item['queue']
-                    song = queue[pointer]
                     if pos == 0:
                         pass
+                    elif item['size'] == 0:
+                        voice.stop()
                     elif pos < 1 or pos > item['size']:
                         await ctx.send(
                             embed=create_embed(
@@ -924,6 +925,7 @@ class Music(commands.Cog, name='Music'):
                             )
                         )
                     elif item['loop'] == 'one':
+                        song = queue[pointer]
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
@@ -932,7 +934,15 @@ class Music(commands.Cog, name='Music'):
                                 }
                             }
                         )
+                        voice.stop()
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Skipped [{song["title"]}]({song["url"]})'
+                            ),
+                            delete_after=10
+                        )
                     else:
+                        song = queue[pointer]
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
@@ -941,13 +951,14 @@ class Music(commands.Cog, name='Music'):
                                 }
                             }
                         )
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Skipped [{song["title"]}]({song["url"]})'
-                        ),
-                        delete_after=10
-                    )
-                    voice.stop()
+                        voice.stop()
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Skipped [{song["title"]}]({song["url"]})'
+                            ),
+                            delete_after=10
+                        )
+
             else:
                 await ctx.send(
                     embed=create_embed(
