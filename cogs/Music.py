@@ -1179,7 +1179,7 @@ class Music(commands.Cog, name='Music'):
         description='Clear the current queue',
         usage='`.clearqueue`'
     )
-    @ensure_voice
+    @ensure_voice()
     async def clearqueue(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
