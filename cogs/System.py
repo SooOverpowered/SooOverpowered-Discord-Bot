@@ -251,7 +251,7 @@ class System(commands.Cog, name='System'):
             await ctx.message.delete()
         except:
             pass
-'''
+
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
@@ -262,7 +262,7 @@ class System(commands.Cog, name='System'):
                 delete_after=10
             )
             await ctx.message.delete()
-'''
+
 
 def setup(client):
     client.add_cog(System(client))
