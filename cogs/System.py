@@ -79,16 +79,31 @@ class System(commands.Cog, name='System'):
     async def listserver(self, ctx, page: int = 1):
         output = ''
         guilds = self.client.guilds
-        pages = math.ceil(len(guilds)/20)
-        for guild in guilds:
-            pass
-
-    @commands.command(
-        name='leaveserver'
-    )
-    @commands.is_owner()
-    async def leaveserver(self, ctx):
-        pass
+        pages = math.ceil(len(guilds)/10)
+        if 1 <= page <= pages:
+            counter = 1+(page-1)*10
+            for guild in guilds:
+                output += f'{counter}. {guild.name}'
+                counter += 1
+            embed = discord.Embed(
+                color=discord.Color.orange(),
+                description=output,
+                title='**GUILD LIST**',
+                timestamp=ctx.message.created_at
+            )
+            embed.set_footer(
+                text=f'Page {page} of {pages}'
+            )
+            await ctx.send(
+                embed=embed
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'The page you specified does not exist'
+                ),
+                delete_after=10
+            )
 
     # Error handler
     @reload.error
