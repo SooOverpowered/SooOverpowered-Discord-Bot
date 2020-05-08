@@ -507,6 +507,15 @@ class Administration(commands.Cog, name='Administration'):
             )
         )
 
+    @setprefix.error
+    async def setprefix_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'You do not have the {"".join(error.missing_perms)} permission for this command'
+                )
+            )
+
 
 # Add cog
 def setup(client):
