@@ -777,7 +777,7 @@ class Music(commands.Cog, name='Music'):
                         )
                     else:
                         item = queuecol.find_one({'guild_id': ctx.guild.id})
-                        if len(item['queue']) >= 1:
+                        if len(item['queue']) > 0:
                             self.play_song(ctx.guild)
                             queuecol.update_one(
                                 {'guild_id': ctx.guild.id},
@@ -1332,7 +1332,7 @@ class Music(commands.Cog, name='Music'):
             output = ''
             playlist_list = playlistcol.find({'guild_id': ctx.guild.id})
             pages = math.ceil(size/10)
-            if 1 <= page < pages:
+            if 1 <= page <= pages:
                 counter = 1+(page-1)*10
                 for pl in playlist_list[(page-1)*10:page*10]:
                     output += f'{counter}. {pl["name"]}\n'
