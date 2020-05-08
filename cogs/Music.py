@@ -1790,6 +1790,14 @@ class Music(commands.Cog, name='Music'):
                     if queue['state'] == 'Playing':
                         voice.resume()
 
+    @commands.Cog.listener()
+    async def on_disconnect(self):
+        queues = queuecol.find()
+        for queue in queues:
+            guild = self.client.get_guild(queue['guild_id'])
+            if guild.voice_client.is_playing():
+                guild.voice_client.pause()
+
     # Error handler
     @play.error
     async def play_error(self, ctx, error):

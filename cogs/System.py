@@ -169,14 +169,6 @@ class System(commands.Cog, name='System'):
         )
 
     @commands.Cog.listener()
-    async def on_disconnect(self):
-        queues = queuecol.find()
-        for queue in queues:
-            guild = self.client.get_guild(queue['guild_id'])
-            if guild.voice_client.is_playing():
-                guild.voice_client.pause()
-
-    @commands.Cog.listener()
     async def on_ready(self):
         print('Bot logged in as {0.user}'.format(self.client))
         guilds = self.client.guilds
