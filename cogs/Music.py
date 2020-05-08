@@ -8,6 +8,7 @@ import pymongo
 from helper import *
 from discord.ext import commands
 
+# Suppress annoying console message
 youtube_dl.utils.bug_reports_message = lambda: ''
 
 # Connect to mongodb database
