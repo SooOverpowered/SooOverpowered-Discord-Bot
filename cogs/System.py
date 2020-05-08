@@ -261,13 +261,6 @@ class System(commands.Cog, name='System'):
         playlistcol.delete_many({'guild_id': guild.id})
 
     @commands.Cog.listener()
-    async def on_command_completion(self, ctx):
-        try:
-            await ctx.message.delete()
-        except:
-            pass
-
-    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
             await ctx.send(
