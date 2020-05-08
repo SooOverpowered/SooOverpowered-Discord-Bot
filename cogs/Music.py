@@ -53,7 +53,7 @@ class Music(commands.Cog, name='Music'):
             'format': 'bestaudio/best',
             'quiet': True,
             'noplaylist': False,
-            #'extract_flat': 'in_playlist',
+            # 'extract_flat': 'in_playlist',
             'nocheckcertificate': True,
             'ignoreerrors': True,
             'logtostderr': False,
@@ -336,18 +336,14 @@ class Music(commands.Cog, name='Music'):
                         else:
                             if len(info['entries']) == 1:  # The playlist only have one song
                                 # Get song metadata
-                                with youtube_dl.YoutubeDL(self.opts) as ydl:
-                                    song_info = ydl.extract_info(
-                                        info['entries'][0]['url'],
-                                        download=False
-                                    )
+                                song_info = info['entries'][0]
                                 # Insert the song into queue
                                 queuecol.update_one(
                                     {'guild_id': ctx.guild.id},
                                     {
                                         '$push': {
                                             'queue': {
-                                                'url': song_info['url'],
+                                                'url': song_info['webpage_url'],
                                                 'title': song_info['title']
                                             }
                                         },
@@ -364,7 +360,7 @@ class Music(commands.Cog, name='Music'):
                                         {
                                             '$push': {
                                                 'queue': {
-                                                    'url': song['url'],
+                                                    'url': song['webpage_url'],
                                                     'title': song['title']
                                                 }
                                             },
@@ -425,18 +421,14 @@ class Music(commands.Cog, name='Music'):
                         else:
                             if len(info['entries']) == 1:  # The playlist only have one song
                                 # Get song metadata
-                                with youtube_dl.YoutubeDL(self.opts) as ydl:
-                                    song_info = ydl.extract_info(
-                                        info['entries'][0]['url'],
-                                        download=False
-                                    )
+                                song_info = info['entries'][0]
                                 # Insert the song into queue
                                 queuecol.update_one(
                                     {'guild_id': ctx.guild.id},
                                     {
                                         '$push': {
                                             'queue': {
-                                                'url': song_info['url'],
+                                                'url': song_info['webpage_url'],
                                                 'title': song_info['title']
                                             }
                                         },
@@ -459,7 +451,7 @@ class Music(commands.Cog, name='Music'):
                                         {
                                             '$push': {
                                                 'queue': {
-                                                    'url': song['url'],
+                                                    'url': song['webpage_url'],
                                                     'title': song['title']
                                                 }
                                             },
@@ -516,18 +508,14 @@ class Music(commands.Cog, name='Music'):
                         else:
                             if len(info['entries']) == 1:  # The playlist only have one song
                                 # Get song metadata
-                                with youtube_dl.YoutubeDL(self.opts) as ydl:
-                                    song_info = ydl.extract_info(
-                                        info['entries'][0]['url'],
-                                        download=False
-                                    )
+                                song_info = info['entries'][0]
                                 # Insert the song into queue
                                 queuecol.update_one(
                                     {'guild_id': ctx.guild.id},
                                     {
                                         '$push': {
                                             'queue': {
-                                                'url': song_info['url'],
+                                                'url': song_info['webpage_url'],
                                                 'title': song_info['title']
                                             }
                                         },
@@ -544,7 +532,7 @@ class Music(commands.Cog, name='Music'):
                                         {
                                             '$push': {
                                                 'queue': {
-                                                    'url': song['url'],
+                                                    'url': song['webpage_url'],
                                                     'title': song['title']
                                                 }
                                             },
@@ -613,18 +601,14 @@ class Music(commands.Cog, name='Music'):
                 else:
                     if len(info['entries']) == 1:  # The playlist only have one song
                         # Get song metadata
-                        with youtube_dl.YoutubeDL(self.opts) as ydl:
-                            song_info = ydl.extract_info(
-                                info['entries'][0]['url'],
-                                download=False
-                            )
+                        song_info = info['entries'][0]
                         # Insert the song into queue
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
                                 '$push': {
                                     'queue': {
-                                        'url': song_info['url'],
+                                        'url': song_info['webpage_url'],
                                         'title': song_info['title']
                                     }
                                 },
@@ -641,7 +625,7 @@ class Music(commands.Cog, name='Music'):
                                 {
                                     '$push': {
                                         'queue': {
-                                            'url': song['url'],
+                                            'url': song['webpage_url'],
                                             'title': song['title']
                                         }
                                     },
@@ -1051,7 +1035,7 @@ class Music(commands.Cog, name='Music'):
                     if 1 <= page <= pages:
                         counter = 1 + (page-1)*10
                         for song in queue[(page-1)*10:page*10]:
-                            output += f'{counter}. {song["title"]}\n'
+                            output += f'{counter}. [{song["title"]}]({song["url"]})\n'
                             counter += 1
                         embed = discord.Embed(
                             color=discord.Color.orange(),
@@ -1580,11 +1564,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 else:
                     if len(info['entries']) == 1:
-                        with youtube_dl.YoutubeDL(self.opts) as ydl:
-                            song_info = ydl.extract_info(
-                                info['entries'][0]['url'],
-                                download=False
-                            )
+                        song_info = info['entries'][0]
                         playlistcol.update_one(
                             {
                                 'guild_id': ctx.guild.id,
@@ -1593,7 +1573,7 @@ class Music(commands.Cog, name='Music'):
                             {
                                 '$push': {
                                     'song_list': {
-                                        'url': song_info['url'],
+                                        'url': song_info['webpage_url'],
                                         'title': song_info['title']
                                     }
                                 },
@@ -1618,7 +1598,7 @@ class Music(commands.Cog, name='Music'):
                                 {
                                     '$push': {
                                         'song_list': {
-                                            'url': song['url'],
+                                            'url': song['webpage_url'],
                                             'title': song['title']
                                         }
                                     },
@@ -1753,7 +1733,7 @@ class Music(commands.Cog, name='Music'):
                 if 1 <= page <= pages:
                     counter = 1 + (page-1)*10
                     for song in song_list[(page-1)*10:page*10]:
-                        output += f'{counter}. {song["title"]}\n'
+                        output += f'{counter}. [{song["title"]}]({song["url"]})\n'
                         counter += 1
                     embed = discord.Embed(
                         color=discord.Color.orange(),
