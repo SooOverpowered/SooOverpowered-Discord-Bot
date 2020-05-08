@@ -1841,6 +1841,15 @@ class Music(commands.Cog, name='Music'):
                 delete_after=10
             )
 
+    @add.error
+    async def add_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(
+                embed=create_embed(
+                    'Please specify the correct argument'
+                )
+            )
+
 
 # Add cog
 def setup(client):
