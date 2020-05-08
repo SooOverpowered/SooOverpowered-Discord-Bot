@@ -241,7 +241,7 @@ class Administration(commands.Cog, name='Administration'):
 
     @commands.command(
         name='userinfo',
-        aliases=['info', ],
+        aliases=['info', 'profile'],
         description='Displays the user info',
         usage='`.userinfo`'
     )
@@ -287,6 +287,23 @@ class Administration(commands.Cog, name='Administration'):
         await ctx.send(embed=embed)
 
     @commands.command(
+        name='avatar',
+        aliases=['photo', 'profilephoto'],
+        description='Shows the user photo',
+        usage='`.avatar [member]`'
+    )
+    async def avatar(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+        embed = discord.Embed(
+            color=discord.Color.orange(),
+            title=f"**{member.display_name}'s Avatar**",
+            timestamp=ctx.message.created_at
+        )
+        embed.set_image(url=member.avatar_url_as(format=None, size=4096))
+        await ctx.send(embed=embed)
+
+    @commands.command(
         name='serverinfo',
         description='Displays the server info',
         aliases=['svinfo', ],
@@ -329,6 +346,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Set the custom prefix for the server',
         usage='`.setprefix [new prefix]`'
     )
+    @commands.has_guild_permissions(manage_guild=True)
     async def setprefix(self, ctx, new_prefix: str):
         info = guildcol.find_one(
             {'guild_id': ctx.guild.id}
@@ -358,7 +376,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.set_join [#channel] [message]`'
     )
     @commands.has_guild_permissions(manage_guild=True)
-    async def set_join(self, ctx, channel: commands.TextChannelConverter, *, message: str):
+    async def set_join(self, ctx, channel: discord.TextChannel, *, message: str):
         if re.search('\{\}', message) == None:
             await ctx.send(
                 embed=create_embed(
@@ -389,7 +407,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.set_leave [#channel] [message]`'
     )
     @commands.has_guild_permissions(manage_guild=True)
-    async def set_leave(self, ctx, channel: commands.TextChannelConverter, *, message: str):
+    async def set_leave(self, ctx, channel: discord.TextChannel, *, message: str):
         if re.search('\{\}', message) == None:
             await ctx.send(
                 embed=create_embed(
@@ -480,6 +498,14 @@ class Administration(commands.Cog, name='Administration'):
                     f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
                 )
             )
+
+    @avatar.error
+    async def avatar_error(self, ctx, error):
+        await ctx.send(
+            embed=create_embed(
+                f"Couldn't get user avatar. Make sure you typed their name correctly or mention them"
+            )
+        )
 
 
 # Add cog
