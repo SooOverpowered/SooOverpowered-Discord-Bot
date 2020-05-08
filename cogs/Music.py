@@ -1412,6 +1412,9 @@ class Music(commands.Cog, name='Music'):
                                     'queue': {
                                         '$each': playlist['song_list']
                                     }
+                                },
+                                '$inc': {
+                                    'size': playlist['size']
                                 }
                             }
                         )
@@ -1437,6 +1440,9 @@ class Music(commands.Cog, name='Music'):
                                 'queue': {
                                     '$each': playlist['song_list']
                                 }
+                            },
+                            '$inc': {
+                                'size': playlist['size']
                             }
                         }
                     )
@@ -1470,6 +1476,9 @@ class Music(commands.Cog, name='Music'):
                             'queue': {
                                 '$each': playlist['song_list']
                             }
+                        },
+                        '$inc': {
+                            'size': playlist['size']
                         }
                     }
                 )
@@ -1479,7 +1488,7 @@ class Music(commands.Cog, name='Music'):
                     ),
                     delete_after=10
                 )
-                self.play_song(voice)
+                self.play_song(ctx.guild)
 
     @playlist.command(
         name='create',
