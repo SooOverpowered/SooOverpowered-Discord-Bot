@@ -53,7 +53,7 @@ class Music(commands.Cog, name='Music'):
             'format': 'bestaudio/best',
             'quiet': True,
             'noplaylist': False,
-            'extract_flat': 'in_playlist',
+            #'extract_flat': 'in_playlist',
             'nocheckcertificate': True,
             'ignoreerrors': True,
             'logtostderr': False,
