@@ -1480,7 +1480,7 @@ class Music(commands.Cog, name='Music'):
                 'name': name
             }
         )
-        if playlist != None:
+        if playlist == None:
             playlistcol.insert_one(
                 {
                     'guild_id': ctx.guild.id,
