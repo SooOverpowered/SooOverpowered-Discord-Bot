@@ -59,7 +59,8 @@ class Music(commands.Cog, name='Music'):
             'logtostderr': False,
             'no_warnings': True,
             'include_ads': False,
-            'skip_download': True
+            'skip_download': True,
+            'source_address': '0.0.0.0'
         }
 
     def ensure_bot_alone(self, ctx):
