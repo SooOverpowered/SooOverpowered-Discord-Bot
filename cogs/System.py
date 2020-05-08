@@ -263,7 +263,7 @@ class System(commands.Cog, name='System'):
                 delete_after=10
             )
             await ctx.message.delete()
-        elif isinstance(error, utils.ExtractorError):
+        elif isinstance(error, utils.UnavailableVideoError):
             await ctx.send(
                 embed=create_embed(
                     'There is an error with Youtube service, please try again'
