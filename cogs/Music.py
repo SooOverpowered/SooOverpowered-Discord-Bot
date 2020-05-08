@@ -1815,9 +1815,8 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     )
             else:
-                if voice.is_paused():
-                    if queue['state'] == 'Playing':
-                        voice.resume()
+                if queue['state'] == 'Playing':
+                    voice.resume()
 
     @commands.Cog.listener()
     async def on_disconnect(self):
