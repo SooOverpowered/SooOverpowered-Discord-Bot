@@ -1592,7 +1592,7 @@ class Music(commands.Cog, name='Music'):
                                     }
                                 },
                                 '$inc': {
-                                    '$size': 1
+                                    'size': 1
                                 }
                             }
                         )
@@ -1617,7 +1617,7 @@ class Music(commands.Cog, name='Music'):
                                         }
                                     },
                                     '$inc': {
-                                        '$size': 1
+                                        'size': 1
                                     }
                                 }
                             )
