@@ -917,15 +917,21 @@ class Music(commands.Cog, name='Music'):
                     item = queuecol.find_one({'guild_id': ctx.guild.id})
                     pointer = item['pointer']
                     queue = item['queue']
-                    if pos == 0:
-                        pass
-                    elif item['size'] == 0:
+                    if item['size'] == 0:
                         pass
                     elif pos < 1 or pos > item['size']:
                         await ctx.send(
                             embed=create_embed(
                                 f'The queue only have {item["size"]} songs, but you specified more than that'
                             )
+                        )
+                    elif pos == 0:
+                        song = queue[pointer]
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Skipped [{song["title"]}]({song["url"]})'
+                            ),
+                            delete_after=10
                         )
                     elif item['loop'] == 'one':
                         song = queue[pointer]
