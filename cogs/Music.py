@@ -1563,7 +1563,7 @@ class Music(commands.Cog, name='Music'):
             }
         )
         if playlist != None:
-            with youtube_dl.YoutubeDL(opts) as ydl:
+            with youtube_dl.YoutubeDL(self.opts) as ydl:
                 info = ydl.extract_info(
                     url,
                     download=False
