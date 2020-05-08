@@ -50,7 +50,7 @@ class Music(commands.Cog, name='Music'):
         self.client = client
         self.opts = {
             "default_search": "ytsearch",
-            'format': 'bestaudio/best',
+            'format': 'bestaudio/best/bestvideo',
             'quiet': True,
             'noplaylist': False,
             # 'extract_flat': 'in_playlist',
