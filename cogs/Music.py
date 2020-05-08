@@ -193,6 +193,8 @@ class Music(commands.Cog, name='Music'):
                     )
             else:
                 voice = await channel.connect(reconnect=True)
+                if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
+                    queuecol.delete_one({'guild_id': ctx.guild.id})
                 queuecol.insert_one(
                     {
                         'guild_id': ctx.guild.id,
@@ -577,6 +579,8 @@ class Music(commands.Cog, name='Music'):
                     download=False
                 )
             # Create a new queue
+            if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
+                queuecol.delete_one({'guild_id': ctx.guild.id})
             queuecol.insert_one(
                 {
                     'guild_id': ctx.guild.id,
@@ -1457,6 +1461,8 @@ class Music(commands.Cog, name='Music'):
                         self.play_song(voice)
             else:
                 voice = await channel.connect(reconnect=True)
+                if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
+                    queuecol.delete_one({'guild_id': ctx.guild.id})
                 queuecol.insert_one(
                     {
                         'guild_id': ctx.guild.id,
