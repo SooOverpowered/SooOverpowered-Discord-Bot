@@ -801,12 +801,25 @@ class Music(commands.Cog, name='Music'):
                                 delete_after=10
                             )
             else:
-                await ctx.send(
-                    embed=create_embed(
-                        'Cannot resume while bot was not connected to any voice channel'
-                    ),
-                    delete_after=10
-                )
+                item = queuecol.find_one({'guild_id': ctx.guild.id})
+                if item == None:
+                    await ctx.send(
+                        embed=create_embed(
+                            'Cannot resume while bot was not connected to any voice channel'
+                        ),
+                        delete_after=10
+                    )
+                else:
+                    guild = self.client.get_guild(item['guild_id'])
+                    channel = guild.get_channel(item['voice_channel'])
+                    voice = await channel.connect(reconnect=True)
+                    self.play_song(ctx.guild)
+                    await ctx.send(
+                        embed=create_embed(
+                            'Resumed music'
+                        ),
+                        delete_after=10
+                    )
 
     @commands.command(
         name='stop',
