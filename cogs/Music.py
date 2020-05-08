@@ -777,7 +777,7 @@ class Music(commands.Cog, name='Music'):
                         )
                     else:
                         item = queuecol.find_one({'guild_id': ctx.guild.id})
-                        if len(item['queue']) > 1:
+                        if len(item['queue']) >= 1:
                             self.play_song(ctx.guild)
                             queuecol.update_one(
                                 {'guild_id': ctx.guild.id},
