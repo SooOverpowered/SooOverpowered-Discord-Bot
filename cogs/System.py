@@ -84,7 +84,7 @@ class System(commands.Cog, name='System'):
         if 1 <= page <= pages:
             counter = 1+(page-1)*10
             for guild in guilds:
-                output += f'{counter}. {guild.name}'
+                output += f'{counter}. {guild.name}\n'
                 counter += 1
             embed = discord.Embed(
                 color=discord.Color.orange(),
