@@ -95,7 +95,7 @@ class Music(commands.Cog, name='Music'):
                         embed=create_embed(
                             'There is an error with Youtube service, retrying'
                         ),
-                        delete_after=info['duration']
+                        delete_after=10
                     ), self.client.loop
                 )
             else:
