@@ -264,27 +264,6 @@ class System(commands.Cog, name='System'):
             )
             await ctx.message.delete()
 
-    @commands.Cog.listener()
-    async def on_error(self, ctx, error):
-        if isinstance(error, utils.UnavailableVideoError):
-            await ctx.send(
-                embed=create_embed(
-                    'There is an error with Youtube service, please try again'
-                )
-            )
-        elif isinstance(error, utils.ExtractorError):
-            await ctx.send(
-                embed=create_embed(
-                    'There is an error with Youtube service, please try again'
-                )
-            )
-        elif isinstance(error, utils.DownloadError):
-            await ctx.send(
-                embed=create_embed(
-                    'There is an error with Youtube service, please try again'
-                )
-            )
-
 
 def setup(client):
     client.add_cog(System(client))
