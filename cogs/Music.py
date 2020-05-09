@@ -69,10 +69,10 @@ class Music(commands.Cog, name='Music'):
     def extract_info(self, url):
         try:
             with youtube_dl.YoutubeDL(self.opts) as ydl:
-            info = ydl.extract_info(
-                url,
-                download=False
-            )
+                info = ydl.extract_info(
+                    url,
+                    download=False
+                )
         except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
             asyncio.run_coroutine_threadsafe(
                 ctx.send(
