@@ -90,10 +90,13 @@ class Music(commands.Cog, name='Music'):
                         download=False
                     )
             except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                await text_channel.send(
-                    embed=create_embed(
-                        'There is an error with Youtube service, retrying'
-                    )
+                asyncio.run_coroutine_threadsafe(
+                    text_channel.send(
+                        embed=create_embed(
+                            'There is an error with Youtube service, retrying'
+                        ),
+                        delete_after=info['duration']
+                    ), self.client.loop
                 )
             else:
                 break
