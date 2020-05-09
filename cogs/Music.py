@@ -1547,7 +1547,7 @@ class Music(commands.Cog, name='Music'):
     @playlist.command(
         name='delete',
         description='Delete an existing playlist',
-        usage='`.delete [playlist name]`',
+        usage='`.playlist delete [playlist name]`',
         aliases=['del', ]
     )
     async def delete(self, ctx, *, name: str):
