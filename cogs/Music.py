@@ -319,7 +319,6 @@ class Music(commands.Cog, name='Music'):
                                 'There is an error with Youtube service, please try again'
                             )
                         )
-                        print('shit')
                     else:
                         # Delete the current queue
                         if voice.is_playing() or voice.is_paused():
@@ -444,6 +443,7 @@ class Music(commands.Cog, name='Music'):
                                 'There is an error with Youtube service, please try again'
                             )
                         )
+                        print('shit')
                     else:
                         # Check if ytdl gives a playlist
                         if "_type" in info and info["_type"] == "playlist":
