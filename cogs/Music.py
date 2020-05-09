@@ -319,6 +319,7 @@ class Music(commands.Cog, name='Music'):
                                 'There is an error with Youtube service, please try again'
                             )
                         )
+                        print('shit')
                     else:
                         # Delete the current queue
                         if voice.is_playing() or voice.is_paused():
