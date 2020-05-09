@@ -270,7 +270,7 @@ class Music(commands.Cog, name='Music'):
                             voice.stop()
                         else:
                             queuecol.delete_one({'guild_id': ctx.guild.id})
-                            voice.disconnect()
+                            await voice.disconnect()
                         await ctx.send(
                             embed=create_embed(
                                 f'Bot disconnected from **{voice.channel}**'
@@ -331,7 +331,7 @@ class Music(commands.Cog, name='Music'):
                                 }
                             )
                             voice.stop()
-                            voice = channel.connect(reconnect=True)
+                            voice = await channel.connect(reconnect=True)
                         else:
                             # Move the bot to the new channel
                             queuecol.delete_one({'guild_id': ctx.guild.id})
@@ -1449,7 +1449,7 @@ class Music(commands.Cog, name='Music'):
                                 }
                             )
                             voice.stop()
-                            voice = channel.connect(reconnect=True)
+                            voice = await channel.connect(reconnect=True)
                         else:
                             queuecol.delete_one({'guild_id': ctx.guild.id})
                             await voice.move_to(channel)
