@@ -264,7 +264,7 @@ class System(commands.Cog, name='System'):
             )
             await ctx.message.delete()
 
-    @commands.Cog.listener
+    @commands.Cog.listener()
     async def on_error(self, ctx, error):
         if isinstance(error, utils.UnavailableVideoError):
             await ctx.send(
