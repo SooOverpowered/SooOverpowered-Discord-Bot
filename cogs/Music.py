@@ -1788,7 +1788,7 @@ class Music(commands.Cog, name='Music'):
                     },
                     {
                         '$pull': {
-                            'queue': None
+                            'song_list': None
                         }
                     }
                 )
