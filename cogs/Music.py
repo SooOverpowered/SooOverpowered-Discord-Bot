@@ -58,7 +58,7 @@ class Music(commands.Cog, name='Music'):
             'noplaylist': False,
             # 'extract_flat': 'in_playlist',
             'nocheckcertificate': True,
-            'ignoreerrors': True,
+            'ignoreerrors': False,
             'logtostderr': False,
             'no_warnings': True,
             'include_ads': False,
