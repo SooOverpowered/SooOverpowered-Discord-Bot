@@ -1882,14 +1882,15 @@ class Music(commands.Cog, name='Music'):
                 voice_channel = guild.get_channel(queue['voice_channel'])
                 voice = await voice_channel.connect(reconnect=True)
                 if queue['state'] == 'Playing':
-                    self.play_song(guild)
-                    text_channel = guild.get_channel(queue['text_channel'])
-                    await text_channel.send(
-                        embed=create_embed(
-                            'Bot was restarted, playing from the most recent song in queue'
-                        ),
-                        delete_after=10
-                    )
+                    if queue['size'] >= 1:
+                        self.play_song(guild)
+                        text_channel = guild.get_channel(queue['text_channel'])
+                        await text_channel.send(
+                            embed=create_embed(
+                                'Bot was restarted, playing from the most recent song in queue'
+                            ),
+                            delete_after=10
+                        )
             else:
                 if queue['state'] == 'Playing':
                     voice.resume()
