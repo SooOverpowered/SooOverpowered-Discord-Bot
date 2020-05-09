@@ -909,90 +909,82 @@ class Music(commands.Cog, name='Music'):
     )
     @ensure_voice()
     async def skip(self, ctx, pos: int = 0):
-        if ctx.author.voice == None:
-            await ctx.send(
-                embed=create_embed(
-                    'You must be connected to a voice channel to use this command'
-                ),
-                delete_after=10
-            )
-        else:
-            channel = ctx.author.voice.channel
-            voice = ctx.voice_client
-            if voice != None:
-                if voice.channel != channel:
+        channel = ctx.author.voice.channel
+        voice = ctx.voice_client
+        if voice != None:
+            if voice.channel != channel:
+                await ctx.send(
+                    embed=create_embed(
+                        'Please wait until other members are done listening to music'
+                    ),
+                    delete_after=10
+                )
+            else:
+                item = queuecol.find_one({'guild_id': ctx.guild.id})
+                pointer = item['pointer']
+                queue = item['queue']
+                if item['size'] == 0:
+                    pass
+                elif pos < 1 or pos > item['size']:
                     await ctx.send(
                         embed=create_embed(
-                            'Please wait until other members are done listening to music'
+                            f'The queue only have {item["size"]} songs, but you specified more than that'
+                        )
+                    )
+                elif pos == 0:
+                    song = queue[pointer]
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Skipped [{song["title"]}]({song["url"]})'
+                        ),
+                        delete_after=10
+                    )
+                elif item['loop'] == 'one':
+                    song = queue[pointer]
+                    queuecol.update_one(
+                        {'guild_id': ctx.guild.id},
+                        {
+                            '$set': {
+                                'pointer': pos-1
+                            }
+                        }
+                    )
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Skipped [{song["title"]}]({song["url"]})'
                         ),
                         delete_after=10
                     )
                 else:
-                    item = queuecol.find_one({'guild_id': ctx.guild.id})
-                    pointer = item['pointer']
-                    queue = item['queue']
-                    if item['size'] == 0:
-                        pass
-                    elif pos < 1 or pos > item['size']:
-                        await ctx.send(
-                            embed=create_embed(
-                                f'The queue only have {item["size"]} songs, but you specified more than that'
-                            )
-                        )
-                    elif pos == 0:
-                        song = queue[pointer]
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Skipped [{song["title"]}]({song["url"]})'
-                            ),
-                            delete_after=10
-                        )
-                    elif item['loop'] == 'one':
-                        song = queue[pointer]
-                        queuecol.update_one(
-                            {'guild_id': ctx.guild.id},
-                            {
-                                '$set': {
-                                    'pointer': pos-1
-                                }
+                    song = queue[pointer]
+                    queuecol.update_one(
+                        {'guild_id': ctx.guild.id},
+                        {
+                            '$set': {
+                                'pointer': pos-2
                             }
-                        )
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Skipped [{song["title"]}]({song["url"]})'
-                            ),
-                            delete_after=10
-                        )
-                    else:
-                        song = queue[pointer]
-                        queuecol.update_one(
-                            {'guild_id': ctx.guild.id},
-                            {
-                                '$set': {
-                                    'pointer': pos-2
-                                }
-                            }
-                        )
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Skipped [{song["title"]}]({song["url"]})'
-                            ),
-                            delete_after=10
-                        )
-                    voice.stop()
-
-            else:
-                await ctx.send(
-                    embed=create_embed(
-                        'Bot was not connected to any voice channel'
-                    ),
-                    delete_after=10
-                )
+                        }
+                    )
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Skipped [{song["title"]}]({song["url"]})'
+                        ),
+                        delete_after=10
+                    )
+                voice.stop()
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'Bot was not connected to any voice channel'
+                ),
+                delete_after=10
+            )
 
     @commands.command(
         name='volume',
         description='Changes the volume (max=300)',
-        aliases=['vol', ]
+        aliases=['vol', ],
+        usage='`.vol [volume]`'
     )
     @ensure_voice()
     async def volume(self, ctx, volume: int):
