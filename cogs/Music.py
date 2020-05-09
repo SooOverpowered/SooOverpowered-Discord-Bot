@@ -81,6 +81,7 @@ class Music(commands.Cog, name='Music'):
     def play_song(self, guild):
         item = queuecol.find_one({'guild_id': guild.id})
         pointer = item['pointer']
+        text_channel = self.client.get_channel(item['text_channel'])
         while True:
             try:
                 with youtube_dl.YoutubeDL(self.opts) as ydl:
@@ -89,7 +90,7 @@ class Music(commands.Cog, name='Music'):
                         download=False
                     )
             except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                await ctx.send(
+                await text_channel.send(
                     embed=create_embed(
                         'There is an error with Youtube service, retrying'
                     )
@@ -99,7 +100,6 @@ class Music(commands.Cog, name='Music'):
         volume = item['volume']
         voice = guild.voice_client
         source = create_ytdl_source(info['url'], volume)
-        text_channel = self.client.get_channel(item['text_channel'])
         try:
             asyncio.run_coroutine_threadsafe(
                 text_channel.send(
