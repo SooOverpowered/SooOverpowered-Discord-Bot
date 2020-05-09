@@ -275,6 +275,12 @@ class System(commands.Cog, name='System'):
                     'There is an error with Youtube service, please try again'
                 )
             )
+        elif isinstance(error, utils.DownloadError):
+            await ctx.send(
+                embed=create_embed(
+                    'There is an error with Youtube service, please try again'
+                )
+            )
 
 
 def setup(client):
