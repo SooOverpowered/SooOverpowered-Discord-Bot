@@ -314,10 +314,12 @@ class Music(commands.Cog, name='Music'):
                                 download=False
                             )
                     except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                        await ctx.send(
-                            embed=create_embed(
-                                'There is an error with Youtube service, please try again'
-                            )
+                        asyncio.run_coroutine_threadsafe(
+                            ctx.send(
+                                embed=create_embed(
+                                    'There is an error with Youtube service, please try again'
+                                ), delete_after=10
+                            ), self.client.loop
                         )
                     else:
                         # Delete the current queue
@@ -438,10 +440,12 @@ class Music(commands.Cog, name='Music'):
                                 download=False
                             )
                     except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                        await ctx.send(
-                            embed=create_embed(
-                                'There is an error with Youtube service, please try again'
-                            )
+                        asyncio.run_coroutine_threadsafe(
+                            ctx.send(
+                                embed=create_embed(
+                                    'There is an error with Youtube service, please try again'
+                                ), delete_after=10
+                            ), self.client.loop
                         )
                     else:
                         # Check if ytdl gives a playlist
@@ -534,10 +538,12 @@ class Music(commands.Cog, name='Music'):
                                 download=False
                             )
                     except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                        await ctx.send(
-                            embed=create_embed(
-                                'There is an error with Youtube service, please try again'
-                            )
+                        asyncio.run_coroutine_threadsafe(
+                            ctx.send(
+                                embed=create_embed(
+                                    'There is an error with Youtube service, please try again'
+                                ), delete_after=10
+                            ), self.client.loop
                         )
                     else:
                         # Check if ytdl gives a playlist
@@ -622,10 +628,12 @@ class Music(commands.Cog, name='Music'):
                         download=False
                     )
             except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                await ctx.send(
-                    embed=create_embed(
-                        'There is an error with Youtube service, please try again'
-                    )
+                asyncio.run_coroutine_threadsafe(
+                    ctx.send(
+                        embed=create_embed(
+                            'There is an error with Youtube service, please try again'
+                        ), delete_after=10
+                    ), self.client.loop
                 )
             else:
                 # Create a new queue
@@ -1642,10 +1650,12 @@ class Music(commands.Cog, name='Music'):
                         download=False
                     )
             except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
-                await ctx.send(
-                    embed=create_embed(
-                        'There is an error with Youtube service, please try again'
-                    )
+                asyncio.run_coroutine_threadsafe(
+                    ctx.send(
+                        embed=create_embed(
+                            'There is an error with Youtube service, please try again'
+                        ), delete_after=10
+                    ), self.client.loop
                 )
             else:
                 if "_type" in info and info["_type"] == "playlist":
