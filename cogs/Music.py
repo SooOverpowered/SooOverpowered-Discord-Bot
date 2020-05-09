@@ -1825,7 +1825,8 @@ class Music(commands.Cog, name='Music'):
                         )
             else:
                 if queue['state'] == 'Playing':
-                    voice.resume()
+                    if queue['size']>=1:
+                        voice.resume()
 
     @commands.Cog.listener()
     async def on_disconnect(self):
