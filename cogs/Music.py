@@ -66,7 +66,7 @@ class Music(commands.Cog, name='Music'):
             'source_address': '0.0.0.0'
         }
 
-    def extract_info(self, url):
+    def extract_info(self, url, ctx):
         try:
             with youtube_dl.YoutubeDL(self.opts) as ydl:
                 info = ydl.extract_info(
@@ -637,7 +637,7 @@ class Music(commands.Cog, name='Music'):
         else:  # Bot is not connected to any voice channel
             # Connects bot to a voice channel
             voice = await channel.connect(reconnect=True)
-            info = self.extract_info(url)
+            info = self.extract_info(url, ctx)
             # Create a new queue
             if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
                 queuecol.delete_one({'guild_id': ctx.guild.id})
