@@ -925,7 +925,7 @@ class Music(commands.Cog, name='Music'):
                 queue = item['queue']
                 if item['size'] == 0:
                     pass
-                elif pos < 1 or pos > item['size']:
+                elif pos < 0 or pos > item['size']:
                     await ctx.send(
                         embed=create_embed(
                             f'The queue only have {item["size"]} songs, but you specified more than that'
