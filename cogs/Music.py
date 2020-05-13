@@ -908,7 +908,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.skip [position]`'
     )
     @ensure_voice()
-    async def skip(self, ctx, pos: int = 0):
+    async def skip(self, ctx, pos: int = None):
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
         if voice != None:
@@ -929,14 +929,14 @@ class Music(commands.Cog, name='Music'):
                             'The music queue is empty'
                         )
                     )
-                elif pos < 0 or pos > item['size']:
+                elif pos < 1 or pos > item['size']:
                     await ctx.send(
                         embed=create_embed(
                             f'The queue only have {item["size"]} songs, but you specified more than that'
                         )
                     )
                 else:
-                    if pos == 0:
+                    if pos == None:
                         song = queue[pointer]
                         await ctx.send(
                             embed=create_embed(
