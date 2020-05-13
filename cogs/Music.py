@@ -924,54 +924,59 @@ class Music(commands.Cog, name='Music'):
                 pointer = item['pointer']
                 queue = item['queue']
                 if item['size'] == 0:
-                    pass
+                    await ctx.send(
+                        embed=create_embed(
+                            'The music queue is empty'
+                        )
+                    )
                 elif pos < 0 or pos > item['size']:
                     await ctx.send(
                         embed=create_embed(
                             f'The queue only have {item["size"]} songs, but you specified more than that'
                         )
                     )
-                elif pos == 0:
-                    song = queue[pointer]
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Skipped [{song["title"]}]({song["url"]})'
-                        ),
-                        delete_after=10
-                    )
-                elif item['loop'] == 'one':
-                    song = queue[pointer]
-                    queuecol.update_one(
-                        {'guild_id': ctx.guild.id},
-                        {
-                            '$set': {
-                                'pointer': pos-1
-                            }
-                        }
-                    )
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Skipped [{song["title"]}]({song["url"]})'
-                        ),
-                        delete_after=10
-                    )
                 else:
-                    song = queue[pointer]
-                    queuecol.update_one(
-                        {'guild_id': ctx.guild.id},
-                        {
-                            '$set': {
-                                'pointer': pos-2
+                    if pos == 0:
+                        song = queue[pointer]
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Skipped [{song["title"]}]({song["url"]})'
+                            ),
+                            delete_after=10
+                        )
+                    elif item['loop'] == 'one':
+                        song = queue[pointer]
+                        queuecol.update_one(
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
+                                    'pointer': pos-1
+                                }
                             }
-                        }
-                    )
-                    await ctx.send(
-                        embed=create_embed(
-                            f'Skipped [{song["title"]}]({song["url"]})'
-                        ),
-                        delete_after=10
-                    )
-                voice.stop()
+                        )
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Skipped [{song["title"]}]({song["url"]})'
+                            ),
+                            delete_after=10
+                        )
+                    else:
+                        song = queue[pointer]
+                        queuecol.update_one(
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
+                                    'pointer': pos-2
+                                }
+                            }
+                        )
+                        await ctx.send(
+                            embed=create_embed(
+                                f'Skipped [{song["title"]}]({song["url"]})'
+                            ),
+                            delete_after=10
+                        )
+                    voice.stop()
         else:
             await ctx.send(
                 embed=create_embed(
