@@ -927,7 +927,8 @@ class Music(commands.Cog, name='Music'):
                     await ctx.send(
                         embed=create_embed(
                             'The music queue is empty'
-                        )
+                        ),
+                        delete_after=10
                     )
                 elif pos == None:
                     song = queue[pointer]
@@ -942,7 +943,8 @@ class Music(commands.Cog, name='Music'):
                     await ctx.send(
                         embed=create_embed(
                             f'The queue only have {item["size"]} songs, but you specified more than that'
-                        )
+                        ),
+                        delete_after=10
                     )
                 else:
                     song = queue[pointer]
