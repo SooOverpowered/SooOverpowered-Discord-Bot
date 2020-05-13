@@ -929,6 +929,15 @@ class Music(commands.Cog, name='Music'):
                             'The music queue is empty'
                         )
                     )
+                elif pos == None:
+                    song = queue[pointer]
+                    await ctx.send(
+                        embed=create_embed(
+                            f'Skipped [{song["title"]}]({song["url"]})'
+                        ),
+                        delete_after=10
+                    )
+                    voice.stop()
                 elif pos < 1 or pos > item['size']:
                     await ctx.send(
                         embed=create_embed(
@@ -936,16 +945,8 @@ class Music(commands.Cog, name='Music'):
                         )
                     )
                 else:
-                    if pos == None:
-                        song = queue[pointer]
-                        await ctx.send(
-                            embed=create_embed(
-                                f'Skipped [{song["title"]}]({song["url"]})'
-                            ),
-                            delete_after=10
-                        )
-                    elif item['loop'] == 'one':
-                        song = queue[pointer]
+                    song = queue[pointer]
+                    if item['loop'] == 'one':
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
@@ -961,7 +962,6 @@ class Music(commands.Cog, name='Music'):
                             delete_after=10
                         )
                     else:
-                        song = queue[pointer]
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
