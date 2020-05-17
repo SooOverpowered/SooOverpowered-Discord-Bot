@@ -1012,6 +1012,13 @@ class Music(commands.Cog, name='Music'):
                     ),
                     delete_after=10
                 )
+            elif volume == None:
+                await ctx.send(
+                    embed=create_embed(
+                        'Please specify the volume that you want'
+                    ),
+                    delete_after=10
+                )
             else:
                 if 0 <= volume <= 300:
                     queuecol.update_one(
