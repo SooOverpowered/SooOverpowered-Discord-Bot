@@ -34,4 +34,4 @@
 
 - Discord: SooOverpowered#3653
 
-- Email: [lehoangminh15122000@gmail.com](lehoangminh15122000@gmail.com)
+- Email: lehoangminh15122000@gmail.com
