@@ -2,7 +2,7 @@
 
 ---
 
-## [Invite Link]([Discord](https://discordapp.com/api/oauth2/authorize?client_id=678865836513165319&permissions=2147483127&scope=bot))
+## [Invite Link](https://discordapp.com/api/oauth2/authorize?client_id=678865836513165319&permissions=2147483127&scope=bot)
 
 ---
 
@@ -16,17 +16,17 @@
 
 ## **To be added:**
 
-- [ ]  Member roles
+- [ ] Member roles
 
-- [ ]  Memes
+- [ ] Memes
 
-- [ ]  Reactions and emotes
+- [ ] Reactions and emotes
 
-- [ ]  More music features
+- [ ] More music features
 
-- [ ]  Migrate to Youtube API system instead of Youtube-DL for better reliability
+- [ ] Migrate to Youtube API system instead of Youtube-DL for better reliability
 
-- [ ]  Installation and hosting documentation
+- [ ] Installation and hosting documentation
 
 ---
 
@@ -35,5 +35,3 @@
 - Discord: SooOverpowered#3653
 
 - Email: [lehoangminh15122000@gmail.com](lehoangminh15122000@gmail.com)
-
-
