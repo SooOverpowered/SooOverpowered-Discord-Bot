@@ -28,6 +28,8 @@
 
 - [ ] Installation and hosting documentation
 
+- [ ] More moderations
+
 ---
 
 ## **Contact:**
