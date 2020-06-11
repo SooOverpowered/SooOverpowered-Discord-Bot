@@ -240,6 +240,88 @@ class Administration(commands.Cog, name='Administration'):
                             )
 
     @commands.command(
+        name='the_purge',
+        description='Initiates the purge event',
+        usage='`.the_purge`'
+    )
+    @commands.has_guild_permissions(kick_members=True)
+    async def purge(self, ctx, *, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'The command takes in no additional arguments'
+                ),
+                delete_after=10
+            )
+        else:
+            estimation = await ctx.guild.estimate_pruned_members(days=30)
+            await ctx.send(
+                embed=create_embed(
+                    f'This command will prune the channel of all inactive members\nEstimated casualties: {estimation}\nPlease reply with "Y" if you wish to continue with the purge\nThe command will be automatically cancelled after 20 seconds'
+                ),
+                delete_after=30
+            )
+            counter = 20
+            while counter > 0:
+                time.sleep(1)
+                async for message in ctx.channel.history(after=ctx.message.created_at):
+                    if message.author == ctx.author and message.content == 'Y':
+                        counter = 0
+                        await ctx.send(
+                            embed=create_embed(
+                                'Initiating purge event'
+                            ),
+                            delete_after=30
+                        )
+                        time.sleep(1)
+                        await ctx.send(
+                            embed=create_embed(
+                                'Shooting white people'
+                            ),
+                            delete_after=30
+                        )
+                        time.sleep(1)
+                        await ctx.send(
+                            embed=create_embed(
+                                'Enslaving Africans'
+                            ),
+                            delete_after=30
+                        )
+                        time.sleep(1)
+                        await ctx.send(
+                            embed=create_embed(
+                                'Overthrowing white supremacy'
+                            ),
+                            delete_after=30
+                        )
+                        time.sleep(1)
+                        await ctx.send(
+                            embed=create_embed(
+                                'Establishing Asian World Domination'
+                            ),
+                            delete_after=30
+                        )
+                        time.sleep(1)
+                        await ctx.guild.prune_members(days=30, compute_prune_count=False)
+                        time.sleep(1)
+                        await ctx.send(
+                            embed=create_embed(
+                                'Purge completed, the world is now free of capitalism.\nAll hail the Communist Party'
+                            ),
+                            delete_after=30
+                        )
+                        break
+                    else:
+                        counter -= 1
+                        if counter == 0:
+                            await ctx.send(
+                                embed=create_embed(
+                                    'The command got cancelled because the timer ran out'
+                                ),
+                                delete_after=10
+                            )
+
+    @commands.command(
         name='userinfo',
         aliases=['info', 'profile'],
         description='Displays the user info',
