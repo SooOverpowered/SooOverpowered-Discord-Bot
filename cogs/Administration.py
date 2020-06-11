@@ -257,7 +257,7 @@ class Administration(commands.Cog, name='Administration'):
             estimation = await ctx.guild.estimate_pruned_members(days=30)
             await ctx.send(
                 embed=create_embed(
-                    f'This command will prune the channel of all inactive members\nEstimated casualties: {estimation}\nPlease reply with "Y" if you wish to continue with the purge\nThe command will be automatically cancelled after 20 seconds'
+                    f'This command will purge the channel of all inactive members\nEstimated casualties: {estimation}\nPlease reply with "Y" if you wish to continue with the purge\nThe command will be automatically cancelled after 20 seconds'
                 ),
                 delete_after=30
             )
