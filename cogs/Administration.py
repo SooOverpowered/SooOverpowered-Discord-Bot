@@ -530,6 +530,21 @@ class Administration(commands.Cog, name='Administration'):
                 )
             )
 
+    @purge.error
+    async def purge_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'You do not have the {"".join(error.missing_perms)} permission for this command'
+                )
+            )
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send(
+                embed=create_embed(
+                    f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
+                )
+            )
+
     @nuke.error
     async def nuke_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
