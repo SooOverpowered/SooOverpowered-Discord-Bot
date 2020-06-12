@@ -302,7 +302,13 @@ class Administration(commands.Cog, name='Administration'):
                             delete_after=30
                         )
                         time.sleep(1)
-                        await ctx.guild.prune_members(days=30, compute_prune_count=False)
+                        deaths = await ctx.guild.prune_members(days=30, compute_prune_count=True)
+                        time.sleep(1)
+                        await ctx.semd(
+                            embed=create_embed(
+                                f'Actual casualties: {deaths}\nEscaped: {estimation-deaths}'
+                            )
+                        )
                         time.sleep(1)
                         await ctx.send(
                             embed=create_embed(
