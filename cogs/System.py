@@ -106,6 +106,22 @@ class System(commands.Cog, name='System'):
                 delete_after=10
             )
 
+    @commands.command(
+        name='leaveserver',
+        description='Leave the server of your choice',
+        usage='`.leaveserver [number on list]`'
+    )
+    @commands.is_owner()
+    async def leaveserver(self, ctx, pos: int):
+        guilds = self.client.guilds
+        guild = guilds[pos-1]
+        await guild.leave()
+        await ctx.send(
+            embed=create_embed(
+                f'Left {guild.name}'
+            )
+        )
+
     # Error handler
     @reload.error
     async def reload_error(self, ctx, error):
