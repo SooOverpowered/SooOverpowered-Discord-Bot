@@ -171,7 +171,7 @@ class System(commands.Cog, name='System'):
     async def showadminblacklist(self, ctx, page: int = 1):
         output = ''
         blacklisted = blacklist_admin.find()
-        pages = math.ceil(len(blacklisted)/10)
+        pages = math.ceil(len(blacklisted.count())/10)
         if 1 <= page <= pages:
             counter = 1+(page-1)*10
             for i in range((page-1)*10,page*10):
