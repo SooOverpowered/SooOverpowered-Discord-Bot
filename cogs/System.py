@@ -128,6 +128,7 @@ class System(commands.Cog, name='System'):
         description='Blacklist anyone you hate from using the bot',
         usage='`.adminblacklist [userid]`'
     )
+    @commands.is_owner()
     async def adminblacklist(self, ctx, userid: int):
         if blacklist_admin.find_one({'user_id': userid}):
             await ctx.send(
