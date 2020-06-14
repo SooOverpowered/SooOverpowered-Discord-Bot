@@ -174,8 +174,8 @@ class System(commands.Cog, name='System'):
         pages = math.ceil(len(blacklisted)/10)
         if 1 <= page <= pages:
             counter = 1+(page-1)*10
-            for user in blacklisted[(page-1)*10:page*10]:
-                user = self.client.get_user(user['user_id'])
+            for i in range((page-1)*10,page*10):
+                user = self.client.get_user(blacklisted[i]['user_id'])
                 output += f'{counter}. {user.name} | {user.id}'
                 counter += 1
             embed = discord.Embed(
