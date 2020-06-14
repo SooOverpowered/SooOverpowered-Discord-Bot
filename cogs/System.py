@@ -367,7 +367,7 @@ class System(commands.Cog, name='System'):
         guildcol.delete_one({'guild_id': guild.id})
         queuecol.delete_many({'guild_id': guild.id})
         playlistcol.delete_many({'guild_id': guild.id})
-
+'''
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
@@ -378,7 +378,7 @@ class System(commands.Cog, name='System'):
                 delete_after=10
             )
             await ctx.message.delete()
-
+'''
 
 def setup(client):
     client.add_cog(System(client))
