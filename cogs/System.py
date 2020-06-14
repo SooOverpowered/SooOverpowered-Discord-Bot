@@ -93,7 +93,7 @@ class System(commands.Cog, name='System'):
         pages = math.ceil(len(guilds)/10)
         if 1 <= page <= pages:
             counter = 1+(page-1)*10
-            for guild in guilds:
+            for guild in guilds[(page-1)*10:page*10]:
                 output += f'{counter}. {guild.name}\n'
                 counter += 1
             embed = discord.Embed(
@@ -151,6 +151,42 @@ class System(commands.Cog, name='System'):
                 embed=create_embed(
                     f'User ID {userid} blacklisted'
                 )
+            )
+
+    @commands.command(
+        name='adminbanlist',
+        description='List all banned user',
+        usage='`.adminbanlist`'
+    )
+    @commands.is_owner()
+    async def adminbanlist(self, ctx, page: int = 1):
+        output = ''
+        blacklisted = blacklist_admin.find()
+        pages = math.ceil(len(blacklisted)/10)
+        if 1 <= page <= pages:
+            counter = 1+(page-1)*10
+            for user in blacklisted[(page-1)*10:page*10]:
+                user = self.client.get_user(user['user_id'])
+                output += f'{counter}. {user.name} | {user.id}'
+                counter += 1
+            embed = discord.Embed(
+                color=discord.Color.orange(),
+                description=output,
+                title='**BLACKLIST**',
+                timestamp=ctx.message.created_at
+            )
+            embed.set_footer(
+                text=f'Page {page} of {pages}'
+            )
+            await ctx.send(
+                embed=embed
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'The page you specified does not exist'
+                ),
+                delete_after=10
             )
 
     # Error handler
