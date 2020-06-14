@@ -146,20 +146,29 @@ class System(commands.Cog, name='System'):
                 )
             )
         else:
-            blacklist_admin.insert_one({'user_id': userid})
-            await ctx.send(
-                embed=create_embed(
-                    f'User ID {userid} blacklisted'
+            if self.client.get_user(userid) != None:
+                blacklist_admin.insert_one({'user_id': userid})
+                await ctx.send(
+                    embed=create_embed(
+                        f'User ID {userid} blacklisted'
+                    ),
+                    delete_after=30
                 )
-            )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'User not found'
+                    ),
+                    delete_after=30
+                )
 
     @commands.command(
-        name='adminbanlist',
+        name='showadminblacklist',
         description='List all banned user',
-        usage='`.adminbanlist`'
+        usage='`.showadminblacklist [page]`'
     )
     @commands.is_owner()
-    async def adminbanlist(self, ctx, page: int = 1):
+    async def showadminblacklist(self, ctx, page: int = 1):
         output = ''
         blacklisted = blacklist_admin.find()
         pages = math.ceil(len(blacklisted)/10)
@@ -185,6 +194,29 @@ class System(commands.Cog, name='System'):
             await ctx.send(
                 embed=create_embed(
                     'The page you specified does not exist'
+                ),
+                delete_after=10
+            )
+
+    @commands.command(
+        name='adminwhitelist',
+        description='Stop blacklisting someone',
+        usage='`.adminwhitelist [userid]`'
+    )
+    @commands.is_owner()
+    async def adminwhitelist(self, ctx, userid: int):
+        if blacklist_admin.find_one({'user_id': userid}):
+            blacklist_admin.delete_one({'user_id': userid})
+            await ctx.send(
+                embed=create_embed(
+                    f'User ID {userid} whitelisted'
+                ),
+                delete_after=30
+            )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    'User not found'
                 ),
                 delete_after=10
             )
