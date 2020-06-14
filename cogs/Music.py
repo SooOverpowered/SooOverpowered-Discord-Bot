@@ -276,8 +276,15 @@ class Music(commands.Cog, name='Music'):
             voice = ctx.voice_client
             if voice != None:
                 if voice.channel == ctx.author.voice.channel:
-                    queuecol.delete_one({'guild_id': ctx.guild.id})
-                    await voice.disconnect()
+                    queuecol.update_one(
+                        {'guild_id': ctx.guild.id},
+                        {
+                            '$set': {
+                                'size': 0
+                            }
+                        }
+                    )
+                    voice.stop()
                     await ctx.send(
                         embed=create_embed(
                             f'Bot disconnected from **{voice.channel}**'
@@ -286,8 +293,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 else:
                     if self.ensure_bot_alone(ctx):
-                        if voice.is_playing() or voice.is_paused():
-                            queuecol.update_one(
+                        queuecol.update_one(
                                 {'guild_id': ctx.guild.id},
                                 {
                                     '$set': {
@@ -295,10 +301,7 @@ class Music(commands.Cog, name='Music'):
                                     }
                                 }
                             )
-                            voice.stop()
-                        else:
-                            queuecol.delete_one({'guild_id': ctx.guild.id})
-                            await voice.disconnect()
+                        voice.stop()
                         await ctx.send(
                             embed=create_embed(
                                 f'Bot disconnected from **{voice.channel}**'
