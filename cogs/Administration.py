@@ -27,6 +27,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Check the latency',
         usage='`.ping`'
     )
+    @blacklist_check()
     async def ping(self, ctx):
         time = round(self.client.latency * 1000)
         await ctx.send(
@@ -42,6 +43,7 @@ class Administration(commands.Cog, name='Administration'):
         aliases=['purge', ],
         usage='`.clear [number of messages]`'
     )
+    @blacklist_check()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount+1)
@@ -51,6 +53,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Send a nuclear missile head that destroys all messages in a text channel',
         usage='`.nuke`'
     )
+    @blacklist_check()
     @commands.cooldown(1, 60, commands.BucketType.channel)
     @commands.has_permissions(manage_channels=True)
     async def nuke(self, ctx, arg=None):
@@ -131,6 +134,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Kick someone from the server',
         usage='`.kick [@member]`'
     )
+    @blacklist_check()
     @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
@@ -191,6 +195,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Ban someone from the server',
         usage='`.ban [@member]`'
     )
+    @blacklist_check()
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
@@ -244,6 +249,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Initiates the purge event',
         usage='`.the_purge`'
     )
+    @blacklist_check()
     @commands.has_guild_permissions(kick_members=True)
     async def purge(self, ctx, *, arg=None):
         if arg != None:
@@ -333,6 +339,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Displays the user info',
         usage='`.userinfo`'
     )
+    @blacklist_check()
     async def userinfo(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -380,6 +387,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Shows the user photo',
         usage='`.avatar [member]`'
     )
+    @blacklist_check()
     async def avatar(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -397,6 +405,7 @@ class Administration(commands.Cog, name='Administration'):
         aliases=['svinfo', ],
         usage='`.serverinfo`',
     )
+    @blacklist_check()
     async def serverinfo(self, ctx):
         embed = discord.Embed(
             color=discord.Color.orange(),
@@ -434,6 +443,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Set the custom prefix for the server',
         usage='`.setprefix [new prefix]`'
     )
+    @blacklist_check()
     @commands.has_guild_permissions(manage_guild=True)
     async def setprefix(self, ctx, new_prefix: str):
         info = guildcol.find_one(
@@ -463,6 +473,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Sets the channel for member join and the announcement message',
         usage='`.set_join [#channel] [message]`'
     )
+    @blacklist_check()
     @commands.has_guild_permissions(manage_guild=True)
     async def set_join(self, ctx, channel: discord.TextChannel, *, message: str):
         if re.search('\{\}', message) == None:
@@ -494,6 +505,7 @@ class Administration(commands.Cog, name='Administration'):
         description='Sets the channel for member leave and the announcement message',
         usage='`.set_leave [#channel] [message]`'
     )
+    @blacklist_check()
     @commands.has_guild_permissions(manage_guild=True)
     async def set_leave(self, ctx, channel: discord.TextChannel, *, message: str):
         if re.search('\{\}', message) == None:

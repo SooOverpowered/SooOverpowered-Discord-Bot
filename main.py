@@ -18,6 +18,7 @@ db = client['DaedBot']
 guildcol = db['prefix']
 queuecol = db['queue']
 playlistcol = db['playlist']
+blacklist_admin = db['adminblacklist']
 
 
 # Load custom prefixes
@@ -25,6 +26,15 @@ def get_prefix(client, message):
     extras = guildcol.find_one({'guild_id': message.guild.id})
     prefixes = extras['prefixes']
     return commands.when_mentioned_or(*prefixes)(client, message)
+
+
+def blacklist_check():
+    def predicate(ctx):
+        author_id = ctx.author.id
+        if blacklist_admin.find_one({'user_id': author_id}):
+            return False
+        return True
+    return commands.check(predicate)
 
 
 # Start the bot

@@ -14,6 +14,7 @@ db = client['DaedBot']
 guildcol = db['prefix']
 queuecol = db['queue']
 playlistcol = db['playlist']
+blacklist_admin = db['adminblacklist']
 
 
 class System(commands.Cog, name='System'):
@@ -121,6 +122,26 @@ class System(commands.Cog, name='System'):
                 f'Left {guild.name}'
             )
         )
+
+    @commands.command(
+        name='adminblacklist',
+        description='Blacklist anyone you hate from using the bot',
+        usage='`.adminblacklist [userid]`'
+    )
+    async def adminblacklist(self, ctx, userid: int):
+        if blacklist_admin.find_one({'user_id': userid}):
+            await ctx.send(
+                embed=create_embed(
+                    'User ID already blacklisted'
+                )
+            )
+        else:
+            blacklist_admin.insert_one({'user_id': userid})
+            await ctx.send(
+                embed=create_embed(
+                    f'User ID {userid} blacklisted'
+                )
+            )
 
     # Error handler
     @reload.error

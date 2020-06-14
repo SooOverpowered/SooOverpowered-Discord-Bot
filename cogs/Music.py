@@ -188,6 +188,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.join`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def join(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
@@ -252,6 +253,7 @@ class Music(commands.Cog, name='Music'):
         description='Disconnect from the voice channel',
         usage='`.leave`'
     )
+    @blacklist_check()
     async def leave(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
@@ -315,6 +317,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.play [url or song name]`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def play(self, ctx, *, url: str):
         text_channel = ctx.channel
         channel = ctx.author.voice.channel
@@ -686,6 +689,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.pause`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def pause(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
@@ -751,6 +755,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.resume`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def resume(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
@@ -847,6 +852,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.stop`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def stop(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
@@ -908,6 +914,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.skip [position]`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def skip(self, ctx, pos: int = None):
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
@@ -994,6 +1001,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.vol [volume]`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def volume(self, ctx, volume: int):
         if ctx.voice_client == None:
             await ctx.send(
@@ -1051,6 +1059,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.queue [page]`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def queue(self, ctx, page: int = 1):
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
@@ -1133,6 +1142,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.dequeue [song position in music queue]`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def dequeue(self, ctx, position: int, arg=None):
         if arg != None:
             await ctx.send(
@@ -1219,6 +1229,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.clearqueue`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def clearqueue(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
@@ -1270,6 +1281,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.loop [all/one/off]`'
     )
     @ensure_voice()
+    @blacklist_check()
     async def loop(self, ctx, arg='all'):
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
@@ -1350,6 +1362,7 @@ class Music(commands.Cog, name='Music'):
         description='Access playlist features',
         usage='`.playlist [option]`'
     )
+    @blacklist_check()
     async def playlist(self, ctx, page: int = 1):
         size = playlistcol.count_documents({'guild_id': ctx.guild.id})
         if size == 0:
@@ -1388,6 +1401,7 @@ class Music(commands.Cog, name='Music'):
         aliases=['p', ]
     )
     @ensure_voice()
+    @blacklist_check()
     async def playlist_play(self, ctx, *, name: str):
         playlist = playlistcol.find_one(
             {
@@ -1528,6 +1542,7 @@ class Music(commands.Cog, name='Music'):
         description='Create a playlist',
         usage='`.playlist create [playlist name]`'
     )
+    @blacklist_check()
     async def create(self, ctx, *, name: str):
         playlist = playlistcol.find_one(
             {
@@ -1564,6 +1579,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.playlist delete [playlist name]`',
         aliases=['del', ]
     )
+    @blacklist_check()
     async def delete(self, ctx, *, name: str):
         playlist = playlistcol.find_one(
             {
@@ -1597,6 +1613,7 @@ class Music(commands.Cog, name='Music'):
         description='Add a song to an existing playlist',
         usage='`.playlist add [playlist name] [song name or url]`'
     )
+    @blacklist_check()
     async def add(self, ctx, name: str, *, url: str):
         playlist = playlistcol.find_one(
             {
@@ -1703,6 +1720,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.playlist remove [song number] [playlist name]`',
         aliases=['rm']
     )
+    @blacklist_check()
     async def remove(self, ctx, position: int, *, name: str):
         playlist = playlistcol.find_one(
             {
@@ -1763,6 +1781,7 @@ class Music(commands.Cog, name='Music'):
         usage='`.playlist list [playlist name] [page]`',
         aliases=['ls']
     )
+    @blacklist_check()
     async def _list(self, ctx, name: str, page: int = 1):
         playlist = playlistcol.find_one(
             {
