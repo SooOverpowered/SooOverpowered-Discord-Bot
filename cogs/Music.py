@@ -18,6 +18,16 @@ db = client['DaedBot']
 guildcol = db['prefix']
 queuecol = db['queue']
 playlistcol = db['playlist']
+blacklist_admin = db['adminblacklist']
+
+
+def blacklist_check():
+    def predicate(ctx):
+        author_id = ctx.author.id
+        if blacklist_admin.find_one({'user_id': author_id}):
+            return False
+        return True
+    return commands.check(predicate)
 
 
 # Helper to create audio player

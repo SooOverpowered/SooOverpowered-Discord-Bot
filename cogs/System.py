@@ -17,6 +17,15 @@ playlistcol = db['playlist']
 blacklist_admin = db['adminblacklist']
 
 
+def blacklist_check():
+    def predicate(ctx):
+        author_id = ctx.author.id
+        if blacklist_admin.find_one({'user_id': author_id}):
+            return False
+        return True
+    return commands.check(predicate)
+
+
 class System(commands.Cog, name='System'):
     def __init__(self, client):
         self.client = client
