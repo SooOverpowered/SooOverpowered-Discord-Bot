@@ -80,7 +80,7 @@ class Music(commands.Cog, name='Music'):
         try:
             with youtube_dl.YoutubeDL(self.opts) as ydl:
                 info = ydl.extract_info(
-                    url,
+                    url+' ',
                     download=False
                 )
         except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
@@ -113,7 +113,7 @@ class Music(commands.Cog, name='Music'):
             try:
                 with youtube_dl.YoutubeDL(self.opts) as ydl:
                     info = ydl.extract_info(
-                        item['queue'][pointer]['url'],
+                        item['queue'][pointer]['url']+' ',
                         download=False
                     )
             except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
