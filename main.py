@@ -41,7 +41,7 @@ def blacklist_check():
 client = commands.Bot(
     command_prefix=get_prefix,
     owner_id=int(os.environ.get('owner')),
-    proxy=os.environ.get('QUOTAGUARD_URL'),
+    #proxy=os.environ.get('QUOTAGUARD_URL'),
 )
 
 
