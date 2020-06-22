@@ -1,5 +1,5 @@
 ---
-SooOverpowered Discord Bot
+**SooOverpowered Discord Bot**
 ---
 
 ---
