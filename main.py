@@ -3,8 +3,9 @@ import discord
 import pymongo
 import os
 import asyncio
+import sys
 from helper import *
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 # Load environmental variables
 try:
@@ -53,6 +54,15 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
+
+# Start task loop
+@tasks.loop(hours=12.0, reconnect=True)
+def restart():
+    print('Bot will automatically restart after 12 hours')
+    sys.exit()
+
+
+restart.start()
 
 # Run the bot
 client.run(os.environ.get('DISCORD_TOKEN'), reconnect=True)
