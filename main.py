@@ -3,7 +3,6 @@ import discord
 import pymongo
 import os
 import asyncio
-import sys
 from helper import *
 from discord.ext import commands, tasks
 
@@ -43,6 +42,12 @@ client = commands.Bot(
     command_prefix=get_prefix,
     owner_id=int(os.environ.get('owner')),
 )
+
+
+# Automatically restarts the bot
+@tasks.loop(hours=12, reconnect=True)
+async def bot_restart():
+    os._exit()
 
 
 # Remove default help command
