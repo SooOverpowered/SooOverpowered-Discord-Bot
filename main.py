@@ -57,7 +57,7 @@ for filename in os.listdir('./cogs'):
 
 # Start task loop
 @tasks.loop(hours=12.0, reconnect=True)
-def restart():
+async def restart():
     print('Bot will automatically restart after 12 hours')
     sys.exit()
 
