@@ -2,13 +2,11 @@
 import asyncio
 import math
 import os
-
 import discord
 import pymongo
 import youtube_dl
 from discord.ext import commands
 from youtube_dl import utils
-
 from helper import *
 
 # Suppress annoying console message
@@ -1746,7 +1744,7 @@ class Music(commands.Cog, name='Music'):
         )
         if playlist != None:
             if ctx.voice_client != None:
-                if ctx.voice_client != ctx.author.voice.channel:
+                if ctx.voice_client.channel != ctx.author.voice.channel:
                     await ctx.send(
                         embed=create_embed(
                             'You have to be in the same channel as the bot to use this command'
