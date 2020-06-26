@@ -1,13 +1,15 @@
 # Imports
-import discord
-import youtube_dl
-from youtube_dl import utils
-import os
 import asyncio
 import math
+import os
+
+import discord
 import pymongo
-from helper import *
+import youtube_dl
 from discord.ext import commands
+from youtube_dl import utils
+
+from helper import *
 
 # Suppress annoying console message
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -294,13 +296,13 @@ class Music(commands.Cog, name='Music'):
                 else:
                     if self.ensure_bot_alone(ctx):
                         queuecol.update_one(
-                                {'guild_id': ctx.guild.id},
-                                {
-                                    '$set': {
-                                        'size': 0
-                                    }
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
+                                    'size': 0
                                 }
-                            )
+                            }
+                        )
                         voice.stop()
                         await ctx.send(
                             embed=create_embed(
@@ -1722,7 +1724,78 @@ class Music(commands.Cog, name='Music'):
         else:
             await ctx.send(
                 embed=create_embed(
-                    f'Playlist **{name}** not found\nNote: Try adding " " to your playlist name'
+                    f'Playlist **{name}** not found\nNote: Try adding " " to your playlist name if it contains multiple words'
+                ),
+                delete_after=10
+            )
+
+    @playlist.command(
+        name='addqueue',
+        description='Add the current queue into a playlist',
+        usage='`.playlist addqueue [playlist name]`',
+        aliases=['addq']
+    )
+    @blacklist_check()
+    @ensure_voice()
+    async def addqueue(self, ctx, name: str):
+        playlist = playlistcol.find_one(
+            {
+                'guild_id': ctx.guild.id,
+                'name': name
+            }
+        )
+        if playlist != None:
+            if ctx.voice_client != None:
+                if ctx.voice_client != ctx.author.voice.channel:
+                    await ctx.send(
+                        embed=create_embed(
+                            'You have to be in the same channel as the bot to use this command'
+                        ),
+                        delete_after=10
+                    )
+                else:
+                    queue = queuecol.find_one({'guild_id': ctx.guild.id})
+                    if queue['size'] == 0:
+                        await ctx.send(
+                            embed=create_embed(
+                                'The queue is empty'
+                            ),
+                            delete_after=10
+                        )
+                    else:
+                        playlistcol.update_one(
+                            {
+                                'guild_id': ctx.guild.id,
+                                'name': name
+                            },
+                            {
+                                '$push': {
+                                    'song_list': {
+                                        '$each': queue['queue']
+                                    }
+                                },
+                                '$inc': {
+                                    'size': queue['size']
+                                }
+                            }
+                        )
+                        await ctx.send(
+                            embed=create_embed(
+                                f'{queue["size"]} songs from queue added to playlist {name}'
+                            ),
+                            delete_after=10
+                        )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    ),
+                    delete_after=10
+                )
+        else:
+            await ctx.send(
+                embed=create_embed(
+                    f'Playlist **{name}** not found\nNote: Try adding " " to your playlist name if it contains multiple words'
                 ),
                 delete_after=10
             )
