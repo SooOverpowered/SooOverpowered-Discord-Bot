@@ -47,7 +47,7 @@ client = commands.Bot(
 # Automatically restarts the bot
 @tasks.loop(hours=12, reconnect=True)
 async def bot_restart():
-    os._exit()
+    os._exit(0)
 
 
 # Remove default help command

@@ -228,7 +228,7 @@ class System(commands.Cog, name='System'):
     )
     @commands.is_owner()
     async def restart(self,ctx):
-        os._exit()
+        os._exit(0)
 
     # Error handler
     @reload.error
