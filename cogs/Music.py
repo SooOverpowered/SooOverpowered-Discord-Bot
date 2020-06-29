@@ -1951,6 +1951,10 @@ class Music(commands.Cog, name='Music'):
                     if queue['state'] == 'Playing':
                         if queue['size'] >= 1:
                             voice.resume()
+                elif not voice.is_playing():
+                    if queue['state'] == 'Playing':
+                        if queue['size'] >= 1:
+                            self.play_song(guild)
 
     @commands.Cog.listener()
     async def on_disconnect(self):
@@ -1959,6 +1963,35 @@ class Music(commands.Cog, name='Music'):
             guild = self.client.get_guild(queue['guild_id'])
             if guild.voice_client.is_playing():
                 guild.voice_client.pause()
+
+    @commands.Cog.listener()
+    async def on_resumed(self):
+        queues = queuecol.find()
+        for queue in queues:
+            guild = self.client.get_guild(queue['guild_id'])
+            voice = guild.voice_client
+            if voice == None:
+                voice_channel = guild.get_channel(queue['voice_channel'])
+                voice = await voice_channel.connect(reconnect=True)
+                if queue['state'] == 'Playing':
+                    if queue['size'] >= 1:
+                        self.play_song(guild)
+                        text_channel = guild.get_channel(queue['text_channel'])
+                        await text_channel.send(
+                            embed=create_embed(
+                                'Bot was restarted, playing from the most recent song in queue'
+                            ),
+                            delete_after=10
+                        )
+            else:
+                if voice.is_paused():
+                    if queue['state'] == 'Playing':
+                        if queue['size'] >= 1:
+                            voice.resume()
+                elif not voice.is_playing():
+                    if queue['state'] == 'Playing':
+                        if queue['size'] >= 1:
+                            self.play_song(guild)
 
     # Error handler
     @play.error
