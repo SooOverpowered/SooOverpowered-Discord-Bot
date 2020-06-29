@@ -125,7 +125,8 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     ), self.client.loop
                 )
-            break
+            else:
+                break
         volume = item['volume']
         voice = guild.voice_client
         source = create_ytdl_source(info['url'], volume)
