@@ -109,7 +109,8 @@ class Music(commands.Cog, name='Music'):
         item = queuecol.find_one({'guild_id': guild.id})
         pointer = item['pointer']
         text_channel = self.client.get_channel(item['text_channel'])
-        while True:
+        restart = False
+        for i in range(3):
             try:
                 with youtube_dl.YoutubeDL(self.opts) as ydl:
                     info = ydl.extract_info(
@@ -125,8 +126,12 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     ), self.client.loop
                 )
+                restart = True
             else:
+                restart = False
                 break
+        if restart:
+            os._exit(0)
         volume = item['volume']
         voice = guild.voice_client
         source = create_ytdl_source(info['url'], volume)
