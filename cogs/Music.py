@@ -131,6 +131,14 @@ class Music(commands.Cog, name='Music'):
                 restart = False
                 break
         if restart:
+            asyncio.run_coroutine_threadsafe(
+                    text_channel.send(
+                        embed=create_embed(
+                            'There is an error with Youtube service, bot is being restarted'
+                        ),
+                        delete_after=10
+                    ), self.client.loop
+                )
             os._exit(0)
         volume = item['volume']
         voice = guild.voice_client
