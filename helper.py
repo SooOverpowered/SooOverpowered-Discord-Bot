@@ -59,7 +59,7 @@ def get_id_and_plid(url):
 def youtubeapi(str):
     search_str = ''
     service = build('youtube', 'v3',
-                    developerKey=os.environ.get('Youtube API'))
+                    developerKey=os.environ.get('Youtube_API'))
     if str.startswith(('https://', 'youtu', 'www')):
         search_str = get_id_and_plid(str)
         if search_str != None:
