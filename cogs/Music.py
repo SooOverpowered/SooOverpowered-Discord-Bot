@@ -1950,7 +1950,7 @@ class Music(commands.Cog, name='Music'):
                             {'guild_id': guild.id},
                             {
                                 '$inc': {
-                                    'size': -1
+                                    'pointer': -1
                                 }
                             }
                         )
