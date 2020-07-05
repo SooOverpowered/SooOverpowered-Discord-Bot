@@ -132,13 +132,13 @@ class Music(commands.Cog, name='Music'):
                 break
         if restart:
             asyncio.run_coroutine_threadsafe(
-                    text_channel.send(
-                        embed=create_embed(
-                            'There is an error with Youtube service, bot is being restarted'
-                        ),
-                        delete_after=10
-                    ), self.client.loop
-                )
+                text_channel.send(
+                    embed=create_embed(
+                        'There is an error with Youtube service, bot is being restarted'
+                    ),
+                    delete_after=10
+                ), self.client.loop
+            )
             os._exit(0)
         volume = item['volume']
         voice = guild.voice_client
@@ -1946,6 +1946,14 @@ class Music(commands.Cog, name='Music'):
                 voice = await voice_channel.connect(reconnect=True)
                 if queue['state'] == 'Playing':
                     if queue['size'] >= 1:
+                        queuecol.update_one(
+                            {'guild_id': guild.id},
+                            {
+                                '$inc': {
+                                    'size': -1
+                                }
+                            }
+                        )
                         self.play_song(guild)
                         text_channel = guild.get_channel(queue['text_channel'])
                         await text_channel.send(
