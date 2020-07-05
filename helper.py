@@ -58,20 +58,20 @@ def get_id_and_plid(url):
 
 def youtubeapi(str):
     search_str = ''
-    service = build('youtube', 'v3',
-                    developerKey=os.environ.get('Youtube_API'))
+    youtube_service = build('youtube', 'v3',
+                            developerKey=os.environ.get('Youtube_API'))
     if str.startswith(('https://', 'youtu', 'www')):
         search_str = get_id_and_plid(str)
         if search_str != None:
             if len(search_str) == 2:
-                request = service.playlistItems().list(
+                request = youtube_service.playlistItems().list(
                     part='snippet', playlistId=search_str[1], maxResults=50)
                 response = request.execute()
                 result = [video['snippet']['resourceId']['videoId']
                           for video in response['items']]
                 while 'nextPageToken' in response:
                     page = response['nextPageToken']
-                    request = service.playlistItems().list(
+                    request = youtube_service.playlistItems().list(
                         part='snippet', playlistId=search_str[1], maxResults=50, pageToken=page)
                     response = request.execute()
                     for video in response['items']:
@@ -83,7 +83,8 @@ def youtubeapi(str):
         else:
             return None
     else:
-        request = service.search().list(part='snippet', q=str, type='video', maxResults=1)
+        request = youtube_service.search().list(
+            part='snippet', q=str, type='video', maxResults=1)
         response = request.execute()
         if response['items'] != []:
             return [response['items'][0]['id']['videoId'], ]
