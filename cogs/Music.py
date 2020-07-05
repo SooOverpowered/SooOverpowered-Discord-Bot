@@ -1126,7 +1126,7 @@ class Music(commands.Cog, name='Music'):
                         )
                         embed.add_field(
                             name='Now Playing',
-                            value=f"[{info['title']}]({info['url']})",
+                            value=f"{pointer+1}. [{info['title']}]({info['url']})",
                             inline=False
                         )
                         embed.add_field(
