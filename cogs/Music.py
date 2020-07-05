@@ -1946,14 +1946,15 @@ class Music(commands.Cog, name='Music'):
                 voice = await voice_channel.connect(reconnect=True)
                 if queue['state'] == 'Playing':
                     if queue['size'] >= 1:
-                        queuecol.update_one(
-                            {'guild_id': guild.id},
-                            {
-                                '$inc': {
-                                    'pointer': -1
+                        if queue['loop']!='one':
+                            queuecol.update_one(
+                                {'guild_id': guild.id},
+                                {
+                                    '$inc': {
+                                        'pointer': -1
+                                    }
                                 }
-                            }
-                        )
+                            )
                         self.play_song(guild)
                         text_channel = guild.get_channel(queue['text_channel'])
                         await text_channel.send(
