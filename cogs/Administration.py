@@ -572,7 +572,7 @@ class Administration(commands.Cog, name='Administration'):
                     f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
                 )
             )
-
+'''
     @nuke.error
     async def nuke_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
@@ -593,7 +593,7 @@ class Administration(commands.Cog, name='Administration'):
                     f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
                 )
             )
-
+'''
     @kick.error
     async def kick_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
