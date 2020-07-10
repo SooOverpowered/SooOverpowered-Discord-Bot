@@ -541,7 +541,7 @@ class Administration(commands.Cog, name='Administration'):
                 ),
                 delete_after=60
             )
-
+'''
     # Error handler
     @clear.error
     async def clear_error(self, ctx, error):
@@ -573,8 +573,6 @@ class Administration(commands.Cog, name='Administration'):
                 )
             )
 
-
-'''
     @nuke.error
     async def nuke_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
@@ -595,7 +593,6 @@ class Administration(commands.Cog, name='Administration'):
                     f'Please give the bot {"".join(error.missing_perms)} permission to run this command'
                 )
             )
-'''
 
     @kick.error
     async def kick_error(self, ctx, error):
@@ -644,7 +641,7 @@ class Administration(commands.Cog, name='Administration'):
                 )
             )
 
-
+'''
 # Add cog
 def setup(client):
     client.add_cog(Administration(client))
