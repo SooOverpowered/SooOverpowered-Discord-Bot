@@ -596,6 +596,7 @@ class Administration(commands.Cog, name='Administration'):
                 )
             )
 '''
+
   @kick.error
    async def kick_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
