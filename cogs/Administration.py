@@ -541,7 +541,7 @@ class Administration(commands.Cog, name='Administration'):
                 ),
                 delete_after=60
             )
-'''
+
     # Error handler
     @clear.error
     async def clear_error(self, ctx, error):
@@ -641,7 +641,7 @@ class Administration(commands.Cog, name='Administration'):
                 )
             )
 
-'''
+
 # Add cog
 def setup(client):
     client.add_cog(Administration(client))
