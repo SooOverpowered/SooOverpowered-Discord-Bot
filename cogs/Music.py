@@ -307,7 +307,7 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     )
                 else:
-                    if self.ensure_bot_alone(ctx):
+                    if len(ctx.voice_client.channel.members)==1:
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
