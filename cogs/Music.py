@@ -299,6 +299,7 @@ class Music(commands.Cog, name='Music'):
                         }
                     )
                     voice.stop()
+                    await voice.disconnect()
                     await ctx.send(
                         embed=create_embed(
                             f'Bot disconnected from **{voice.channel}**'
@@ -317,6 +318,7 @@ class Music(commands.Cog, name='Music'):
                             }
                         )
                         voice.stop()
+                        await voice.disconnect()
                         await ctx.send(
                             embed=create_embed(
                                 f'Bot disconnected from **{voice.channel}**'
