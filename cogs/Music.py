@@ -98,6 +98,7 @@ class Music(commands.Cog, name='Music'):
             return True
         elif ctx.voice_client != None:
             if len(ctx.voice_client.channel.members) == 1:
+                print(True)
                 return True
             else:
                 if ctx.voice_client.is_playing() or ctx.voice_client.is_paused():
