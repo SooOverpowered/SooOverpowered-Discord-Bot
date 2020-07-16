@@ -289,7 +289,7 @@ class Music(commands.Cog, name='Music'):
         else:
             voice = ctx.voice_client
             if voice != None:
-                if voice.channel == ctx.author.voice.channel:
+                if len(ctx.voice_client.channel.members) == 1:
                     queuecol.update_one(
                         {'guild_id': ctx.guild.id},
                         {
@@ -305,8 +305,9 @@ class Music(commands.Cog, name='Music'):
                         ),
                         delete_after=10
                     )
+
                 else:
-                    if len(ctx.voice_client.channel.members)==1:
+                    if voice.channel == ctx.author.voice.channel:
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
                             {
@@ -1946,7 +1947,7 @@ class Music(commands.Cog, name='Music'):
                 voice = await voice_channel.connect(reconnect=True)
                 if queue['state'] == 'Playing':
                     if queue['size'] >= 1:
-                        if queue['loop']!='one':
+                        if queue['loop'] != 'one':
                             queuecol.update_one(
                                 {'guild_id': guild.id},
                                 {
