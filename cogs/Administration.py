@@ -393,7 +393,7 @@ class Administration(commands.Cog, name='Administration'):
 
     @commands.command(
         name='avatar',
-        aliases=['photo', 'profilephoto'],
+        aliases=['photo', 'profilephoto', 'ava'],
         description='Shows the user photo',
         usage='`.avatar [member]`'
     )
