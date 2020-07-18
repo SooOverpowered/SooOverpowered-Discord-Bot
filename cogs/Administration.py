@@ -145,7 +145,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.kick [@member]`'
     )
     @blacklist_check()
-    #@commands.has_guild_permissions(kick_members=True)
+    @commands.has_guild_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
             await ctx.send(
@@ -206,7 +206,7 @@ class Administration(commands.Cog, name='Administration'):
         usage='`.ban [@member]`'
     )
     @blacklist_check()
-    #@commands.has_guild_permissions(ban_members=True)
+    @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         if ctx.author == member:
             await ctx.send(
