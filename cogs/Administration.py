@@ -460,10 +460,7 @@ class Administration(commands.Cog, name='Administration'):
             {'guild_id': ctx.guild.id}
         )
         prefixes = info['prefixes']
-        if len(prefixes) == 2:
-            prefixes[1] = new_prefix
-        else:
-            prefixes.append(new_prefix)
+        prefixes[0] = new_prefix
         guildcol.update_one(
             {'guild_id': ctx.guild.id},
             {
