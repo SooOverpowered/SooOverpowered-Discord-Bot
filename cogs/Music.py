@@ -206,13 +206,13 @@ class Music(commands.Cog, name='Music'):
         voice.play(source, after=after_playing)
 
     @commands.command(
-        name='voice_ping',
+        name='voiceping',
         description='Calculate the current voice client latency',
-        usage='`.voice_ping`'
+        usage='`.voiceping`'
     )
     @ensure_voice()
     @blacklist_check()
-    async def voice_ping(self, ctx, arg=None):
+    async def voiceping(self, ctx, arg=None):
         if arg != None:
             await ctx.send(
                 embed=create_embed(
