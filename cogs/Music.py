@@ -229,6 +229,13 @@ class Music(commands.Cog, name='Music'):
                     ),
                     delete_after=10
                 )
+            else:
+                await ctx.send(
+                    embed=create_embed(
+                        'Bot was not connected to any voice channel'
+                    ),
+                    delete_after=10
+                )
 
     @commands.command(
         name='join',
