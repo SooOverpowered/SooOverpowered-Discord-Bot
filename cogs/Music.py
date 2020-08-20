@@ -222,7 +222,7 @@ class Music(commands.Cog, name='Music'):
         else:
             voice = ctx.voice_client
             if voice != None:
-                time = round(voice.latency*1000)
+                time = voice.latency*1000
                 await ctx.send(
                     embed=create_embed(
                         f'The voice client ping is {time} ms!'
