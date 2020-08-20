@@ -206,6 +206,31 @@ class Music(commands.Cog, name='Music'):
         voice.play(source, after=after_playing)
 
     @commands.command(
+        name='voiceping',
+        description='Calculate the current voice client latency',
+        usage='`.voiceping`'
+    )
+    @ensure_voice()
+    @blacklist_check()
+    async def voiceping(self, ctx, arg=None):
+        if arg != None:
+            await ctx.send(
+                embed=create_embed(
+                    'This command does not take in any other argument'
+                )
+            )
+        else:
+            voice = ctx.voice_client
+            if voice != None:
+                time = int(voice.latency*1000)
+                await ctx.send(
+                    embed=create_embed(
+                        f'The voice client ping is {time} ms!'
+                    ),
+                    delete_after=10
+                )
+
+    @commands.command(
         name='join',
         aliases=['j', 'connect', ],
         description='Connect to your current voice channel',

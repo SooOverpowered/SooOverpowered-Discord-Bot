@@ -39,7 +39,7 @@ class Administration(commands.Cog, name='Administration'):
     )
     @blacklist_check()
     async def ping(self, ctx):
-        time = round(self.client.latency * 1000)
+        time = int(self.client.latency * 1000)
         await ctx.send(
             embed=create_embed(
                 f'The ping is {time} ms!'
