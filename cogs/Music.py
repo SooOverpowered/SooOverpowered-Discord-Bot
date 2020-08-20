@@ -207,7 +207,7 @@ class Music(commands.Cog, name='Music'):
 
     @commands.command(
         name='voice_ping',
-        description='Calculate the current voice client latency'
+        description='Calculate the current voice client latency',
         usage='`.voice_ping`'
     )
     @ensure_voice()
