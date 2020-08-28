@@ -5,7 +5,6 @@ import os
 import discord
 import pymongo
 import youtube_dl
-import soundcloud
 from googleapiclient.discovery import build
 from discord.ext import commands
 from youtube_dl import utils
