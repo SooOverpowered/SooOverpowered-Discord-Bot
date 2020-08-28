@@ -5,6 +5,8 @@ import os
 import discord
 import pymongo
 import youtube_dl
+import soundcloud
+from googleapiclient.discovery import build
 from discord.ext import commands
 from youtube_dl import utils
 from helper import *
@@ -75,6 +77,11 @@ class Music(commands.Cog, name='Music'):
             'skip_download': True,
             'source_address': '0.0.0.0'
         }
+        self.youtube_service = build(
+            'youtube',
+            'v3',
+            developerKey=os.environ.get('Youtube_API')
+        )
 
     def extract_info(self, url, ctx):
         try:
