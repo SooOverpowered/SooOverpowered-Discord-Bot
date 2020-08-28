@@ -2,9 +2,7 @@
 import discord
 import os
 import urllib.parse as parse
-import soundcloud
 from googleapiclient.discovery import build
-
 
 
 # Create embed
@@ -92,4 +90,3 @@ def API_SEARCH(str):
             return [response['items'][0]['id']['videoId'], ]
         else:
             return None
-
