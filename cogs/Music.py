@@ -244,7 +244,6 @@ class Music(commands.Cog, name='Music'):
                     delete_after=10
                 )
 
-
     @commands.command(
         name='join',
         aliases=['j', 'connect', ],
