@@ -97,7 +97,8 @@ class Music(commands.Cog, name='Music'):
                     ), delete_after=10
                 ), self.client.loop
             )
-        return info
+        else:
+            return info
 
     def ensure_bot_alone(self, ctx):
         if ctx.voice_client == None:
