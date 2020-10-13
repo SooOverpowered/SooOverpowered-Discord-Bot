@@ -1571,7 +1571,7 @@ class Music(commands.Cog, name='Music'):
                         delete_after=10
                     )
                     if voice.is_playing() == False and voice.is_paused() == False:
-                        self.play_song(voice)
+                        self.play_song(ctx.guild)
             else:
                 voice = await channel.connect(reconnect=True)
                 if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
