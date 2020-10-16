@@ -74,7 +74,6 @@ class Music(commands.Cog, name='Music'):
             'no_warnings': True,
             'include_ads': False,
             'skip_download': True,
-            'source_address': '0.0.0.0'
         }
         self.youtube_service = build(
             'youtube',
