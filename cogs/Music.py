@@ -74,7 +74,6 @@ class Music(commands.Cog, name='Music'):
             'no_warnings': True,
             'include_ads': False,
             'skip_download': True,
-            'source_address': '0.0.0.0'
         }
         self.youtube_service = build(
             'youtube',
@@ -121,7 +120,7 @@ class Music(commands.Cog, name='Music'):
             try:
                 with youtube_dl.YoutubeDL(self.opts) as ydl:
                     info = ydl.extract_info(
-                        item['queue'][pointer]['url']+' ',
+                        item['queue'][pointer]['url'],
                         download=False
                     )
             except (utils.ExtractorError, utils.DownloadError, utils.UnavailableVideoError) as error:
@@ -339,8 +338,8 @@ class Music(commands.Cog, name='Music'):
                     )
                     voice.stop()
                     await voice.disconnect()
-                    if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
-                        queuecol.delete_one({'guild_id': ctx.guild.id})
+                    #if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
+                        #queuecol.delete_one({'guild_id': ctx.guild.id})
                     await ctx.send(
                         embed=create_embed(
                             f'Bot disconnected from **{voice.channel}**'
