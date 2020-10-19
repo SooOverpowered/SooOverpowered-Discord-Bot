@@ -319,6 +319,10 @@ class System(commands.Cog, name='System'):
                         'announcement_leave_message': None
                     }
                 )
+        id_list = [i.id for i in guilds]
+        for item in dbguilds:
+            if item not in id_list:
+                guildcol.delete_one({'guild_id': item})
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
