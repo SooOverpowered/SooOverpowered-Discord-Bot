@@ -338,8 +338,8 @@ class Music(commands.Cog, name='Music'):
                     )
                     voice.stop()
                     await voice.disconnect()
-                    #if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
-                        #queuecol.delete_one({'guild_id': ctx.guild.id})
+                    if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
+                        queuecol.delete_one({'guild_id': ctx.guild.id})
                     await ctx.send(
                         embed=create_embed(
                             f'Bot disconnected from **{voice.channel}**'
@@ -359,8 +359,8 @@ class Music(commands.Cog, name='Music'):
                         )
                         voice.stop()
                         await voice.disconnect()
-                        #if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
-                            #queuecol.delete_one({'guild_id': ctx.guild.id})
+                        if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
+                            queuecol.delete_one({'guild_id': ctx.guild.id})
                         await ctx.send(
                             embed=create_embed(
                                 f'Bot disconnected from **{voice.channel}**'
