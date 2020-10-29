@@ -4,7 +4,7 @@ SooOverpowered Discord Bot
 
 ---
 
-## [Invite Link](https://discordapp.com/api/oauth2/authorize?client_id=678865836513165319&permissions=2147483127&scope=bot)
+## [Invite Link](https://discord.com/api/oauth2/authorize?client_id=678865836513165319&permissions=8&scope=bot)
 
 ---
 
