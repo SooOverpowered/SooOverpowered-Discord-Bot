@@ -13,8 +13,8 @@ except:
     print('shit does not work, abort mission')
 
 # Connect to mongodb database
-client = pymongo.MongoClient(os.environ.get('dbconn'))
-db = client['DaedBot']
+dbclient = pymongo.MongoClient(os.environ.get('dbconn'))
+db = dbclient['DaedBot']
 guildcol = db['prefix']
 queuecol = db['queue']
 playlistcol = db['playlist']
