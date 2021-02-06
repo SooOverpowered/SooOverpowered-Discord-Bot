@@ -106,10 +106,10 @@ class Music(commands.Cog, name='Music'):
         restart = False
         for i in range(3):
             try:
-                yt = YouTube(item['queue'][pointer]['url'])
+                yt = YouTube(item['queue'][pointer]['webpage_url'])
                 streams = yt.streams.filter(
                     progressive=False, audio_codec='opus').desc().first()
-                info = {'webpage_url': streams.url, 'title': streams.title}
+                info = {'url': streams.url, 'title': streams.title, 'webpage_url':item['queue'][pointer]['webpage_url']}
             except exceptions.PytubeError:
                 asyncio.run_coroutine_threadsafe(
                     text_channel.send(
