@@ -4,11 +4,9 @@ import math
 import os
 import discord
 import pymongo
-import youtube_dl
 from pytube import YouTube, exceptions
 from googleapiclient.discovery import build
 from discord.ext import commands
-from youtube_dl import utils
 from helper import *
 
 # Suppress annoying console message
