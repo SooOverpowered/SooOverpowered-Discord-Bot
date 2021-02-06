@@ -376,10 +376,11 @@ class Music(commands.Cog, name='Music'):
     )
     @ensure_voice()
     @blacklist_check()
-    async def play(self, ctx, *, url: str):
+    async def play(self, ctx, *, url):
         text_channel = ctx.channel
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
+        print(url)
         if voice != None:  # Bot already in voice channel
             if voice.channel != channel:  # User in a different channel
                 if self.ensure_bot_alone(ctx):   # Check if bot is available
