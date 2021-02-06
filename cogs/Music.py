@@ -5,7 +5,7 @@ import os
 import discord
 import pymongo
 import youtube_dl
-from pytube import Youtube, exceptions
+from pytube import YouTube, exceptions
 from googleapiclient.discovery import build
 from discord.ext import commands
 from youtube_dl import utils
@@ -71,7 +71,7 @@ class Music(commands.Cog, name='Music'):
 
     def extract_info(self, url, ctx):
         try:
-            yt = Youtube(url)
+            yt = YouTube(url)
             streams = yt.streams.filter(
                 progressive=False, audio_codec='opus').desc().first()
             info = {'webpage_url': url,
@@ -106,7 +106,7 @@ class Music(commands.Cog, name='Music'):
         restart = False
         for i in range(3):
             try:
-                yt = Youtube(item['queue'][pointer]['url'])
+                yt = YouTube(item['queue'][pointer]['url'])
                 streams = yt.streams.filter(
                     progressive=False, audio_codec='opus').desc().first()
                 info = {'webpage_url': streams.url, 'title': streams.title}
