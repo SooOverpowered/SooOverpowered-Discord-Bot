@@ -16,4 +16,4 @@ pymongo==3.11.0
 dnspython==2.0.0
 wheel==0.34.2
 google-api-python-client==1.12.3
-pytube==10.4.1
+pytube==9.7.0
