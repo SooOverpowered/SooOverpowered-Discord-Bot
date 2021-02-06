@@ -1000,7 +1000,7 @@ class Music(commands.Cog, name='Music'):
                     if 1 <= page <= pages:
                         counter = 1 + (page-1)*10
                         for song in queue[(page-1)*10:page*10]:
-                            output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                            output += f'{counter}. [{song["title"]}]({song["webpage_url"]})\n'
                             counter += 1
                         embed = discord.Embed(
                             color=discord.Color.orange(),
@@ -1010,7 +1010,7 @@ class Music(commands.Cog, name='Music'):
                         )
                         embed.add_field(
                             name='Now Playing',
-                            value=f"{pointer+1}. [{info['title']}]({info['url']})",
+                            value=f"{pointer+1}. [{info['title']}]({info['webpage_url']})",
                             inline=False
                         )
                         embed.add_field(
@@ -1114,7 +1114,7 @@ class Music(commands.Cog, name='Music'):
 
                         await ctx.send(
                             embed=create_embed(
-                                f'Song [{info["title"]}]({info["url"]}) removed from music queue'
+                                f'Song [{info["title"]}]({info["webpage_url]}) removed from music queue'
                             ),
                             delete_after=10
                         )
