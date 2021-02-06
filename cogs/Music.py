@@ -1114,7 +1114,7 @@ class Music(commands.Cog, name='Music'):
 
                         await ctx.send(
                             embed=create_embed(
-                                f'Song [{info["title"]}]({info["webpage_url]}) removed from music queue'
+                                f'Song [{info["title"]}]({info["webpage_url"]}) removed from music queue'
                             ),
                             delete_after=10
                         )
