@@ -20,6 +20,7 @@ queuecol = db['queue']
 playlistcol = db['playlist']
 blacklist_admin = db['adminblacklist']
 
+intents=discord.Intents.all()
 
 # Load custom prefixes
 def get_prefix(client, message):
@@ -41,6 +42,7 @@ def blacklist_check():
 client = commands.Bot(
     command_prefix=get_prefix,
     owner_id=int(os.environ.get('owner')),
+    intents=intents,
 )
 
 
