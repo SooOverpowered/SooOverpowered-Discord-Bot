@@ -4,7 +4,6 @@ import json
 import os
 import math
 import pymongo
-from youtube_dl import utils
 from helper import *
 from discord.ext import commands
 
