@@ -433,7 +433,7 @@ class Music(commands.Cog, name='Music'):
                                 {
                                     '$push': {
                                         'queue': {
-                                            'url': metadata['webpage_url'],
+                                            'webpage_url': metadata['webpage_url'],
                                             'title': metadata['title']
                                         }
                                     },
@@ -483,7 +483,7 @@ class Music(commands.Cog, name='Music'):
                             {
                                 '$push': {
                                     'queue': {
-                                        'url': metadata['webpage_url'],
+                                        'webpage_url': metadata['webpage_url'],
                                         'title': metadata['title']
                                     }
                                 },
@@ -545,7 +545,7 @@ class Music(commands.Cog, name='Music'):
                         {
                             '$push': {
                                 'queue': {
-                                    'url': metadata['webpage_url'],
+                                    'webpage_url': metadata['webpage_url'],
                                     'title': metadata['title']
                                 }
                             },
