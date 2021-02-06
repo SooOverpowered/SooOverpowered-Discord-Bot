@@ -379,8 +379,6 @@ class Music(commands.Cog, name='Music'):
         text_channel = ctx.channel
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
-        print(url)
-        print(type(url))
         if voice != None:  # Bot already in voice channel
             if voice.channel != channel:  # User in a different channel
                 if self.ensure_bot_alone(ctx):   # Check if bot is available
@@ -1870,17 +1868,17 @@ class Music(commands.Cog, name='Music'):
                     if queue['state'] == 'Playing':
                         if queue['size'] >= 1:
                             self.play_song(guild)
-
+'''
     # Error handler
-    #@play.error
-    #async def play_error(self, ctx, error):
-        #if isinstance(error, commands.MissingRequiredArgument):
-            #await ctx.send(
-                #embed=create_embed(
-                #    'The play command also need a link or search keyword to work'
-                #),
-                #delete_after=10
-            #)
+    @play.error
+    async def play_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(
+                embed=create_embed(
+                    'The play command also need a link or search keyword to work'
+                ),
+                delete_after=10
+            )
 
     @dequeue.error
     async def dequeue_error(self, ctx, error):
@@ -1900,7 +1898,7 @@ class Music(commands.Cog, name='Music'):
                     'Please specify the correct argument'
                 )
             )
-
+'''
 
 # Add cog
 def setup(client):
