@@ -829,7 +829,7 @@ class Music(commands.Cog, name='Music'):
                     song = queue[pointer]
                     await ctx.send(
                         embed=create_embed(
-                            f'Skipped [{song["title"]}]({song["url"]})'
+                            f'Skipped [{song["title"]}]({song["webpage_url"]})'
                         ),
                         delete_after=10
                     )
@@ -854,7 +854,7 @@ class Music(commands.Cog, name='Music'):
                         )
                         await ctx.send(
                             embed=create_embed(
-                                f'Skipped [{song["title"]}]({song["url"]})'
+                                f'Skipped [{song["title"]}]({song["webpage_url"]})'
                             ),
                             delete_after=10
                         )
@@ -869,7 +869,7 @@ class Music(commands.Cog, name='Music'):
                         )
                         await ctx.send(
                             embed=create_embed(
-                                f'Skipped [{song["title"]}]({song["url"]})'
+                                f'Skipped [{song["title"]}]({song["webpage_url"]})'
                             ),
                             delete_after=10
                         )
