@@ -1871,15 +1871,15 @@ class Music(commands.Cog, name='Music'):
                             self.play_song(guild)
 
     # Error handler
-    @play.error
-    async def play_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(
-                embed=create_embed(
-                    'The play command also need a link or search keyword to work'
-                ),
-                delete_after=10
-            )
+    #@play.error
+    #async def play_error(self, ctx, error):
+        #if isinstance(error, commands.MissingRequiredArgument):
+            #await ctx.send(
+                #embed=create_embed(
+                #    'The play command also need a link or search keyword to work'
+                #),
+                #delete_after=10
+            #)
 
     @dequeue.error
     async def dequeue_error(self, ctx, error):
