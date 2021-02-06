@@ -1543,89 +1543,55 @@ class Music(commands.Cog, name='Music'):
         )
         if playlist != None:
             info = self.extract_info(url, ctx)
-            if "_type" in info and info["_type"] == "playlist":
-                if 'title' not in info['entries'][0]:
-                    await ctx.send(
-                        embed=create_embed(
-                            'This playlist link is not supported'
-                        ),
-                        delete_after=10
-                    )
-                else:
-                    if len(info['entries']) == 1:
-                        song_info = info['entries'][0]
-                        playlistcol.update_one(
-                            {
-                                'guild_id': ctx.guild.id,
-                                'name': name
-                            },
-                            {
-                                '$push': {
-                                    'song_list': {
-                                        'url': song_info['webpage_url'],
-                                        'title': song_info['title']
-                                    }
-                                },
-                                '$inc': {
-                                    'size': 1
+            if info == None:
+                await ctx.send(
+                    embed=create_embed(
+                        'This playlist link is not supported'
+                    ),
+                    delete_after=10
+                )
+            else:
+                for song in info:
+                    song_info = self.extract_info(build_url(song), ctx)
+                    playlistcol.update_one(
+                        {
+                            'guild_id': ctx.guild.id,
+                            'name': name
+                        },
+                        {
+                            '$push': {
+                                'song_list': {
+                                    'url': song_info['webpage_url'],
+                                    'title': song_info['title']
                                 }
+                            },
+                            '$inc': {
+                                'size': 1
                             }
+                        }
+                    )
+                if len(info) == 1:
+                    if song_info == None:
+                        await ctx.send(
+                            embed=create_embed(
+                                'This playlist link is not supported'
+                            ),
+                            delete_after=10
                         )
+                    else:
                         await ctx.send(
                             embed=create_embed(
                                 f'Song [{song_info["title"]}]({song_info["webpage_url"]}) added to **{name}**'
                             ),
                             delete_after=10
                         )
-                    else:
-                        for song in info['entries']:
-                            playlistcol.update_one(
-                                {
-                                    'guild_id': ctx.guild.id,
-                                    'name': name
-                                },
-                                {
-                                    '$push': {
-                                        'song_list': {
-                                            'url': song['webpage_url'],
-                                            'title': song['title']
-                                        }
-                                    },
-                                    '$inc': {
-                                        'size': 1
-                                    }
-                                }
-                            )
-                        await ctx.send(
-                            embed=create_embed(
-                                f'{len(info["entries"])} songs added to **{name}**'
-                            ),
-                            delete_after=10
-                        )
-            else:
-                playlistcol.update_one(
-                    {
-                        'guild_id': ctx.guild.id,
-                        'name': name
-                    },
-                    {
-                        '$push': {
-                            'song_list': {
-                                'url': info['webpage_url'],
-                                'title': info['title']
-                            }
-                        },
-                        '$inc': {
-                            'size': 1
-                        }
-                    }
-                )
-                await ctx.send(
-                    embed=create_embed(
-                        f'Song [{info["title"]}]({info["webpage_url"]}) added to **{name}**'
-                    ),
-                    delete_after=10
-                )
+                else:
+                    await ctx.send(
+                        embed=create_embed(
+                            f'{len(info)} songs added to **{name}**'
+                        ),
+                        delete_after=10
+                    )
         else:
             await ctx.send(
                 embed=create_embed(
@@ -1749,7 +1715,7 @@ class Music(commands.Cog, name='Music'):
                 )
                 await ctx.send(
                     embed=create_embed(
-                        f'Song [{info["title"]}]({info["url"]}) deleted from **{name}**'
+                        f'Song [{info["title"]}]({info["webpage_url"]}) deleted from **{name}**'
                     ),
                     delete_after=10
                 )
@@ -1795,7 +1761,7 @@ class Music(commands.Cog, name='Music'):
                 if 1 <= page <= pages:
                     counter = 1 + (page-1)*10
                     for song in song_list[(page-1)*10:page*10]:
-                        output += f'{counter}. [{song["title"]}]({song["url"]})\n'
+                        output += f'{counter}. [{song["title"]}]({song["webpage_url"]})\n'
                         counter += 1
                     embed = discord.Embed(
                         color=discord.Color.orange(),
