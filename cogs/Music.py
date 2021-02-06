@@ -427,7 +427,7 @@ class Music(commands.Cog, name='Music'):
                             )
                         # Insert all songs into queue
                         for song in info:
-                            metadata = self.extract_info(build_url(song))
+                            metadata = self.extract_info(build_url(song),ctx)
                             queuecol.update_one(
                                 {'guild_id': ctx.guild.id},
                                 {
@@ -476,7 +476,7 @@ class Music(commands.Cog, name='Music'):
                     )
                 else:
                     for song in info:
-                        metadata = self.extract_info(build_url(song))
+                        metadata = self.extract_info(build_url(song),ctx)
                         # Insert the song into queue
                         queuecol.update_one(
                             {'guild_id': ctx.guild.id},
@@ -538,7 +538,7 @@ class Music(commands.Cog, name='Music'):
                     }
                 )
                 for song in info:
-                    metadata = self.extract_info(build_url(song))
+                    metadata = self.extract_info(build_url(song),ctx)
                     # Insert the song into queue
                     queuecol.update_one(
                         {'guild_id': ctx.guild.id},
