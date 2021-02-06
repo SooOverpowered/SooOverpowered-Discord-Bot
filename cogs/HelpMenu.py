@@ -8,8 +8,8 @@ from discord.utils import get
 
 
 # Connect to mongodb database
-client = pymongo.MongoClient(os.environ.get('dbconn'))
-db = client['DaedBot']
+dbclient = pymongo.MongoClient(os.environ.get('dbconn'))
+db = dbclient['DaedBot']
 guildcol = db['prefix']
 queuecol = db['queue']
 playlistcol = db['playlist']
