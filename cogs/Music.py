@@ -393,37 +393,33 @@ class Music(commands.Cog, name='Music'):
                             delete_after=10
                         )
                     else:
-                        # Delete the current queue
-                        if voice.is_playing() or voice.is_paused():
-                            queuecol.update_one(
-                                {'guild_id': ctx.guild.id},
-                                {
-                                    '$set': {
-                                        'size': 0,
-                                    }
-                                }
-                            )
-                            voice.stop()
-                            await voice.disconnect()
-                            voice = await channel.connect(reconnect=True)
-                        else:
-                            # Move the bot to the new channel
-                            queuecol.delete_one({'guild_id': ctx.guild.id})
-                            await voice.move_to(channel)
-                            # Create a new queue
-                            queuecol.insert_one(
-                                {
-                                    'guild_id': ctx.guild.id,
-                                    'text_channel': ctx.channel.id,
-                                    'voice_channel': voice.channel.id,
-                                    'state': 'Playing',
-                                    'loop': 'off',
-                                    'volume': 0.5,
-                                    'pointer': 0,
+                        queuecol.update_one(
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
                                     'size': 0,
-                                    'queue': [],
                                 }
-                            )
+                            }
+                        )
+                        voice.stop()
+                        await voice.disconnect()
+                        voice = await channel.connect(reconnect=True)
+                        # Move the bot to the new channel
+                        queuecol.delete_one({'guild_id': ctx.guild.id})
+                        # Create a new queue
+                        queuecol.insert_one(
+                            {
+                                'guild_id': ctx.guild.id,
+                                'text_channel': ctx.channel.id,
+                                'voice_channel': voice.channel.id,
+                                'state': 'Playing',
+                                'loop': 'off',
+                                'volume': 0.5,
+                                'pointer': 0,
+                                'size': 0,
+                                'queue': [],
+                            }
+                        )
                         # Insert all songs into queue
                         for song in info:
                             metadata = self.extract_info(build_url(song), ctx)
