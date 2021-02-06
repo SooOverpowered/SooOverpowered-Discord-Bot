@@ -1111,7 +1111,6 @@ class Music(commands.Cog, name='Music'):
                                 }
                             }
                         )
-
                         await ctx.send(
                             embed=create_embed(
                                 f'Song [{info["title"]}]({info["webpage_url"]}) removed from music queue'
@@ -1150,6 +1149,7 @@ class Music(commands.Cog, name='Music'):
                 delete_after=10
             )
         else:
+            item = queuecol.find_one({'guild_id': ctx.guild.id})
             channel = ctx.author.voice.channel
             voice = ctx.voice_client
             if voice != None:
@@ -1171,6 +1171,15 @@ class Music(commands.Cog, name='Music'):
                             }
                         }
                     )
+                    if item['loop'] == 'off' or item['loop'] == 'all':
+                        queuecol.update_one(
+                            {'guild_id': ctx.guild.id},
+                            {
+                                '$set': {
+                                    'pointer': -1,
+                                }
+                            }
+                        )
                     await ctx.send(
                         embed=create_embed(
                             'Queue cleared'
