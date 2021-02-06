@@ -72,10 +72,10 @@ class Music(commands.Cog, name='Music'):
     def extract_info(self, url, ctx):
         try:
             yt = YouTube(url)
-            streams = yt.streams.filter(
+            stream = yt.streams.filter(
                 progressive=False, audio_codec='opus').desc().first()
             info = {'webpage_url': url,
-                    'title': streams.title, 'url': streams.url}
+                    'title': stream.title, 'url': stream.url}
         except exceptions.PytubeError:
             asyncio.run_coroutine_threadsafe(
                 ctx.send(
@@ -107,9 +107,9 @@ class Music(commands.Cog, name='Music'):
         for i in range(3):
             try:
                 yt = YouTube(item['queue'][pointer]['webpage_url'])
-                streams = yt.streams.filter(
+                stream = yt.streams.filter(
                     progressive=False, audio_codec='opus').desc().first()
-                info = {'url': streams.url, 'title': streams.title, 'webpage_url':item['queue'][pointer]['webpage_url']}
+                info = {'url': stream.url, 'title': stream.title, 'webpage_url':item['queue'][pointer]['webpage_url']}
             except exceptions.PytubeError:
                 asyncio.run_coroutine_threadsafe(
                     text_channel.send(
@@ -141,8 +141,7 @@ class Music(commands.Cog, name='Music'):
                 text_channel.send(
                     embed=create_embed(
                         f'**Now playing**: [{info["title"]}]({info["webpage_url"]})'
-                    ),
-                    delete_after=info['duration']
+                    )
                 ), self.client.loop
             )
         except:
