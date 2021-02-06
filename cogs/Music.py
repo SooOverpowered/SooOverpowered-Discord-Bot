@@ -381,6 +381,7 @@ class Music(commands.Cog, name='Music'):
         channel = ctx.author.voice.channel
         voice = ctx.voice_client
         print(url)
+        print(type(url))
         if voice != None:  # Bot already in voice channel
             if voice.channel != channel:  # User in a different channel
                 if self.ensure_bot_alone(ctx):   # Check if bot is available
