@@ -404,6 +404,7 @@ class Music(commands.Cog, name='Music'):
                                 }
                             )
                             voice.stop()
+                            await voice.disconnect()
                             voice = await channel.connect(reconnect=True)
                         else:
                             # Move the bot to the new channel
