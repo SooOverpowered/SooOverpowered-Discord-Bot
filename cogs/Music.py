@@ -9,8 +9,6 @@ from googleapiclient.discovery import build
 from discord.ext import commands
 from helper import *
 
-# Suppress annoying console message
-youtube_dl.utils.bug_reports_message = lambda: ''
 
 # Connect to mongodb database
 client = pymongo.MongoClient(os.environ.get('dbconn'))
