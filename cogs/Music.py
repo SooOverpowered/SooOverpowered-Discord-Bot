@@ -31,7 +31,7 @@ def blacklist_check():
 # Helper to create audio player
 def create_source(source, volume=0.5):
     player = discord.PCMVolumeTransformer(
-        discord.FFmpegOpusAudio(
+        discord.FFmpegPCMAudio(
             source,
             before_options=" -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 1",
             options='-vn'
