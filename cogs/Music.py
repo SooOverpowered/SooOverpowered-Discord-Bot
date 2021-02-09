@@ -1553,7 +1553,7 @@ class Music(commands.Cog, name='Music'):
                         {
                             '$push': {
                                 'song_list': {
-                                    'url': song_info['webpage_url'],
+                                    'webpage_url': song_info['webpage_url'],
                                     'title': song_info['title']
                                 }
                             },
