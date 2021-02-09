@@ -100,26 +100,22 @@ class Music(commands.Cog, name='Music'):
         pointer = item['pointer']
         text_channel = self.client.get_channel(item['text_channel'])
         restart = False
-        for i in range(3):
-            try:
-                yt = YouTube(item['queue'][pointer]['webpage_url'])
-                stream = yt.streams.filter(
-                    progressive=False, audio_codec='opus').desc().first()
-                info = {'url': stream.url, 'title': stream.title,
-                        'webpage_url': item['queue'][pointer]['webpage_url']}
-            except exceptions.PytubeError:
-                asyncio.run_coroutine_threadsafe(
-                    text_channel.send(
-                        embed=create_embed(
-                            'There is an error with Youtube service, retrying...'
-                        ),
-                        delete_after=10
-                    ), self.client.loop
-                )
-                restart = True
-            else:
-                restart = False
-                break
+        try:
+            yt = YouTube(item['queue'][pointer]['webpage_url'])
+            stream = yt.streams.filter(
+                progressive=False, audio_codec='opus').desc().first()
+            info = {'url': stream.url, 'title': stream.title,
+                    'webpage_url': item['queue'][pointer]['webpage_url']}
+        except exceptions.PytubeError:
+            asyncio.run_coroutine_threadsafe(
+                text_channel.send(
+                    embed=create_embed(
+                        'There is an error with Youtube service, retrying...'
+                    ),
+                    delete_after=10
+                ), self.client.loop
+            )
+            restart = True
         if restart:
             asyncio.run_coroutine_threadsafe(
                 text_channel.send(
@@ -1557,7 +1553,7 @@ class Music(commands.Cog, name='Music'):
                         {
                             '$push': {
                                 'song_list': {
-                                    'url': song_info['webpage_url'],
+                                    'webpage_url': song_info['webpage_url'],
                                     'title': song_info['title']
                                 }
                             },
