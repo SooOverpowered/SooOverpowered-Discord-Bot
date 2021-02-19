@@ -93,3 +93,6 @@ def API_SEARCH(string):
 
 def build_url(string):
     return f'https://www.youtube.com/watch?v={string}'
+
+def build_playlist_url(string):
+    return f"https://www.youtube.com/playlist?list={string}"
