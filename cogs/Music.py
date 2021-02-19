@@ -1534,7 +1534,7 @@ class Music(commands.Cog, name='Music'):
             }
         )
         if playlist != None:
-            info = self.extract_info(url, ctx)
+            info = API_SEARCH(url)
             if info == None:
                 await ctx.send(
                     embed=create_embed(
