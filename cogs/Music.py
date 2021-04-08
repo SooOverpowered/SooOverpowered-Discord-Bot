@@ -266,6 +266,8 @@ class Music(commands.Cog, name='Music'):
                     )
             else:
                 voice = await channel.connect(reconnect=True)
+                if isinstance(channel, StageChannel):
+                    await self.client.request_to_speak()
                 if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
                     queuecol.delete_one({'guild_id': ctx.guild.id})
                 queuecol.insert_one(
