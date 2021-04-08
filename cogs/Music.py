@@ -243,6 +243,8 @@ class Music(commands.Cog, name='Music'):
             if voice != None:
                 if self.ensure_bot_alone(ctx):
                     await voice.move_to(channel)
+                    if isinstance(channel, discord.StageChannel):
+                        await ctx.me.edit(suppress=False)
                     queuecol.update_one(
                         {'guild_id': ctx.guild.id},
                         {
@@ -266,6 +268,8 @@ class Music(commands.Cog, name='Music'):
                     )
             else:
                 voice = await channel.connect(reconnect=True)
+                if isinstance(channel, discord.StageChannel):
+                    await ctx.me.edit(suppress=False)
                 if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
                     queuecol.delete_one({'guild_id': ctx.guild.id})
                 queuecol.insert_one(
@@ -396,6 +400,8 @@ class Music(commands.Cog, name='Music'):
                         voice.stop()
                         await voice.disconnect()
                         voice = await channel.connect(reconnect=True)
+                        if isinstance(channel, discord.StageChannel):
+                            await ctx.me.edit(suppress=False)
                         # Move the bot to the new channel
                         queuecol.delete_one({'guild_id': ctx.guild.id})
                         # Create a new queue
@@ -517,6 +523,8 @@ class Music(commands.Cog, name='Music'):
         else:  # Bot is not connected to any voice channel
             # Connects bot to a voice channel
             voice = await channel.connect(reconnect=True)
+            if isinstance(channel, discord.StageChannel):
+                await ctx.me.edit(suppress=False)
             info = API_SEARCH(url)
             if info == None:
                 await ctx.send(
@@ -1346,9 +1354,13 @@ class Music(commands.Cog, name='Music'):
                             )
                             voice.stop()
                             voice = await channel.connect(reconnect=True)
+                            if isinstance(channel, discord.StageChannel):
+                                await ctx.me.edit(suppress=False)
                         else:
                             queuecol.delete_one({'guild_id': ctx.guild.id})
                             await voice.move_to(channel)
+                            if isinstance(channel, discord.StageChannel):
+                                await ctx.me.edit(suppress=False)
                         queuecol.insert_one(
                             {
                                 'guild_id': ctx.guild.id,
@@ -1413,6 +1425,8 @@ class Music(commands.Cog, name='Music'):
                         self.play_song(ctx.guild)
             else:
                 voice = await channel.connect(reconnect=True)
+                if isinstance(channel, discord.StageChannel):
+                    await ctx.me.edit(suppress=False)
                 if queuecol.find_one({'guild_id': ctx.guild.id}) != None:
                     queuecol.delete_one({'guild_id': ctx.guild.id})
                 queuecol.insert_one(
