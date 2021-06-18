@@ -44,7 +44,7 @@ def create_source(source, volume=0.5):
 # Ensure user is connected to voice
 def ensure_voice():
     async def predicate(ctx):
-        if ctx.author.voice.channel == None:
+        if ctx.author.voice == None:
             await ctx.send(
                 embed=create_embed(
                     'You must be connected to a voice channel to use this command'
