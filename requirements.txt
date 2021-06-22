@@ -3,4 +3,4 @@ pymongo==3.11.4
 dnspython==2.1.0
 certifi==2021.5.30
 google-api-python-client==2.9.0
-pytube==10.8.4
+pytube==10.8.5
